@@ -26,7 +26,7 @@
     <Library Include="SDL2_mixer.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="39_tiling\Source.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
