@@ -1,0 +1,3 @@
+/*
+Arxiu principal
+*/
