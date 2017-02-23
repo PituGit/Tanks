@@ -77,7 +77,7 @@ class LTexture
 		//Image dimensions
 		int mWidth;
 		int mHeight;
-};fggbkhzgfbcklhxbfj
+};
 
 //The tile
 class Tile
