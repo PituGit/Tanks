@@ -8,6 +8,7 @@ and may not be redistributed without written permission.*/
 #include <string>
 #include <fstream>
 #include <vector>
+#include <math.h>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
@@ -107,6 +108,9 @@ class Tile
 		int mType;
 };
 
+const int Meitat_CapsulaX = 21;
+const int Meitat_CapsulaY = 23;
+
 //The dot that will move around on the screen
 class Tank
 {
@@ -115,17 +119,14 @@ class Tank
 		static const int Tank_WIDTH = 55;
 		static const int Tank_HEIGHT = 45;
 
-		static const int Meitat_CapsulaX = 21;
-		static const int Meitat_CapsulaY = 23;
-
 		//Maximum axis velocity of the dot
-		static const int DOT_VEL = 1;
+		static const int DOT_VEL = 5;
 
 		//Initializes the variables
 		Tank();
 
 		//Takes key presses and adjusts the dot's velocity
-		void handleEvent( SDL_Event& e, double &degrees);
+		void handleEvent(SDL_Event& e);
 
 		//Moves the dot and check collision against tiles
 		void move( Tile *tiles[] );
@@ -136,10 +137,11 @@ class Tank
 		//Shows the dot on the screen
 		void render( SDL_Rect& camera, float degrees, SDL_RendererFlip flipType);
 
-		SDL_Rect getTankBox();
+		//Obté dades del tanc
+		int getVelocitatX();
+		int getVelocitatY();
 
-		//Gets the collision boxes
-		std::vector<SDL_Rect>& getColliders();
+		SDL_Rect getTankBox();
 
     private:
 		//The X and Y offsets of the dot
@@ -149,12 +151,6 @@ class Tank
 		int mVelX, mVelY;
 
 		SDL_Rect TankBox;
-
-		//Dot's collision boxes
-		std::vector<SDL_Rect> mColliders;
-
-		//Moves the collision boxes relative to the dot's offset
-		void shiftColliders();
 };
 
 //Starts up SDL and creates window
@@ -383,7 +379,22 @@ Tank::Tank()
     mVelY = 0;
 }
 
-void Tank::handleEvent( SDL_Event& e, double &degrees )
+int Tank::getVelocitatX()
+{
+	return mVelX;
+}
+
+int Tank::getVelocitatY()
+{
+	return mVelY;
+}
+
+SDL_Rect Tank::getTankBox()
+{
+	return TankBox;
+}
+
+void Tank::handleEvent( SDL_Event& e )
 {
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
@@ -391,11 +402,12 @@ void Tank::handleEvent( SDL_Event& e, double &degrees )
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-            case SDLK_UP: mVelY -= DOT_VEL; degrees = 270; break;
-            case SDLK_DOWN: mVelY += DOT_VEL; degrees = 90; break;
-            case SDLK_LEFT: mVelX -= DOT_VEL; degrees = 180; break;
-            case SDLK_RIGHT: mVelX += DOT_VEL; degrees = 0; break;
+            case SDLK_UP: mVelY -= DOT_VEL; break;
+            case SDLK_DOWN: mVelY += DOT_VEL; break;
+            case SDLK_LEFT: mVelX -= DOT_VEL; break;
+            case SDLK_RIGHT: mVelX += DOT_VEL; break;
         }
+		
     }
     //If a key was released
     else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
@@ -409,7 +421,30 @@ void Tank::handleEvent( SDL_Event& e, double &degrees )
             case SDLK_RIGHT: mVelX -= DOT_VEL; break;
         }
     }
+
 }
+
+void CalcularGraus(double &degrees, Tank tank)
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	if (tank.getVelocitatX() != 0)
+	{
+		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
+		degrees = degrees*57.3;
+		if (tank.getVelocitatX()<0)
+		{
+			degrees += 180;
+		}
+	}
+	else
+	{
+		if (currentKeyStates[SDL_SCANCODE_UP])
+			degrees = 270;
+		else if (currentKeyStates[SDL_SCANCODE_DOWN])
+			degrees = 90;
+	}
+}
+
 
 void Tank::move( Tile *tiles[] )
 {
@@ -825,15 +860,13 @@ int main( int argc, char* args[] )
 					{
 						quit = true;
 					}
-					
-
-
 					//Handle input for the dot
-					tank.handleEvent( e, degrees);
+					tank.handleEvent( e );
 				}
+				CalcularGraus(degrees, tank);
 
-				//Move the dot
-				tank.move( tileSet );
+				//Mou el tank
+				tank.move( tileSet);
 				tank.setCamera( camera );
 
 				//Clear screen
