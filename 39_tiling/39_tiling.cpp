@@ -115,14 +115,17 @@ class Tank
 		static const int Tank_WIDTH = 55;
 		static const int Tank_HEIGHT = 45;
 
+		static const int Meitat_CapsulaX = 21;
+		static const int Meitat_CapsulaY = 23;
+
 		//Maximum axis velocity of the dot
-		static const int DOT_VEL = 5;
+		static const int DOT_VEL = 1;
 
 		//Initializes the variables
 		Tank();
 
 		//Takes key presses and adjusts the dot's velocity
-		void handleEvent( SDL_Event& e );
+		void handleEvent( SDL_Event& e, double &degrees);
 
 		//Moves the dot and check collision against tiles
 		void move( Tile *tiles[] );
@@ -366,11 +369,6 @@ SDL_Rect Tile::getBox()
     return mBox;
 }
 
-SDL_Rect Tank::getTankBox()
-{
-	return TankBox;
-}
-
 
 Tank::Tank()
 {
@@ -385,7 +383,7 @@ Tank::Tank()
     mVelY = 0;
 }
 
-void Tank::handleEvent( SDL_Event& e )
+void Tank::handleEvent( SDL_Event& e, double &degrees )
 {
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
@@ -393,10 +391,10 @@ void Tank::handleEvent( SDL_Event& e )
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-            case SDLK_UP: mVelY -= DOT_VEL; break;
-            case SDLK_DOWN: mVelY += DOT_VEL; break;
-            case SDLK_LEFT: mVelX -= DOT_VEL; break;
-            case SDLK_RIGHT: mVelX += DOT_VEL; break;
+            case SDLK_UP: mVelY -= DOT_VEL; degrees = 270; break;
+            case SDLK_DOWN: mVelY += DOT_VEL; degrees = 90; break;
+            case SDLK_LEFT: mVelX -= DOT_VEL; degrees = 180; break;
+            case SDLK_RIGHT: mVelX += DOT_VEL; degrees = 0; break;
         }
     }
     //If a key was released
@@ -463,9 +461,11 @@ void Tank::setCamera( SDL_Rect& camera )
 
 void Tank::render(SDL_Rect& camera, float degrees, SDL_RendererFlip flipType)
 {
+	SDL_Point centre = {Meitat_CapsulaX, Meitat_CapsulaY };
+	SDL_Point* center = &centre;
     //Mostra el tank
-	gDotTexture.render( TankBox.x - camera.x, TankBox.y - camera.y );
-	gCapsulaTexture.render(TankBox.x - camera.x, TankBox.y - camera.y + 4, NULL, degrees, NULL, flipType );
+	gDotTexture.render(TankBox.x - camera.x, TankBox.y - camera.y, NULL, degrees, center, flipType);
+	gCapsulaTexture.render(TankBox.x - camera.x, TankBox.y - camera.y + 4);
 }
 
 bool init()
@@ -808,7 +808,7 @@ int main( int argc, char* args[] )
 			//tipus de rotacio
 			SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
-			//The dot that will be moving around on the screen
+			//The tank that will be moving around on the screen
 			Tank tank;
 
 			//Level camera
@@ -825,32 +825,11 @@ int main( int argc, char* args[] )
 					{
 						quit = true;
 					}
-					else if (e.type == SDL_KEYDOWN)
-					{
-						switch (e.key.keysym.sym)
-						{
-						case SDLK_a:
-							flipType = SDL_FLIP_HORIZONTAL;
-							degrees += 180;
-							break;
+					
 
-						case SDLK_d:
-							flipType = SDL_FLIP_HORIZONTAL;
-							break;
-
-						case SDLK_s:
-							flipType = SDL_FLIP_VERTICAL;
-							degrees += 180;
-							break;
-
-						case SDLK_w:
-							flipType = SDL_FLIP_VERTICAL;
-							break;
-						}
-					}
 
 					//Handle input for the dot
-					tank.handleEvent( e );
+					tank.handleEvent( e, degrees);
 				}
 
 				//Move the dot
