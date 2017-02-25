@@ -126,7 +126,7 @@ class Tank
 		Tank();
 
 		//Takes key presses and adjusts the dot's velocity
-		void handleEvent(SDL_Event& e);
+		void handleEvent(SDL_Event& e, double& angle, SDL_Rect& camera);
 
 		//Moves the dot and check collision against tiles
 		void move( Tile *tiles[] );
@@ -135,7 +135,7 @@ class Tank
 		void setCamera( SDL_Rect& camera );
 
 		//Shows the dot on the screen
-		void render( SDL_Rect& camera, float degrees, SDL_RendererFlip flipType);
+		void render( SDL_Rect& camera, float degrees, SDL_RendererFlip flipType, double angle);
 
 		//Obté dades del tanc
 		int getVelocitatX();
@@ -178,7 +178,7 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 //Scene textures
-LTexture gDotTexture;
+LTexture gBaseTankTexture;
 LTexture gCapsulaTexture;
 LTexture gTileTexture;
 SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ];
@@ -394,8 +394,20 @@ SDL_Rect Tank::getTankBox()
 	return TankBox;
 }
 
-void Tank::handleEvent( SDL_Event& e )
+void Tank::handleEvent( SDL_Event& e, double& angle, SDL_Rect& camera)
 {
+	//Si hi ha algun envent del mouse
+
+	//Get la posicio del mouse
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	if ((x-TankBox.x)!= 0)
+		angle = atan((double(y - TankBox.y))/double(x - TankBox.x));
+	angle *= 57.3;
+	if ((x - TankBox.x) < 0)
+		angle += 180;
+
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
     {
@@ -494,13 +506,17 @@ void Tank::setCamera( SDL_Rect& camera )
 	}
 }
 
-void Tank::render(SDL_Rect& camera, float degrees, SDL_RendererFlip flipType)
+void Tank::render(SDL_Rect& camera, float degrees, SDL_RendererFlip flipType, double angle)
 {
+	//Centre de rotació del tanc
 	SDL_Point centre = {Meitat_CapsulaX, Meitat_CapsulaY };
 	SDL_Point* center = &centre;
     //Mostra el tank
-	gDotTexture.render(TankBox.x - camera.x, TankBox.y - camera.y, NULL, degrees, center, flipType);
-	gCapsulaTexture.render(TankBox.x - camera.x, TankBox.y - camera.y + 4);
+	gBaseTankTexture.render(TankBox.x - camera.x, TankBox.y - camera.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { Meitat_CapsulaX, Meitat_CapsulaY -4 };
+	gCapsulaTexture.render(TankBox.x - camera.x, TankBox.y - camera.y + 4, NULL, degrees, center, flipType);
 }
 
 bool init()
@@ -563,7 +579,7 @@ bool loadMedia( Tile* tiles[] )
 	bool success = true;
 
 	//Load dot texture
-	if( !gDotTexture.loadFromFile( "39_tiling/Base_tank.png" ) )
+	if( !gBaseTankTexture.loadFromFile( "39_tiling/Base_tank.png" ) )
 	{
 		printf( "Failed to load dot texture!\n" );
 		success = false;
@@ -605,7 +621,7 @@ void close( Tile* tiles[] )
 	}
 
 	//Free loaded images
-	gDotTexture.free();
+	gBaseTankTexture.free();
 	gTileTexture.free();
 
 	//Destroy window	
@@ -838,7 +854,7 @@ int main( int argc, char* args[] )
 			SDL_Event e;
 
 			//Angle de rotació
-			double degrees = 0;
+			double degrees = 0, angle = 0;
 
 			//tipus de rotacio
 			SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -860,12 +876,12 @@ int main( int argc, char* args[] )
 					{
 						quit = true;
 					}
-					//Handle input for the dot
-					tank.handleEvent( e );
+					//Gestiona les dades introduides
+					tank.handleEvent( e, angle, camera);
 				}
 				CalcularGraus(degrees, tank);
 
-				//Mou el tank
+				//Mou el tank i camera
 				tank.move( tileSet);
 				tank.setCamera( camera );
 
@@ -878,9 +894,8 @@ int main( int argc, char* args[] )
 				{
 					tileSet[ i ]->render( camera );
 				}
-				
 				//Render tank
-				tank.render( camera, degrees, flipType );
+				tank.render( camera, degrees, flipType, angle);
 				
 
 				//Update screen
