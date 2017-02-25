@@ -1,13 +1,19 @@
+/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
+and may not be redistributed without written permission.*/
+
 //Using SDL, SDL_image, standard IO, strings, and file streams
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <math.h>
+#include <iostream>
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 960;
 
 //The dimensions of the level
 const int LEVEL_WIDTH = 1280;
@@ -32,6 +38,9 @@ const int TILE_BOTTOM = 8;
 const int TILE_BOTTOMLEFT = 9;
 const int TILE_LEFT = 10;
 const int TILE_TOPLEFT = 11;
+
+//Màxim de bales que hi poden haver
+const int N = 20;
 
 //Texture wrapper class
 class LTexture
@@ -103,22 +112,25 @@ class Tile
 		int mType;
 };
 
+const int Meitat_CapsulaX = 21;
+const int Meitat_CapsulaY = 23;
+
 //The dot that will move around on the screen
-class Dot
+class Tank
 {
     public:
 		//The dimensions of the dot
-		static const int DOT_WIDTH = 20;
-		static const int DOT_HEIGHT = 20;
+		static const int Tank_WIDTH = 55;
+		static const int Tank_HEIGHT = 45;
 
 		//Maximum axis velocity of the dot
 		static const int DOT_VEL = 5;
 
 		//Initializes the variables
-		Dot();
+		Tank();
 
 		//Takes key presses and adjusts the dot's velocity
-		void handleEvent( SDL_Event& e );
+		void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool& shoot);
 
 		//Moves the dot and check collision against tiles
 		void move( Tile *tiles[] );
@@ -127,14 +139,46 @@ class Dot
 		void setCamera( SDL_Rect& camera );
 
 		//Shows the dot on the screen
-		void render( SDL_Rect& camera );
+		void render(float degrees, SDL_RendererFlip flipType, double angle);
+
+		//Obté dades del tanc
+		int getVelocitatX();
+		int getVelocitatY();
+
+		SDL_Rect getTankBox();
 
     private:
-		//Collision box of the dot
-		SDL_Rect mBox;
+		//The X and Y offsets of the tank
+		int mPosX, mPosY;
 
-		//The velocity of the dot
+		//The velocity of the tank
 		int mVelX, mVelY;
+
+		SDL_Rect TankBox;
+};
+
+class Bala
+{
+	public:
+		//en realitat es 10 (amplada) x7 (altura)
+		static const int Bala_WIDTH = 10;
+		static const int Bala_HEIGHT = 10;
+
+		Bala();
+
+		void move(Tile *tiles[]);
+
+		void render(float degrees, SDL_RendererFlip flipType, double angle);
+
+	private:
+		//The X and Y offsets of the bala
+		int mPosX, mPosY;
+
+		//The velocity of the bala
+		int Vel;
+
+		SDL_Rect BalaBox;
+
 };
 
 //Starts up SDL and creates window
@@ -162,8 +206,10 @@ SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 
 //Scene textures
-LTexture gDotTexture;
+LTexture gBaseTankTexture;
+LTexture gCapsulaTexture;
 LTexture gTileTexture;
+LTexture gBalaTexture;
 SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ];
 
 LTexture::LTexture()
@@ -293,15 +339,15 @@ void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* ce
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
-	//Set clip rendering dimensions
-	if( clip != NULL )
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}
+//Set clip rendering dimensions
+if (clip != NULL)
+{
+	renderQuad.w = clip->w;
+	renderQuad.h = clip->h;
+}
 
-	//Render to screen
-	SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
+//Render to screen
+SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
 int LTexture::getWidth()
@@ -314,55 +360,101 @@ int LTexture::getHeight()
 	return mHeight;
 }
 
-Tile::Tile( int x, int y, int tileType )
+Tile::Tile(int x, int y, int tileType)
 {
-    //Get the offsets
-    mBox.x = x;
-    mBox.y = y;
+	//Get the offsets
+	mBox.x = x;
+	mBox.y = y;
 
-    //Set the collision box
-    mBox.w = TILE_WIDTH;
-    mBox.h = TILE_HEIGHT;
+	//Set the collision box
+	mBox.w = TILE_WIDTH;
+	mBox.h = TILE_HEIGHT;
 
-    //Get the tile type
-    mType = tileType;
+	//Get the tile type
+	mType = tileType;
 }
 
-void Tile::render( SDL_Rect& camera )
+void Tile::render(SDL_Rect& camera)
 {
-    //If the tile is on screen
-    if( checkCollision( camera, mBox ) )
-    {
-        //Show the tile
-        gTileTexture.render( mBox.x - camera.x, mBox.y - camera.y, &gTileClips[ mType ] );
-    }
+	//If the tile is on screen
+	if (checkCollision(camera, mBox))
+	{
+		//Show the tile
+		gTileTexture.render(mBox.x - camera.x, mBox.y - camera.y, &gTileClips[mType]);
+	}
 }
 
 int Tile::getType()
 {
-    return mType;
+	return mType;
 }
 
 SDL_Rect Tile::getBox()
 {
-    return mBox;
+	return mBox;
 }
 
-Dot::Dot()
-{
-    //Initialize the collision box
-    mBox.x = 0;
-    mBox.y = 0;
-	mBox.w = DOT_WIDTH;
-	mBox.h = DOT_HEIGHT;
 
-    //Initialize the velocity
-    mVelX = 0;
-    mVelY = 0;
+Tank::Tank()
+{
+	//Initialize the collision box
+	TankBox.x = 400;
+	TankBox.y = 500;
+	TankBox.w = Tank_WIDTH;
+	TankBox.h = Tank_HEIGHT;
+
+	//Initialize the velocity
+	mVelX = 0;
+	mVelY = 0;
 }
 
-void Dot::handleEvent( SDL_Event& e )
+Bala::Bala()
 {
+	//Initialize the collision box
+	BalaBox.x = 400;
+	BalaBox.y = 500;
+	BalaBox.w = Bala_WIDTH;
+	BalaBox.h = Bala_HEIGHT;
+
+	//Initialize the velocity
+	Vel = 10;
+}
+
+int Tank::getVelocitatX()
+{
+	return mVelX;
+}
+
+int Tank::getVelocitatY()
+{
+	return mVelY;
+}
+
+SDL_Rect Tank::getTankBox()
+{
+	return TankBox;
+}
+
+void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool& shoot)
+{
+	//Si hi ha algun envent del mouse
+
+	//Get la posicio del mouse
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	if ((x - TankBox.x) != 0)
+		angle = atan((double(y - TankBox.y)) / double(x - TankBox.x));
+	angle *= 57.3;
+	if ((x - TankBox.x) < 0)
+		angle += 180;
+
+	//Si s'ha apretat el botó del ratoli
+	if (a->type == SDL_MOUSEBUTTONDOWN)
+	{
+		shoot = true;
+	}
+
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
     {
@@ -374,6 +466,7 @@ void Dot::handleEvent( SDL_Event& e )
             case SDLK_LEFT: mVelX -= DOT_VEL; break;
             case SDLK_RIGHT: mVelX += DOT_VEL; break;
         }
+		
     }
     //If a key was released
     else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
@@ -387,36 +480,64 @@ void Dot::handleEvent( SDL_Event& e )
             case SDLK_RIGHT: mVelX -= DOT_VEL; break;
         }
     }
+
 }
 
-void Dot::move( Tile *tiles[] )
+void CalcularGraus(double &degrees, Tank tank)
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	if (tank.getVelocitatX() != 0)
+	{
+		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
+		degrees = degrees*57.3;
+		if (tank.getVelocitatX()<0)
+		{
+			degrees += 180;
+		}
+	}
+	else
+	{
+		if (currentKeyStates[SDL_SCANCODE_UP])
+			degrees = 270;
+		else if (currentKeyStates[SDL_SCANCODE_DOWN])
+			degrees = 90;
+	}
+}
+
+
+void Tank::move( Tile *tiles[] )
 {
     //Move the dot left or right
-    mBox.x += mVelX;
+    TankBox.x += mVelX;
 
     //If the dot went too far to the left or right or touched a wall
-    if( ( mBox.x < 0 ) || ( mBox.x + DOT_WIDTH > LEVEL_WIDTH ) || touchesWall( mBox, tiles ) )
+    if( ( TankBox.x < 0 ) || ( TankBox.x + Tank_WIDTH > LEVEL_WIDTH ) || touchesWall( TankBox, tiles ) )
     {
         //move back
-        mBox.x -= mVelX;
+        TankBox.x -= mVelX;
     }
 
     //Move the dot up or down
-    mBox.y += mVelY;
+    TankBox.y += mVelY;
 
     //If the dot went too far up or down or touched a wall
-    if( ( mBox.y < 0 ) || ( mBox.y + DOT_HEIGHT > LEVEL_HEIGHT ) || touchesWall( mBox, tiles ) )
+    if( ( TankBox.y < 0 ) || ( TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT ) || touchesWall( TankBox, tiles ) )
     {
         //move back
-        mBox.y -= mVelY;
+        TankBox.y -= mVelY;
     }
 }
 
-void Dot::setCamera( SDL_Rect& camera )
+void Bala::move(Tile *tileSet[])
+{
+
+}
+
+void Tank::setCamera( SDL_Rect& camera )
 {
 	//Center the camera over the dot
-	camera.x = ( mBox.x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-	camera.y = ( mBox.y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+	camera.x = ( TankBox.x + Tank_WIDTH / 2 ) - SCREEN_WIDTH / 2;
+	camera.y = ( TankBox.y + Tank_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 
 	//Keep the camera in bounds
 	if( camera.x < 0 )
@@ -437,10 +558,23 @@ void Dot::setCamera( SDL_Rect& camera )
 	}
 }
 
-void Dot::render( SDL_Rect& camera )
+void Tank::render(float degrees, SDL_RendererFlip flipType, double angle)
 {
-    //Show the dot
-	gDotTexture.render( mBox.x - camera.x, mBox.y - camera.y );
+	//Centre de rotació del tanc
+	SDL_Point centre = {Meitat_CapsulaX, Meitat_CapsulaY };
+	SDL_Point* center = &centre;
+    //Mostra el tank
+	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { Meitat_CapsulaX, Meitat_CapsulaY -4 };
+	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+}
+
+void Bala::render(float degrees, SDL_RendererFlip flipType, double angle)
+{
+	degrees = angle;
+	gBalaTexture.render(mPosX, mPosY, NULL, degrees, NULL, flipType);
 }
 
 bool init()
@@ -503,9 +637,21 @@ bool loadMedia( Tile* tiles[] )
 	bool success = true;
 
 	//Load dot texture
-	if( !gDotTexture.loadFromFile( "39_tiling/dot.bmp" ) )
+	if( !gBaseTankTexture.loadFromFile( "39_tiling/Base_tank.png" ) )
 	{
 		printf( "Failed to load dot texture!\n" );
+		success = false;
+	}
+	
+	if (!gCapsulaTexture.loadFromFile("39_tiling/Capsula&Cano_tank.png"))
+	{
+		printf("Failed to load capsula texture!\n");
+		success = false;
+	}
+
+	if (!gBalaTexture.loadFromFile("39_tiling/Bala.png"))
+	{
+		printf("Failed to load capsula texture!\n");
 		success = false;
 	}
 
@@ -539,7 +685,7 @@ void close( Tile* tiles[] )
 	}
 
 	//Free loaded images
-	gDotTexture.free();
+	gBaseTankTexture.free();
 	gTileTexture.free();
 
 	//Destroy window	
@@ -560,7 +706,6 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
     int rightA, rightB;
     int topA, topB;
     int bottomA, bottomB;
-	bool colision = true;
 
     //Calculate the sides of rect A
     leftA = a.x;
@@ -577,26 +722,26 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
     //If any of the sides from A are outside of B
     if( bottomA <= topB )
     {
-        colision = false;
+        return false;
     }
 
     if( topA >= bottomB )
     {
-		colision = false;
+        return false;
     }
 
     if( rightA <= leftB )
     {
-		colision = false;
+        return false;
     }
 
     if( leftA >= rightB )
     {
-		colision = false;
+        return false;
     }
 
     //If none of the sides from A are outside B
-    return colision;
+    return true;
 }
 
 bool setTiles( Tile* tiles[] )
@@ -610,7 +755,7 @@ bool setTiles( Tile* tiles[] )
     //Open the map
     std::ifstream map( "39_tiling/lazy.map" );
 
- 	//Initialize the tiles
+	//Initialize the tiles
 	for( int i = 0; i < TOTAL_TILES; ++i )
 	{
 		//Determines what kind of tile will be made
@@ -772,8 +917,23 @@ int main( int argc, char* args[] )
 			//Event handler
 			SDL_Event e;
 
-			//The dot that will be moving around on the screen
-			Dot dot;
+			//Angle de rotació
+			double degrees = 0, angle = 0;
+
+			//tipus de rotacio
+			SDL_RendererFlip flipType = SDL_FLIP_NONE;
+
+			//The tank that will be moving around on the screen
+			Tank tank;
+
+			//Les bales que es pintaran per pantalla
+			std::vector <Bala> bala(N);
+
+			//Variable per saber si s'ha disparat
+			bool shoot = false;
+
+			//Numero de bales
+			int cBales = 0;
 
 			//Level camera
 			SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -789,14 +949,19 @@ int main( int argc, char* args[] )
 					{
 						quit = true;
 					}
-
-					//Handle input for the dot
-					dot.handleEvent( e );
+					//Gestiona les dades introduides
+					tank.handleEvent( e, &e, angle, camera, shoot);
 				}
+				CalcularGraus(degrees, tank);
 
-				//Move the dot
-				dot.move( tileSet );
-				dot.setCamera( camera );
+				//Mou el tank i camera
+				tank.move( tileSet);
+				tank.setCamera( camera );
+
+				for (int i = 0; i < cBales; i++)
+				{
+					bala[i].move(tileSet);
+				}
 
 				//Clear screen
 				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -807,10 +972,17 @@ int main( int argc, char* args[] )
 				{
 					tileSet[ i ]->render( camera );
 				}
+				//Render tank
+				tank.render( degrees, flipType, angle);
 
-				//Render dot
-				dot.render( camera );
+				if (shoot)
+					cBales++;
 
+				//Renderitza totes les bales
+				for(int i=0; i<cBales; i++)
+					bala[i].render(degrees, flipType, angle);
+				
+				
 				//Update screen
 				SDL_RenderPresent( gRenderer );
 			}
