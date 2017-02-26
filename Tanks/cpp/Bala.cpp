@@ -3,8 +3,8 @@
 Bala::Bala()
 {
 	//Initialize the collision box
-	BalaBox.x = 400;
-	BalaBox.y = 500;
+	BalaBox.x = 10;
+	BalaBox.y = 10;
 	BalaBox.w = Bala_WIDTH;
 	BalaBox.h = Bala_HEIGHT;
 
