@@ -164,7 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\Bala.h" />
-    <ClInclude Include="h\Ltexture.h" />
+    <ClInclude Include="h\LTexture.h" />
     <ClInclude Include="h\Tank.h" />
     <ClInclude Include="h\Tile.h" />
     <ClInclude Include="SDL_mixer.h" />
