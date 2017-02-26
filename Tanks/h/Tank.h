@@ -2,10 +2,6 @@
 
 #include "Tile.h"
 
-
-const int MEITAT_CAPSULA_X = 21;
-const int MEITAT_CAPSULA_Y = 23;
-
 class Tank
 {
 public:

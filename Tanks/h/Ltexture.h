@@ -1,18 +1,6 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <string>
-
-#include "Main.h"
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 960;
-
-//The dimensions of the level
-const int LEVEL_WIDTH = 1280;
-const int LEVEL_HEIGHT = 960;
+#include "Global.h"
 
 class LTexture
 {
@@ -58,3 +46,8 @@ private:
 	int mWidth;
 	int mHeight;
 };
+
+extern LTexture gTileTexture;
+extern LTexture gBaseTankTexture;
+extern LTexture gCapsulaTexture;
+extern LTexture gBalaTexture;

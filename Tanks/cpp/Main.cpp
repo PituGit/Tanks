@@ -1,9 +1,5 @@
 #include "../h/Main.h"
 
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
-
 void CalcularGraus(double &degrees, Tank tank)
 {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -85,26 +81,26 @@ bool loadMedia( Tile* tiles[] )
 	bool success = true;
 
 	//Load dot texture
-	if( !gBaseTankTexture.loadFromFile( "39_tiling/Base_tank.png" ) )
+	if( !gBaseTankTexture.loadFromFile( "res/Base_tank.png" ) )
 	{
 		printf( "Failed to load dot texture!\n" );
 		success = false;
 	}
 	
-	if (!gCapsulaTexture.loadFromFile("39_tiling/Capsula&Cano_tank.png"))
+	if (!gCapsulaTexture.loadFromFile("res/Capsula&Cano_tank.png"))
 	{
 		printf("Failed to load capsula texture!\n");
 		success = false;
 	}
 
-	if (!gBalaTexture.loadFromFile("39_tiling/Bala.png"))
+	if (!gBalaTexture.loadFromFile("res/Bala.png"))
 	{
 		printf("Failed to load capsula texture!\n");
 		success = false;
 	}
 
 	//Load tile texture
-	if( !gTileTexture.loadFromFile( "39_tiling/tiles.png" ) )
+	if( !gTileTexture.loadFromFile( "res/tiles.png" ) )
 	{
 		printf( "Failed to load tile set texture!\n" );
 		success = false;
@@ -157,7 +153,7 @@ bool setTiles( Tile* tiles[] )
     int x = 0, y = 0;
 
     //Open the map
-    std::ifstream map( "39_tiling/lazy.map" );
+    std::ifstream map( "res/lazy.map" );
 
 	//Initialize the tiles
 	for( int i = 0; i < TOTAL_TILES; ++i )
@@ -311,7 +307,7 @@ int main( int argc, char* args[] )
 			Tank tank;
 
 			//Les bales que es pintaran per pantalla
-			std::vector <Bala> bala(N);
+			std::vector <Bala> bala(MAX_BALES);
 
 			//Variable per saber si s'ha disparat
 			bool shoot = false;

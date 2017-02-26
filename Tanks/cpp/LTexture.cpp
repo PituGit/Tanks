@@ -1,5 +1,10 @@
 #include "../h/LTexture.h"
 
+LTexture gTileTexture;
+LTexture gBaseTankTexture;
+LTexture gCapsulaTexture;
+LTexture gBalaTexture;
+
 LTexture::LTexture()
 {
 	//Initialize

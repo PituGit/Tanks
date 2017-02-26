@@ -76,7 +76,6 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 
 }
 
-
 void Tank::setCamera(SDL_Rect& camera)
 {
 	//Center the camera over the dot
