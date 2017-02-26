@@ -24,8 +24,8 @@ public:
 	//Centers the camera over the dot
 	void setCamera(SDL_Rect& camera);
 
-	//Shows the dot on the screen
-	void render(float degrees, SDL_RendererFlip flipType, double angle);
+	//Mostra el tank en pantalla
+	void render(double degrees, SDL_RendererFlip flipType, double angle);
 
 	//Obté dades del tanc
 	int getVelocitatX();

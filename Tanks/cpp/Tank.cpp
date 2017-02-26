@@ -101,7 +101,7 @@ void Tank::setCamera(SDL_Rect& camera)
 	}
 }
 
-void Tank::render(float degrees, SDL_RendererFlip flipType, double angle)
+void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
 	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
