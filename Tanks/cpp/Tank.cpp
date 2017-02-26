@@ -30,7 +30,7 @@ SDL_Rect Tank::getTankBox()
 
 void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool& shoot)
 {
-	//Si hi ha algun envent del mouse
+	shoot = false;
 
 	//Get la posicio del mouse
 	int x, y;
