@@ -46,6 +46,3 @@ private:
 
 	SDL_Rect TankBox;
 };
-
-LTexture gBaseTankTexture;
-LTexture gCapsulaTexture;

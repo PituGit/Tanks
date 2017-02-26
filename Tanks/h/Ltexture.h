@@ -4,6 +4,8 @@
 #include <SDL_image.h>
 #include <string>
 
+#include "Main.h"
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
@@ -56,5 +58,3 @@ private:
 	int mWidth;
 	int mHeight;
 };
-
-SDL_Renderer* gRenderer = NULL;

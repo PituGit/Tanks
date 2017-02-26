@@ -45,8 +45,5 @@ private:
 	int mType;
 };
 
-LTexture gTileTexture;
-SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
-
 bool checkCollision(SDL_Rect a, SDL_Rect b);
 bool touchesWall(SDL_Rect box, Tile* tiles[]);

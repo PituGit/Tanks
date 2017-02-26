@@ -28,5 +28,3 @@ private:
 	SDL_Rect BalaBox;
 
 };
-
-LTexture gBalaTexture;

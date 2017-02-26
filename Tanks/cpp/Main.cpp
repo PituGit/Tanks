@@ -1,27 +1,8 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
-and may not be redistributed without written permission.*/
-
-//Using SDL, SDL_image, standard IO, strings, and file streams
-
 #include "../h/Main.h"
-
-
-//Starts up SDL and creates window
-bool init();
-
-//Loads media
-bool loadMedia( Tile* tiles[] );
-
-//Frees media and shuts down SDL
-void close( Tile* tiles[] );
-
-
-//Sets tiles from tile map
-bool setTiles( Tile *tiles[] );
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
-
+SDL_Renderer* gRenderer = NULL;
 
 void CalcularGraus(double &degrees, Tank tank)
 {
