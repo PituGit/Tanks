@@ -32,6 +32,7 @@
     <None Include="res\lazy.map">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Bala.cpp">
@@ -63,5 +64,11 @@
     <ClInclude Include="h\Tank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDL_mixer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL2_mixer.lib" />
   </ItemGroup>
 </Project>
