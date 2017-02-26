@@ -38,7 +38,7 @@ void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
-	gBalaTexture.render(BalaBox.x, BalaBox.y, NULL, degrees, NULL, flipType);
+	gBalaTexture.render(BalaBox.x, BalaBox.y);
 }
 
 void Bala::moveBala(Tile *tiles[])
