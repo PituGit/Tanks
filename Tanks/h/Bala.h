@@ -13,16 +13,17 @@ public:
 
 	void moveBala(Tile *tiles[]);
 
-	void renderPrimerCop(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+	void ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank);
 
-	void renderBala(float degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
 private:
 	//The X and Y offsets of the bala
 	int mPosX, mPosY;
 
 	//The velocity of the bala, els signes de la velocitat i la velocitat en cartesianes
-	int Vel, signeX, signeY, VelX, VelY;
+	int Vel, signeX, signeY;
+	float VelX, VelY;
 
 	//Temps de la bala
 	float Temps, TempsFinal;
