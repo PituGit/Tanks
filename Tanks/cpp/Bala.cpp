@@ -1,5 +1,5 @@
 #include "../h/Bala.h"
-//TRY
+//TRYY
 
 Bala::Bala()
 {
