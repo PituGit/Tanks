@@ -5,7 +5,7 @@
 class Bala
 {
 public:
-	//en realitat es 10 (amplada) x7 (altura)
+	//es 8 (amplada) x8 (altura)
 	static const int BALA_WIDTH = 8;
 	static const int BALA_HEIGHT = 8;
 

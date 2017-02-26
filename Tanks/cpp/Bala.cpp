@@ -28,14 +28,13 @@ void Bala::ObtenirDades( double angle, Tank tank)
 	if (Angle_Direccio < 0 && Angle_Direccio > 180)
 		signeY = -1;
 	
-
 	//Velocitats cartesianes de la bala
 	VelX = double(Vel) * cos(Angle_Direccio * PI / 180) * signeX;
 	VelY = double(Vel) * sin(Angle_Direccio * PI / 180) * signeY;
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
-	BalaBox.x = PosicioT.x + centre.x;
-	BalaBox.y = PosicioT.y + centre.y;
+	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180);
+	BalaBox.y = PosicioT.y + centre.y + LONGITUD_TOTAL_DEL_CANO * sin(Angle_Direccio * PI / 180);
 }
 
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
