@@ -339,7 +339,7 @@ int main( int argc, char* args[] )
 				tank.setCamera(camera);
 
 				for (int i = 0; i<cBales; i++)
-					bala[i].moveBala(tileSet, angle);
+					bala[i].moveBala(tileSet);
 
 				//Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);

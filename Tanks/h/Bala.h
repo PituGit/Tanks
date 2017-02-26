@@ -11,7 +11,7 @@ public:
 
 	Bala();
 
-	void moveBala(Tile *tiles[], double angle);
+	void moveBala(Tile *tiles[]);
 
 	void renderPrimerCop(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
@@ -21,8 +21,8 @@ private:
 	//The X and Y offsets of the bala
 	int mPosX, mPosY;
 
-	//The velocity of the bala i els signes de la velocitat
-	int Vel, signeX, signeY;
+	//The velocity of the bala, els signes de la velocitat i la velocitat en cartesianes
+	int Vel, signeX, signeY, VelX, VelY;
 
 	//Temps de la bala
 	float Temps, TempsFinal;

@@ -39,7 +39,7 @@ const int LEVEL_WIDTH = 1280;
 const int LEVEL_HEIGHT = 960;
 
 //Màxim de bales
-const int MAX_BALES = 20;
+const int MAX_BALES = 1;
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;

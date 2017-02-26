@@ -26,6 +26,10 @@ void Bala::renderPrimerCop(double degrees, SDL_RendererFlip flipType, double ang
 	if (sin(degrees) < 0)
 		signeY = -1;
 
+	//Velocitats cartesianes de la bala
+	VelX = Vel*cos(degrees)*signeX;
+	VelY = Vel*sin(degrees)*signeY;
+
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
 	BalaBox.x = PosicioT.x + centre.x;
 	BalaBox.y = PosicioT.y + centre.y;
@@ -38,27 +42,29 @@ void Bala::renderBala(float degrees, SDL_RendererFlip flipType, double angle, Ta
 	gBalaTexture.render(BalaBox.x, BalaBox.y, NULL, degrees, NULL, flipType);
 }
 
-void Bala::moveBala(Tile *tiles[], double angle)
+void Bala::moveBala(Tile *tiles[])
 {
 	//Move the bala left or right
-	BalaBox.x += Vel*cos(angle)*signeX;
+	BalaBox.x += VelX;
 
 	//If the bala went too far to the left or right or touched a wall
 	if ((BalaBox.x < 0) || (BalaBox.x + BALA_WIDTH > LEVEL_WIDTH) || touchesWall(BalaBox, tiles))
 	{
 		//move back
-		BalaBox.x -= Vel*cos(angle)*signeX;
+		BalaBox.x -= VelX;
 		signeX = -signeX;
+		VelX *= signeX;
 	}
 
 	//Move the bala up or down
-	BalaBox.y += Vel*sin(angle)*signeY;
+	BalaBox.y += VelY;
 
 	//If the bala went too far up or down or touched a wall
 	if ((BalaBox.y < 0) || (BalaBox.y + BALA_HEIGHT > LEVEL_HEIGHT) || touchesWall(BalaBox, tiles))
 	{
 		//move back
-		BalaBox.y -= Vel*sin(angle)*signeY;
+		BalaBox.y -= VelY;
 		signeY = -signeY;
+		VelY *= signeY;
 	}
 }
