@@ -161,6 +161,12 @@
     <ClCompile Include="cpp\Tank.cpp" />
     <ClCompile Include="cpp\Tile.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="h\Bala.h" />
+    <ClInclude Include="h\Ltexture.h" />
+    <ClInclude Include="h\Tank.h" />
+    <ClInclude Include="h\Tile.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
