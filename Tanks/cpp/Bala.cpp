@@ -20,17 +20,17 @@ void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 	SDL_Point* center = &centre;
 
-	double degrees = angle;
+	Angle_Direccio = angle;
 	SDL_Rect PosicioT = tank.getTankBox();
 
-	if (cos(degrees) < 0)
+	if (cos(Angle_Direccio) < 0)
 		signeX = -1;
-	if (sin(degrees) < 0)
+	if (sin(Angle_Direccio) < 0)
 		signeY = -1;
 
 	//Velocitats cartesianes de la bala
-	VelX = Vel*cos(degrees);
-	VelY = Vel*sin(degrees);
+	VelX = Vel*cos(Angle_Direccio);
+	VelY = Vel*sin(Angle_Direccio);
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
 	BalaBox.x = PosicioT.x + centre.x;
@@ -39,7 +39,7 @@ void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
-	gBalaTexture.render(BalaBox.x, BalaBox.y, NULL, degrees, NULL, flipType);
+	gBalaTexture.render(BalaBox.x, BalaBox.y);
 }
 
 void Bala::moveBala(Tile *tiles[])

@@ -36,10 +36,10 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
-	if ((x - TankBox.x) != 0)
-		angle = atan((double(y - TankBox.y)) / double(x - TankBox.x));
+	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
+		angle = atan((double(y - TankBox.y - MEITAT_CAPSULA_Y)) / double(x - TankBox.x - MEITAT_CAPSULA_X));
 	angle *= 57.3;
-	if ((x - TankBox.x) < 0)
+	if ((x - TankBox.x - MEITAT_CAPSULA_X) < 0)
 		angle += 180;
 
 	//Si s'ha apretat el botó del ratoli
@@ -109,7 +109,7 @@ void Tank::setCamera(SDL_Rect& camera)
 	}
 }
 
-void Tank::render(float degrees, SDL_RendererFlip flipType, double angle)
+void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
 	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };

@@ -29,7 +29,7 @@ private:
 	float Temps, TempsFinal;
 
 	//L'angle en el qual està anant la bala
-	float Angle_Direccio;
+	double Angle_Direccio;
 
 	SDL_Rect BalaBox;
 
