@@ -24,6 +24,7 @@ public:
 	//Centers the camera over the dot
 	void setCamera(SDL_Rect& camera);
 
+
 	//Mostra el tank en pantalla
 	void render(double degrees, SDL_RendererFlip flipType, double angle);
 
@@ -38,7 +39,7 @@ private:
 	int mPosX, mPosY;
 
 	//The velocity of the tank
-	int mVelX, mVelY;
+	float mVelX, mVelY;
 
 	SDL_Rect TankBox;
 };

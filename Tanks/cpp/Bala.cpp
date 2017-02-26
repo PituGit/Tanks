@@ -29,8 +29,8 @@ void Bala::ObtenirDades( double angle, Tank tank)
 		signeY = -1;
 
 	//Velocitats cartesianes de la bala
-	VelX = Vel*cos(Angle_Direccio)*signeX;
-	VelY = Vel*sin(Angle_Direccio)*signeY;
+	VelX = double(Vel) * cos(Angle_Direccio * PI / 180) * signeX;
+	VelY = double(Vel) * sin(Angle_Direccio * PI / 180) * signeY;
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
 	BalaBox.x = PosicioT.x + centre.x;

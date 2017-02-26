@@ -23,7 +23,7 @@ private:
 
 	//The velocity of the bala, els signes de la velocitat i la velocitat en cartesianes
 	int Vel, signeX, signeY;
-	float VelX, VelY;
+	double VelX, VelY;
 
 	//Temps de la bala
 	float Temps, TempsFinal;

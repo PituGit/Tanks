@@ -60,6 +60,7 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		case SDLK_RIGHT: mVelX += TANK_VEL; break;
 		}
 
+		
 	}
 	//If a key was released
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -73,8 +74,8 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		case SDLK_RIGHT: mVelX -= TANK_VEL; break;
 		}
 	}
-
 }
+
 
 void Tank::setCamera(SDL_Rect& camera)
 {
