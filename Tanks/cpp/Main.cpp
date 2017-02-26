@@ -2,184 +2,9 @@
 and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, standard IO, strings, and file streams
-#include <SDL.h>
-#include <SDL_image.h>
-#include <stdio.h>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <math.h>
-#include <iostream>
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 960;
+#include "Main.h"
 
-//The dimensions of the level
-const int LEVEL_WIDTH = 1280; 
-const int LEVEL_HEIGHT = 960;
-
-//Tile constants
-const int TILE_WIDTH = 80;
-const int TILE_HEIGHT = 80;
-const int TOTAL_TILES = 192;
-const int TOTAL_TILE_SPRITES = 12;
-
-//The different tile sprites
-const int TILE_RED = 0;
-const int TILE_GREEN = 1;
-const int TILE_BLUE = 2;
-const int TILE_CENTER = 3;
-const int TILE_TOP = 4;
-const int TILE_TOPRIGHT = 5;
-const int TILE_RIGHT = 6;
-const int TILE_BOTTOMRIGHT = 7;
-const int TILE_BOTTOM = 8;
-const int TILE_BOTTOMLEFT = 9;
-const int TILE_LEFT = 10;
-const int TILE_TOPLEFT = 11;
-
-//Màxim de bales que hi poden haver
-const int N = 20;
-
-//Texture wrapper class
-class LTexture
-{
-	public:
-		//Initializes variables
-		LTexture();
-
-		//Deallocates memory
-		~LTexture();
-
-		//Loads image at specified path
-		bool loadFromFile( std::string path );
-		
-		#ifdef _SDL_TTF_H
-		//Creates image from font string
-		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
-		#endif
-
-		//Deallocates texture
-		void free();
-
-		//Set color modulation
-		void setColor( Uint8 red, Uint8 green, Uint8 blue );
-
-		//Set blending
-		void setBlendMode( SDL_BlendMode blending );
-
-		//Set alpha modulation
-		void setAlpha( Uint8 alpha );
-		
-		//Renders texture at given point
-		void render( int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
-
-		//Gets image dimensions
-		int getWidth();
-		int getHeight();
-
-	private:
-		//The actual hardware texture
-		SDL_Texture* mTexture;
-
-		//Image dimensions
-		int mWidth;
-		int mHeight;
-};
-
-//The tile
-class Tile
-{
-    public:
-		//Initializes position and type
-		Tile( int x, int y, int tileType );
-
-		//Shows the tile
-		void render( SDL_Rect& camera );
-
-		//Get the tile type
-		int getType();
-
-		//Get the collision box
-		SDL_Rect getBox();
-
-    private:
-		//The attributes of the tile
-		SDL_Rect mBox;
-
-		//The tile type
-		int mType;
-};
-
-const int Meitat_CapsulaX = 21;
-const int Meitat_CapsulaY = 23;
-
-//The dot that will move around on the screen
-class Tank
-{
-    public:
-		//The dimensions of the dot
-		static const int Tank_WIDTH = 55;
-		static const int Tank_HEIGHT = 45;
-
-		//Maximum axis velocity of the dot
-		static const int DOT_VEL = 5;
-
-		//Initializes the variables
-		Tank();
-
-		//Takes key presses and adjusts the dot's velocity
-		void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool& shoot);
-
-		//Moves the dot and check collision against tiles
-		void move( Tile *tiles[] );
-
-		//Centers the camera over the dot
-		void setCamera( SDL_Rect& camera );
-
-		//Shows the dot on the screen
-		void render(float degrees, SDL_RendererFlip flipType, double angle);
-
-		//Obté dades del tanc
-		int getVelocitatX();
-		int getVelocitatY();
-
-		SDL_Rect getTankBox();
-
-    private:
-		//The X and Y offsets of the tank
-		int mPosX, mPosY;
-
-		//The velocity of the tank
-		int mVelX, mVelY;
-
-		SDL_Rect TankBox;
-};
-
-class Bala
-{
-	public:
-		//en realitat es 10 (amplada) x7 (altura)
-		static const int Bala_WIDTH = 10;
-		static const int Bala_HEIGHT = 10;
-
-		Bala();
-
-		void move(Tile *tiles[]);
-
-		void render(float degrees, SDL_RendererFlip flipType, double angle);
-
-	private:
-		//The X and Y offsets of the bala
-		int mPosX, mPosY;
-
-		//The velocity of the bala
-		int Vel;
-
-		SDL_Rect BalaBox;
-
-};
 
 //Starts up SDL and creates window
 bool init();
@@ -202,14 +27,8 @@ bool setTiles( Tile *tiles[] );
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
 
-//The window renderer
-SDL_Renderer* gRenderer = NULL;
-
 //Scene textures
-LTexture gBaseTankTexture;
-LTexture gCapsulaTexture;
-LTexture gTileTexture;
-LTexture gBalaTexture;
+
 SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ];
 
 LTexture::LTexture()
@@ -225,6 +44,101 @@ LTexture::~LTexture()
 	//Deallocate
 	free();
 }
+
+
+#ifdef _SDL_TTF_H
+bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
+{
+	//Get rid of preexisting texture
+	free();
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);
+	if (textSurface != NULL)
+	{
+		//Create texture from surface pixels
+		mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+		if (mTexture == NULL)
+		{
+			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Get image dimensions
+			mWidth = textSurface->w;
+			mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface(textSurface);
+	}
+	else
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+
+
+	//Return success
+	return mTexture != NULL;
+}
+#endif
+
+void LTexture::free()
+{
+	//Free texture if it exists
+	if (mTexture != NULL)
+	{
+		SDL_DestroyTexture(mTexture);
+		mTexture = NULL;
+		mWidth = 0;
+		mHeight = 0;
+	}
+}
+
+void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
+{
+	//Modulate texture rgb
+	SDL_SetTextureColorMod(mTexture, red, green, blue);
+}
+
+void LTexture::setBlendMode(SDL_BlendMode blending)
+{
+	//Set blending function
+	SDL_SetTextureBlendMode(mTexture, blending);
+}
+
+void LTexture::setAlpha(Uint8 alpha)
+{
+	//Modulate texture alpha
+	SDL_SetTextureAlphaMod(mTexture, alpha);
+}
+
+void LTexture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Set clip rendering dimensions
+	if (clip != NULL)
+	{
+		renderQuad.w = clip->w;
+		renderQuad.h = clip->h;
+	}
+
+	//Render to screen
+	SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
+}
+
+int LTexture::getWidth()
+{
+	return mWidth;
+}
+
+int LTexture::getHeight()
+{
+	return mHeight;
+}
+
 
 bool LTexture::loadFromFile( std::string path )
 {
@@ -267,97 +181,15 @@ bool LTexture::loadFromFile( std::string path )
 	return mTexture != NULL;
 }
 
-#ifdef _SDL_TTF_H
-bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColor )
-{
-	//Get rid of preexisting texture
-	free();
 
-	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
-	if( textSurface != NULL )
+void Tile::render(SDL_Rect& camera)
+{
+	//If the tile is on screen
+	if (checkCollision(camera, mBox))
 	{
-		//Create texture from surface pixels
-        mTexture = SDL_CreateTextureFromSurface( gRenderer, textSurface );
-		if( mTexture == NULL )
-		{
-			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
-		}
-		else
-		{
-			//Get image dimensions
-			mWidth = textSurface->w;
-			mHeight = textSurface->h;
-		}
-
-		//Get rid of old surface
-		SDL_FreeSurface( textSurface );
+		//Show the tile
+		gTileTexture.render(mBox.x - camera.x, mBox.y - camera.y, &gTileClips[mType]);
 	}
-	else
-	{
-		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
-	}
-
-	
-	//Return success
-	return mTexture != NULL;
-}
-#endif
-
-void LTexture::free()
-{
-	//Free texture if it exists
-	if( mTexture != NULL )
-	{
-		SDL_DestroyTexture( mTexture );
-		mTexture = NULL;
-		mWidth = 0;
-		mHeight = 0;
-	}
-}
-
-void LTexture::setColor( Uint8 red, Uint8 green, Uint8 blue )
-{
-	//Modulate texture rgb
-	SDL_SetTextureColorMod( mTexture, red, green, blue );
-}
-
-void LTexture::setBlendMode( SDL_BlendMode blending )
-{
-	//Set blending function
-	SDL_SetTextureBlendMode( mTexture, blending );
-}
-		
-void LTexture::setAlpha( Uint8 alpha )
-{
-	//Modulate texture alpha
-	SDL_SetTextureAlphaMod( mTexture, alpha );
-}
-
-void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
-{
-	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-
-//Set clip rendering dimensions
-if (clip != NULL)
-{
-	renderQuad.w = clip->w;
-	renderQuad.h = clip->h;
-}
-
-//Render to screen
-SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
-}
-
-int LTexture::getWidth()
-{
-	return mWidth;
-}
-
-int LTexture::getHeight()
-{
-	return mHeight;
 }
 
 Tile::Tile(int x, int y, int tileType)
@@ -374,16 +206,6 @@ Tile::Tile(int x, int y, int tileType)
 	mType = tileType;
 }
 
-void Tile::render(SDL_Rect& camera)
-{
-	//If the tile is on screen
-	if (checkCollision(camera, mBox))
-	{
-		//Show the tile
-		gTileTexture.render(mBox.x - camera.x, mBox.y - camera.y, &gTileClips[mType]);
-	}
-}
-
 int Tile::getType()
 {
 	return mType;
@@ -394,6 +216,27 @@ SDL_Rect Tile::getBox()
 	return mBox;
 }
 
+
+void CalcularGraus(double &degrees, Tank tank)
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	if (tank.getVelocitatX() != 0)
+	{
+		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
+		degrees = degrees*57.3;
+		if (tank.getVelocitatX()<0)
+		{
+			degrees += 180;
+		}
+	}
+	else
+	{
+		if (currentKeyStates[SDL_SCANCODE_UP])
+			degrees = 270;
+		else if (currentKeyStates[SDL_SCANCODE_DOWN])
+			degrees = 90;
+	}
+}
 
 Tank::Tank()
 {
@@ -406,18 +249,6 @@ Tank::Tank()
 	//Initialize the velocity
 	mVelX = 0;
 	mVelY = 0;
-}
-
-Bala::Bala()
-{
-	//Initialize the collision box
-	BalaBox.x = 400;
-	BalaBox.y = 500;
-	BalaBox.w = Bala_WIDTH;
-	BalaBox.h = Bala_HEIGHT;
-
-	//Initialize the velocity
-	Vel = 10;
 }
 
 int Tank::getVelocitatX()
@@ -455,53 +286,71 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		shoot = true;
 	}
 
-    //If a key was pressed
-	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
-        {
-            case SDLK_UP: mVelY -= DOT_VEL; break;
-            case SDLK_DOWN: mVelY += DOT_VEL; break;
-            case SDLK_LEFT: mVelX -= DOT_VEL; break;
-            case SDLK_RIGHT: mVelX += DOT_VEL; break;
-        }
-		
-    }
-    //If a key was released
-    else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
-        {
-            case SDLK_UP: mVelY += DOT_VEL; break;
-            case SDLK_DOWN: mVelY -= DOT_VEL; break;
-            case SDLK_LEFT: mVelX += DOT_VEL; break;
-            case SDLK_RIGHT: mVelX -= DOT_VEL; break;
-        }
-    }
+	//If a key was pressed
+	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+	{
+		//Adjust the velocity
+		switch (e.key.keysym.sym)
+		{
+		case SDLK_UP: mVelY -= Tank_VEL; break;
+		case SDLK_DOWN: mVelY += Tank_VEL; break;
+		case SDLK_LEFT: mVelX -= Tank_VEL; break;
+		case SDLK_RIGHT: mVelX += Tank_VEL; break;
+		}
+
+	}
+	//If a key was released
+	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
+	{
+		//Adjust the velocity
+		switch (e.key.keysym.sym)
+		{
+		case SDLK_UP: mVelY += Tank_VEL; break;
+		case SDLK_DOWN: mVelY -= Tank_VEL; break;
+		case SDLK_LEFT: mVelX += Tank_VEL; break;
+		case SDLK_RIGHT: mVelX -= Tank_VEL; break;
+		}
+	}
 
 }
 
-void CalcularGraus(double &degrees, Tank tank)
+
+void Tank::setCamera(SDL_Rect& camera)
 {
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-	if (tank.getVelocitatX() != 0)
+	//Center the camera over the dot
+	camera.x = (TankBox.x + Tank_WIDTH / 2) - SCREEN_WIDTH / 2;
+	camera.y = (TankBox.y + Tank_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+
+	//Keep the camera in bounds
+	if (camera.x < 0)
 	{
-		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
-		degrees = degrees*57.3;
-		if (tank.getVelocitatX()<0)
-		{
-			degrees += 180;
-		}
+		camera.x = 0;
 	}
-	else
+	if (camera.y < 0)
 	{
-		if (currentKeyStates[SDL_SCANCODE_UP])
-			degrees = 270;
-		else if (currentKeyStates[SDL_SCANCODE_DOWN])
-			degrees = 90;
+		camera.y = 0;
 	}
+	if (camera.x > LEVEL_WIDTH - camera.w)
+	{
+		camera.x = LEVEL_WIDTH - camera.w;
+	}
+	if (camera.y > LEVEL_HEIGHT - camera.h)
+	{
+		camera.y = LEVEL_HEIGHT - camera.h;
+	}
+}
+
+void Tank::render(float degrees, SDL_RendererFlip flipType, double angle)
+{
+	//Centre de rotació del tanc
+	SDL_Point centre = { Meitat_CapsulaX, Meitat_CapsulaY };
+	SDL_Point* center = &centre;
+	//Mostra el tank
+	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { Meitat_CapsulaX, Meitat_CapsulaY - 4 };
+	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
 
@@ -528,47 +377,16 @@ void Tank::move( Tile *tiles[] )
     }
 }
 
-void Bala::move(Tile *tileSet[])
+Bala::Bala()
 {
+	//Initialize the collision box
+	BalaBox.x = 400;
+	BalaBox.y = 500;
+	BalaBox.w = Bala_WIDTH;
+	BalaBox.h = Bala_HEIGHT;
 
-}
-
-void Tank::setCamera( SDL_Rect& camera )
-{
-	//Center the camera over the dot
-	camera.x = ( TankBox.x + Tank_WIDTH / 2 ) - SCREEN_WIDTH / 2;
-	camera.y = ( TankBox.y + Tank_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-
-	//Keep the camera in bounds
-	if( camera.x < 0 )
-	{ 
-		camera.x = 0;
-	}
-	if( camera.y < 0 )
-	{
-		camera.y = 0;
-	}
-	if( camera.x > LEVEL_WIDTH - camera.w )
-	{
-		camera.x = LEVEL_WIDTH - camera.w;
-	}
-	if( camera.y > LEVEL_HEIGHT - camera.h )
-	{
-		camera.y = LEVEL_HEIGHT - camera.h;
-	}
-}
-
-void Tank::render(float degrees, SDL_RendererFlip flipType, double angle)
-{
-	//Centre de rotació del tanc
-	SDL_Point centre = {Meitat_CapsulaX, Meitat_CapsulaY };
-	SDL_Point* center = &centre;
-    //Mostra el tank
-	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
-	//Angle en el que apunta
-	degrees = angle;
-	centre = { Meitat_CapsulaX, Meitat_CapsulaY -4 };
-	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+	//Initialize the velocity
+	Vel = 10;
 }
 
 void Bala::render(float degrees, SDL_RendererFlip flipType, double angle)
@@ -576,6 +394,31 @@ void Bala::render(float degrees, SDL_RendererFlip flipType, double angle)
 	degrees = angle;
 	gBalaTexture.render(mPosX, mPosY, NULL, degrees, NULL, flipType);
 }
+
+void Bala::move(Tile *tiles[])
+{
+	//Move the dot left or right
+	BalaBox.x += cos(Vel);
+
+	//If the dot went too far to the left or right or touched a wall
+	if ((BalaBox.x < 0) || (BalaBox.x + Bala_WIDTH > LEVEL_WIDTH) || touchesWall(BalaBox, tiles))
+	{
+		//move back
+		BalaBox.x -= cos(Vel);
+	}
+
+	//Move the dot up or down
+	BalaBox.y += sin(Vel);
+
+	//If the dot went too far up or down or touched a wall
+	if ((BalaBox.y < 0) || (BalaBox.y + Bala_HEIGHT > LEVEL_HEIGHT) || touchesWall(BalaBox, tiles))
+	{
+		//move back
+		BalaBox.y -= sin(Vel);
+	}
+}
+
+
 
 bool init()
 {
@@ -958,6 +801,14 @@ int main( int argc, char* args[] )
 				tank.move( tileSet);
 				tank.setCamera( camera );
 
+				if (shoot)
+				{
+					cBales++;
+
+				}
+					
+
+				//Mou cada una de les bales
 				for (int i = 0; i < cBales; i++)
 				{
 					bala[i].move(tileSet);
@@ -975,8 +826,6 @@ int main( int argc, char* args[] )
 				//Render tank
 				tank.render( degrees, flipType, angle);
 
-				if (shoot)
-					cBales++;
 
 				//Renderitza totes les bales
 				for(int i=0; i<cBales; i++)
