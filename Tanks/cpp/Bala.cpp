@@ -15,12 +15,12 @@ Bala::Bala()
 	signeY = 1;
 }
 
-void Bala::ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
+void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 	SDL_Point* center = &centre;
 
-	degrees = angle;
+	double degrees = angle;
 	SDL_Rect PosicioT = tank.getTankBox();
 
 	if (cos(degrees) < 0)
@@ -37,7 +37,7 @@ void Bala::ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle,
 	BalaBox.y = PosicioT.y + centre.y;
 }
 
-void Bala::renderBala(float degrees, SDL_RendererFlip flipType, double angle, Tank tank)
+void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	gBalaTexture.render(BalaBox.x, BalaBox.y, NULL, degrees, NULL, flipType);
 }

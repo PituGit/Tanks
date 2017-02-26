@@ -13,9 +13,9 @@ public:
 
 	void moveBala(Tile *tiles[]);
 
-	void ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+	void ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank);
 
-	void renderBala(float degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
 private:
 	//The X and Y offsets of the bala
