@@ -1,6 +1,6 @@
 # Tanks
 
-He posat a la carpeta 39_tiling el projecte amb nomes un header Main.h on esta guardat totes les constants i les classes.
+Esborra't el projecte al local i torna a clonar el repositori. Així tenim tots la mateixa estructura
 
 /cpp para .cpp
 
