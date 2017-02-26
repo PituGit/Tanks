@@ -13,12 +13,12 @@ Tank::Tank()
 	mVelY = 0;
 }
 
-int Tank::getVelocitatX()
+float Tank::getVelocitatX()
 {
 	return mVelX;
 }
 
-int Tank::getVelocitatY()
+float Tank::getVelocitatY()
 {
 	return mVelY;
 }
@@ -76,6 +76,35 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 	}
 }
 
+/*
+void Tank::AjustarVelocitat()
+{
+	//Ajusta la velocitat perque no vagi mes rapid en diagonal
+	if (mVelX != 0 && mVelY != 0)
+	{
+		if (mVelX > 0 && mVelY > 0)
+		{
+			mVelX = TANK_VEL * cos( 7 * PI / 4 );
+			mVelY = TANK_VEL * sin( 7 * PI / 4 );
+		}
+		else if (mVelX > 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( PI / 4);
+			mVelY = TANK_VEL * sin( PI / 4);
+		}
+		else if (mVelX < 0 && mVelY > 0)
+		{ 
+			mVelX = TANK_VEL * cos( 3 * PI / 4);
+			mVelY = TANK_VEL * sin( 3 * PI / 4);
+		}
+		else if (mVelX < 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( 5 * PI / 4);
+			mVelY = TANK_VEL * sin( 5 * PI / 4);
+		}
+	}
+}
+*/
 
 void Tank::setCamera(SDL_Rect& camera)
 {

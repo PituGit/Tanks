@@ -24,13 +24,15 @@ public:
 	//Centers the camera over the dot
 	void setCamera(SDL_Rect& camera);
 
+	//Ajusta la velocitat perque no vagi mes rapid en diagonal
+	//void AjustarVelocitat();
 
 	//Mostra el tank en pantalla
 	void render(double degrees, SDL_RendererFlip flipType, double angle);
 
 	//Obté dades del tanc
-	int getVelocitatX();
-	int getVelocitatY();
+	float getVelocitatX();
+	float getVelocitatY();
 
 	SDL_Rect getTankBox();
 

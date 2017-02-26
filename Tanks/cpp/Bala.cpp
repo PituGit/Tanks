@@ -23,10 +23,11 @@ void Bala::ObtenirDades( double angle, Tank tank)
 	Angle_Direccio = angle;
 	SDL_Rect PosicioT = tank.getTankBox();
 
-	if (cos(Angle_Direccio) < 0)
+	if (Angle_Direccio < 90 && Angle_Direccio > 270)
 		signeX = -1;
-	if (sin(Angle_Direccio) > 0)
+	if (Angle_Direccio < 0 && Angle_Direccio > 180)
 		signeY = -1;
+	
 
 	//Velocitats cartesianes de la bala
 	VelX = double(Vel) * cos(Angle_Direccio * PI / 180) * signeX;

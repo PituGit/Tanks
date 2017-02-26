@@ -34,7 +34,7 @@ enum TILE
 const int MEITAT_CAPSULA_X = 21;
 const int MEITAT_CAPSULA_Y = 23;
 
-const float PI = 3.14159265;
+const double PI = 3.14159265;
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;

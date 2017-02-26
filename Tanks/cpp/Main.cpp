@@ -335,6 +335,7 @@ int main( int argc, char* args[] )
 				CalcularGraus(degrees, tank);
 
 				//Mou el tank i camera
+				//tank.AjustarVelocitat();
 				tank.move(tileSet);
 				tank.setCamera(camera);
 
