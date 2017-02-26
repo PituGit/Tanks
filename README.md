@@ -4,6 +4,6 @@ Esborra't el projecte al local i torna a clonar el repositori. Així tenim tots 
 
 /cpp para .cpp
 
-/h para .h
+/h para .h  /---/ Global.h para constantes
 
 /res para recursos
