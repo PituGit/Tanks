@@ -203,10 +203,10 @@ bool setTiles( Tile* tiles[] )
 		//Clip the sprite sheet
 		if( tilesLoaded )
 		{
-			gTileClips[ TILE_RED ].x = 0;
-			gTileClips[ TILE_RED ].y = 0;
-			gTileClips[ TILE_RED ].w = TILE_WIDTH;
-			gTileClips[ TILE_RED ].h = TILE_HEIGHT;
+			gTileClips[ TILE_FLOOR ].x = 0;
+			gTileClips[ TILE_FLOOR ].y = 0;
+			gTileClips[ TILE_FLOOR ].w = TILE_WIDTH;
+			gTileClips[ TILE_FLOOR ].h = TILE_HEIGHT;
 
 			gTileClips[ TILE_GREEN ].x = 0;
 			gTileClips[ TILE_GREEN ].y = 80;

@@ -33,7 +33,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Bala.cpp">

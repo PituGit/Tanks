@@ -152,7 +152,6 @@
     <Image Include="res\tiles.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="res\lazy.map" />
   </ItemGroup>
