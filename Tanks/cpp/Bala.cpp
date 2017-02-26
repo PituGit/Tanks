@@ -14,6 +14,28 @@ Bala::Bala()
 	signeY = 1;
 }
 
+void Bala::ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
+{
+	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
+	SDL_Point* center = &centre;
+
+	degrees = angle;
+	SDL_Rect PosicioT = tank.getTankBox();
+
+	if (cos(degrees) < 0)
+		signeX = -1;
+	if (sin(degrees) < 0)
+		signeY = -1;
+
+	//Velocitats cartesianes de la bala
+	VelX = Vel*cos(degrees);
+	VelY = Vel*sin(degrees);
+
+	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
+	BalaBox.x = PosicioT.x + centre.x;
+	BalaBox.y = PosicioT.y + centre.y;
+}
+
 void Bala::renderPrimerCop(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
@@ -27,8 +49,8 @@ void Bala::renderPrimerCop(double degrees, SDL_RendererFlip flipType, double ang
 		signeY = -1;
 
 	//Velocitats cartesianes de la bala
-	VelX = Vel*cos(degrees)*signeX;
-	VelY = Vel*sin(degrees)*signeY;
+	VelX = Vel*cos(degrees);
+	VelY = Vel*sin(degrees);
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
 	BalaBox.x = PosicioT.x + centre.x;

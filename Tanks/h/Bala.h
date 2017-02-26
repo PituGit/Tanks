@@ -15,6 +15,8 @@ public:
 
 	void renderPrimerCop(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
+	void ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+
 	void renderBala(float degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
 private:
@@ -22,7 +24,8 @@ private:
 	int mPosX, mPosY;
 
 	//The velocity of the bala, els signes de la velocitat i la velocitat en cartesianes
-	int Vel, signeX, signeY, VelX, VelY;
+	int Vel, signeX, signeY;
+	float VelX, VelY;
 
 	//Temps de la bala
 	float Temps, TempsFinal;
