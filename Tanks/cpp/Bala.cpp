@@ -13,6 +13,10 @@ Bala::Bala()
 	VelX = 0;
 	VelY = 0;
 	Angle_Direccio = 0;
+
+	//Temps
+	Temps = 0;
+	Temps = SDL_GetTicks();
 }
 
 void Bala::ObtenirDades( double angle, Tank tank)
@@ -40,6 +44,16 @@ void Bala::ObtenirDades( double angle, Tank tank)
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
+}
+
+bool Bala::ControlaBales()
+{
+	bool trobat = false;
+	if ((SDL_GetTicks() - Temps) >= 2000)
+	{
+		trobat = true;
+	}
+	return trobat;
 }
 
 void Bala::moveBala(Tile *tiles[])

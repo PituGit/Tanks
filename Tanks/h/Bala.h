@@ -17,6 +17,8 @@ public:
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
+	bool ControlaBales();
+
 private:
 	//The X and Y offsets of the bala
 	int mPosX, mPosY;
@@ -26,7 +28,7 @@ private:
 	double VelX, VelY;
 
 	//Temps de la bala
-	float Temps, TempsFinal;
+	Uint32 Temps, TempsFinal;
 
 	//L'angle en el qual està anant la bala
 	double Angle_Direccio;
