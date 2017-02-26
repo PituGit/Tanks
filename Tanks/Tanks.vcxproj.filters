@@ -67,6 +67,9 @@
     <ClInclude Include="h\LTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="h\Main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
