@@ -357,7 +357,7 @@ int main(int argc, char* args[])
 				{
 					bala.push_back(Bala());
 					cBales++;
-					bala[cBales - 1].renderPrimerCop(degrees, flipType, angle, tank);
+					bala[cBales-1].ObtenirDades(degrees, flipType, angle, tank);
 				}
 
 				//Renderitza totes les bales
