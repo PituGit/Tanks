@@ -13,8 +13,6 @@ public:
 
 	void moveBala(Tile *tiles[]);
 
-	void renderPrimerCop(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
-
 	void ObtenirDades(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
 	void renderBala(float degrees, SDL_RendererFlip flipType, double angle, Tank tank);
