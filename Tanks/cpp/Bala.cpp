@@ -3,8 +3,6 @@
 Bala::Bala()
 {
 	//Initialize the collision box
-	BalaBox.x = 10;
-	BalaBox.y = 10;
 	BalaBox.w = BALA_WIDTH;
 	BalaBox.h = BALA_HEIGHT;
 
@@ -12,6 +10,9 @@ Bala::Bala()
 	Vel = 10;
 	signeX = 1;
 	signeY = 1;
+	VelX = 0;
+	VelY = 0;
+	Angle_Direccio = 0;
 }
 
 void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
@@ -24,7 +25,7 @@ void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 
 	if (cos(Angle_Direccio) < 0)
 		signeX = -1;
-	if (sin(Angle_Direccio) < 0)
+	if (sin(Angle_Direccio) > 0)
 		signeY = -1;
 
 	//Velocitats cartesianes de la bala
