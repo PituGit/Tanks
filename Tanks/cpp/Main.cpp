@@ -319,63 +319,60 @@ int main( int argc, char* args[] )
 			SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 			//While application is running
-			while( !quit )
+			while (!quit)
 			{
 				//Handle events on queue
-				while( SDL_PollEvent( &e ) != 0 )
+				while (SDL_PollEvent(&e) != 0)
 				{
 					//User requests quit
-					if( e.type == SDL_QUIT )
+					if (e.type == SDL_QUIT)
 					{
 						quit = true;
 					}
 					//Gestiona les dades introduides
-					tank.handleEvent( e, &e, angle, camera, shoot);
+					tank.handleEvent(e, &e, angle, camera, shoot);
 				}
 				CalcularGraus(degrees, tank);
 
 				//Mou el tank i camera
-				tank.move( tileSet);
-				tank.setCamera( camera );
+				tank.move(tileSet);
+				tank.setCamera(camera);
+
+				for (int i = 0; i<cBales; i++)
+					bala[i].moveBala(tileSet, angle);
+
+				//Clear screen
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderer);
+
+				//Render level
+				for (int i = 0; i < TOTAL_TILES; ++i)
+				{
+					tileSet[i]->render(camera);
+				}
+				//Render tank
+				tank.render(degrees, flipType, angle);
 
 				if (shoot)
 				{
+					bala.push_back(Bala());
 					cBales++;
-
+					bala[cBales - 1].renderPrimerCop(degrees, flipType, angle, tank);
 				}
-					
-
-				//Mou cada una de les bales
-				for (int i = 0; i < cBales; i++)
-				{
-					bala[i].move(tileSet);
-				}
-
-				//Clear screen
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				SDL_RenderClear( gRenderer );
-
-				//Render level
-				for( int i = 0; i < TOTAL_TILES; ++i )
-				{
-					tileSet[ i ]->render( camera );
-				}
-				//Render tank
-				tank.render( degrees, flipType, angle);
-
 
 				//Renderitza totes les bales
-				for(int i=0; i<cBales; i++)
-					bala[i].render(degrees, flipType, angle);
-				
-				
+				for (int i = 0; i<cBales; i++)
+					bala[i].renderBala(degrees, flipType, angle, tank);
+
+
+
 				//Update screen
-				SDL_RenderPresent( gRenderer );
+				SDL_RenderPresent(gRenderer);
 			}
 		}
-		
+
 		//Free resources and close SDL
-		close( tileSet );
+		close(tileSet);
 	}
 
 	return 0;
