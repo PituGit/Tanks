@@ -5,17 +5,19 @@
 class Bala
 {
 public:
-	//en realitat es 10 (amplada) x7 (altura)
-	static const int BALA_WIDTH = 10;
-	static const int BALA_HEIGHT = 10;
+	//es 8 (amplada) x8 (altura)
+	static const int BALA_WIDTH = 8;
+	static const int BALA_HEIGHT = 8;
 
 	Bala();
 
 	void moveBala(Tile *tiles[]);
 
-	void ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank);
+	void ObtenirDades( double angle, Tank tank);
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+
+	bool ControlaBales();
 
 private:
 	//The X and Y offsets of the bala
@@ -23,10 +25,10 @@ private:
 
 	//The velocity of the bala, els signes de la velocitat i la velocitat en cartesianes
 	int Vel, signeX, signeY;
-	float VelX, VelY;
+	double VelX, VelY;
 
 	//Temps de la bala
-	float Temps, TempsFinal;
+	Uint32 Temps, TempsFinal;
 
 	//L'angle en el qual està anant la bala
 	double Angle_Direccio;

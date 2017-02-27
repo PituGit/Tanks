@@ -4,8 +4,6 @@
 Bala::Bala()
 {
 	//Initialize the collision box
-	BalaBox.x = 10;
-	BalaBox.y = 10;
 	BalaBox.w = BALA_WIDTH;
 	BalaBox.h = BALA_HEIGHT;
 
@@ -13,9 +11,16 @@ Bala::Bala()
 	Vel = 10;
 	signeX = 1;
 	signeY = 1;
+	VelX = 0;
+	VelY = 0;
+	Angle_Direccio = 0;
+
+	//Temps
+	Temps = 0;
+	Temps = SDL_GetTicks();
 }
 
-void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
+void Bala::ObtenirDades( double angle, Tank tank)
 {
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 	SDL_Point* center = &centre;
@@ -23,23 +28,33 @@ void Bala::ObtenirDades( SDL_RendererFlip flipType, double angle, Tank tank)
 	Angle_Direccio = angle;
 	SDL_Rect PosicioT = tank.getTankBox();
 
-	if (cos(Angle_Direccio) < 0)
+	if (Angle_Direccio < 90 && Angle_Direccio > 270)
 		signeX = -1;
-	if (sin(Angle_Direccio) < 0)
+	if (Angle_Direccio < 0 && Angle_Direccio > 180)
 		signeY = -1;
-
+	
 	//Velocitats cartesianes de la bala
-	VelX = Vel*cos(Angle_Direccio);
-	VelY = Vel*sin(Angle_Direccio);
+	VelX = double(Vel) * cos(Angle_Direccio * PI / 180) * signeX;
+	VelY = double(Vel) * sin(Angle_Direccio * PI / 180) * signeY;
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
-	BalaBox.x = PosicioT.x + centre.x;
-	BalaBox.y = PosicioT.y + centre.y;
+	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180);
+	BalaBox.y = PosicioT.y + centre.y + LONGITUD_TOTAL_DEL_CANO * sin(Angle_Direccio * PI / 180);
 }
 
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
+}
+
+bool Bala::ControlaBales()
+{
+	bool trobat = false;
+	if ((SDL_GetTicks() - Temps) >= 2000)
+	{
+		trobat = true;
+	}
+	return trobat;
 }
 
 void Bala::moveBala(Tile *tiles[])

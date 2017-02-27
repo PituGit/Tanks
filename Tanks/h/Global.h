@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <string>
 #include <stdio.h>
 #include <fstream>
@@ -33,6 +34,10 @@ enum TILE
 
 const int MEITAT_CAPSULA_X = 21;
 const int MEITAT_CAPSULA_Y = 23;
+
+const int LONGITUD_TOTAL_DEL_CANO = 47;
+
+const double PI = 3.14159265;
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;

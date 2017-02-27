@@ -335,6 +335,7 @@ int main(int argc, char* args[])
 				CalcularGraus(degrees, tank);
 
 				//Mou el tank i camera
+				//tank.AjustarVelocitat();
 				tank.move(tileSet);
 				tank.setCamera(camera);
 
@@ -357,8 +358,22 @@ int main(int argc, char* args[])
 				{
 					bala.push_back(Bala());
 					cBales++;
-					bala[cBales-1].ObtenirDades( flipType, angle, tank);
+					bala[cBales-1].ObtenirDades( angle, tank);
 				}
+
+				for (int i = 0; i < cBales; i++)
+				{
+					if (bala[i].ControlaBales())
+					{
+						for (int j = i; j < cBales - 1; j++)
+						{
+							bala[j] = bala[j + 1];
+						}
+						bala.erase(bala.begin() + (cBales-1));
+						cBales--;
+					}
+				}
+				
 
 				//Renderitza totes les bales
 				for (int i = 0; i<cBales; i++)
