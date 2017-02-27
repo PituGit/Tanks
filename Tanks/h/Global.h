@@ -35,7 +35,7 @@ enum TILE
 const int MEITAT_CAPSULA_X = 21;
 const int MEITAT_CAPSULA_Y = 23;
 
-const int LONGITUD_TOTAL_DEL_CANO = 47;
+const int LONGITUD_TOTAL_DEL_CANO = 53;
 
 const double PI = 3.14159265;
 

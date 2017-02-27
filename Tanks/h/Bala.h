@@ -19,6 +19,9 @@ public:
 
 	bool ControlaBales();
 
+	//Retorna el Temps de la bala
+	Uint32 Bala::getTemps();
+
 private:
 	//The X and Y offsets of the bala
 	int mPosX, mPosY;

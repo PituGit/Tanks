@@ -37,7 +37,7 @@ void Bala::ObtenirDades( double angle, Tank tank)
 	VelY = double(Vel) * sin(Angle_Direccio * PI / 180) * signeY;
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
-	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180);
+	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180) - 5;
 	BalaBox.y = PosicioT.y + centre.y + LONGITUD_TOTAL_DEL_CANO * sin(Angle_Direccio * PI / 180);
 }
 
@@ -54,6 +54,11 @@ bool Bala::ControlaBales()
 		trobat = true;
 	}
 	return trobat;
+}
+
+Uint32 Bala::getTemps()
+{
+	return (SDL_GetTicks() - Temps);
 }
 
 void Bala::moveBala(Tile *tiles[])

@@ -356,9 +356,21 @@ int main( int argc, char* args[] )
 
 				if (shoot)
 				{
-					bala.push_back(Bala());
-					cBales++;
-					bala[cBales-1].ObtenirDades( angle, tank);
+					if (cBales > 0)
+					{
+						if (bala[cBales - 1].getTemps() > 1000)
+						{
+							bala.push_back(Bala());
+							cBales++;
+							bala[cBales - 1].ObtenirDades(angle, tank);
+						}
+					}
+					else
+					{
+						bala.push_back(Bala());
+						cBales++;
+						bala[cBales - 1].ObtenirDades(angle, tank);
+					}
 				}
 
 				for (int i = 0; i < cBales; i++)
