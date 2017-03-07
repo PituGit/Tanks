@@ -336,7 +336,8 @@ int main(int argc, char* args[])
 			SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 			//The tank that will be moving around on the screen
-			Tank tank;
+			TankJugador tank(400,500);
+			TankDolent dolentProva(800,500);
 
 			//Les bales que es pintaran per pantalla
 			std::vector <Bala> bala(MAX_BALES);
@@ -391,6 +392,7 @@ int main(int argc, char* args[])
 				}
 				//Render tank
 				tank.render(degrees, flipType, angle);
+				dolentProva.render(0, flipType, 180);
 
 				if (shoot)
 				{

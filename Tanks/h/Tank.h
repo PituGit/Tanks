@@ -2,6 +2,12 @@
 
 #include "Tile.h"
 
+enum TANK_ID
+{
+	ID_JUGADOR,
+	ID_DOLENT,
+};
+
 class Tank
 {
 public:
@@ -12,20 +18,11 @@ public:
 	//Maximum axis velocity of the dot
 	static const int TANK_VEL = 5;
 
-	//Initializes the variables
-	Tank();
-
-	//Takes key presses and adjusts the dot's velocity
-	void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool &shoot);
-
-	//Moves the dot and check collision against tiles
-	void move(Tile *tiles[]);
-
-	//Centers the camera over the dot
-	void setCamera(SDL_Rect& camera);
-
 	//Ajusta la velocitat perque no vagi mes rapid en diagonal
 	//void AjustarVelocitat();
+
+	//Initializes the variables
+	Tank(int x, int y, int tankId);
 
 	//Mostra el tank en pantalla
 	void render(double degrees, SDL_RendererFlip flipType, double angle);
@@ -36,7 +33,7 @@ public:
 
 	SDL_Rect getTankBox();
 
-private:
+protected:
 	//The X and Y offsets of the tank
 	int mPosX, mPosY;
 
@@ -44,4 +41,27 @@ private:
 	float mVelX, mVelY;
 
 	SDL_Rect TankBox;
+
+	int mTankId;
+};
+
+class TankJugador : public Tank {
+public:	
+	TankJugador(int x, int y) : Tank(x, y, ID_JUGADOR) {};
+
+	//Takes key presses and adjusts the dot's velocity
+	void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool &shoot);
+
+	//Moves the dot and check collision against tiles
+	void move(Tile *tiles[]);
+
+	//Centers the camera over the dot
+	void setCamera(SDL_Rect& camera);
+
+};
+
+class TankDolent : public Tank {
+public:
+	TankDolent(int x, int y) : Tank(x, y, ID_DOLENT) {};
+
 };
