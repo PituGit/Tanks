@@ -92,7 +92,7 @@ bool loadMedia( Tile* tiles[] )
 		printf("Failed to load capsula texture!\n");
 		success = false;
 	}
-/*
+
 	if (!gExplosioATexture.loadFromFile("res/ExplosioA.png"))
 	{
 		printf("Failed to load explosio texture!\n");
@@ -122,7 +122,6 @@ bool loadMedia( Tile* tiles[] )
 		printf("Failed to load explosio texture!\n");
 		success = false;
 	}
-	*/
 
 	if (!gBalaTexture.loadFromFile("res/Bala.png"))
 	{
@@ -424,7 +423,6 @@ int main( int argc, char* args[] )
 						cBales--;
 					}
 				}
-				
 
 				//Renderitza totes les bales
 				for (int i = 0; i<cBales; i++)
@@ -435,6 +433,7 @@ int main( int argc, char* args[] )
 				//Update screen
 				SDL_RenderPresent(gRenderer);
 			}
+			bala[0].renderExplosio(tank);
 		}
 
 		//Free resources and close SDL

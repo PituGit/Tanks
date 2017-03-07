@@ -4,6 +4,11 @@ LTexture gTileTexture;
 LTexture gBaseTankTexture;
 LTexture gCapsulaTexture;
 LTexture gBalaTexture;
+LTexture gExplosioATexture;
+LTexture gExplosioBTexture;
+LTexture gExplosioCTexture;
+LTexture gExplosioDTexture;
+LTexture gExplosioETexture;
 
 LTexture::LTexture()
 {
