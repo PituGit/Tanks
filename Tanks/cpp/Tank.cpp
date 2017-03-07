@@ -28,10 +28,9 @@ SDL_Rect Tank::getTankBox()
 	return TankBox;
 }
 
-void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool& shoot)
+void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool &shoot)
 {
 	shoot = false;
-
 	//Get la posicio del mouse
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -42,7 +41,6 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) < 0)
 		angle += 180;
 
-	//Si s'ha apretat el botó del ratoli
 	if (a->type == SDL_MOUSEBUTTONDOWN)
 	{
 		shoot = true;

@@ -11,13 +11,20 @@ public:
 
 	Bala();
 
-	void moveBala(Tile *tiles[]);
+	bool moveBala(Tile *tiles[], Tank tank);
 
 	void ObtenirDades( double angle, Tank tank);
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
+	void renderExplosio(Tank tank);
+
+	bool shoot();
+
 	bool ControlaBales();
+
+	//Retorna el Temps de la bala
+	Uint32 Bala::getTemps();
 
 private:
 	//The X and Y offsets of the bala

@@ -38,13 +38,18 @@ void Bala::ObtenirDades( double angle, Tank tank)
 	VelY = double(Vel) * sin(Angle_Direccio * PI / 180) * signeY;
 
 	//Calcul de la posicio de la punta del cano = Posicio de la bala quan es dispara
-	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180);
+	BalaBox.x = PosicioT.x + centre.x + LONGITUD_TOTAL_DEL_CANO * cos(Angle_Direccio * PI / 180) - 5;
 	BalaBox.y = PosicioT.y + centre.y + LONGITUD_TOTAL_DEL_CANO * sin(Angle_Direccio * PI / 180);
 }
 
 void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank)
 {
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
+}
+
+void Bala::renderExplosio(Tank tank)
+{
+
 }
 
 bool Bala::ControlaBales()
@@ -57,8 +62,16 @@ bool Bala::ControlaBales()
 	return trobat;
 }
 
-void Bala::moveBala(Tile *tiles[])
+Uint32 Bala::getTemps()
 {
+	return (SDL_GetTicks() - Temps);
+}
+
+bool Bala::moveBala(Tile *tiles[], Tank tank)
+{
+	//La variable que indica si colisiona
+	bool colisio = false;
+
 	//Move the bala left or right
 	BalaBox.x += VelX;
 
@@ -82,4 +95,11 @@ void Bala::moveBala(Tile *tiles[])
 		signeY = -signeY;
 		VelY *= signeY;
 	}
+
+	//Si la bala colisiona amb el tank
+	if (checkCollision(BalaBox, tank.getTankBox()))
+	{
+		colisio = true;
+	}
+	return colisio;
 }
