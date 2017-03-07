@@ -93,6 +93,36 @@ bool loadMedia( Tile* tiles[] )
 		success = false;
 	}
 
+	if (!gExplosioATexture.loadFromFile("res/ExplosioA.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioBTexture.loadFromFile("res/ExplosioB.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioCTexture.loadFromFile("res/ExplosioC.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioDTexture.loadFromFile("res/ExplosioD.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioETexture.loadFromFile("res/ExplosioE.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
 	if (!gBalaTexture.loadFromFile("res/Bala.png"))
 	{
 		printf("Failed to load capsula texture!\n");
@@ -312,6 +342,9 @@ int main( int argc, char* args[] )
 			//Variable per saber si s'ha disparat
 			bool shoot = false;
 
+			//La variable que indica si han colisionat
+			bool colisio = false;
+
 			//Numero de bales
 			int cBales = 0;
 
@@ -319,7 +352,7 @@ int main( int argc, char* args[] )
 			SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 			//While application is running
-			while (!quit)
+			while (!quit && !colisio)
 			{
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
@@ -339,8 +372,11 @@ int main( int argc, char* args[] )
 				tank.move(tileSet);
 				tank.setCamera(camera);
 
-				for (int i = 0; i<cBales; i++)
-					bala[i].moveBala(tileSet);
+				for (int i = 0; i < cBales; i++)
+				{
+					if (bala[i].moveBala(tileSet, tank))
+						colisio = true;
+				}
 
 				//Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);

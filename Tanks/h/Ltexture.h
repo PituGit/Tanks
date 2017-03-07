@@ -51,3 +51,8 @@ extern LTexture gTileTexture;
 extern LTexture gBaseTankTexture;
 extern LTexture gCapsulaTexture;
 extern LTexture gBalaTexture;
+extern LTexture gExplosioATexture;
+extern LTexture gExplosioBTexture;
+extern LTexture gExplosioCTexture;
+extern LTexture gExplosioDTexture;
+extern LTexture gExplosioETexture;

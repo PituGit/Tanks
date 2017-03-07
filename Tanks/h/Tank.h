@@ -5,9 +5,9 @@
 class Tank
 {
 public:
-	//The dimensions of the dot
-	static const int Tank_WIDTH = 55;
-	static const int Tank_HEIGHT = 45;
+	//Les dimensions del tank
+	const int Tank_WIDTH = 45;
+	const int Tank_HEIGHT = 45;
 
 	//Maximum axis velocity of the dot
 	static const int TANK_VEL = 5;

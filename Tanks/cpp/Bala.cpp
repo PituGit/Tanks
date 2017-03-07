@@ -46,6 +46,11 @@ void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, T
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
 }
 
+void Bala::renderExplosio(Tank tank)
+{
+
+}
+
 bool Bala::ControlaBales()
 {
 	bool trobat = false;
@@ -61,8 +66,11 @@ Uint32 Bala::getTemps()
 	return (SDL_GetTicks() - Temps);
 }
 
-void Bala::moveBala(Tile *tiles[])
+bool Bala::moveBala(Tile *tiles[], Tank tank)
 {
+	//La variable que indica si colisiona
+	bool colisio = false;
+
 	//Move the bala left or right
 	BalaBox.x += VelX;
 
@@ -86,4 +94,11 @@ void Bala::moveBala(Tile *tiles[])
 		signeY = -signeY;
 		VelY *= signeY;
 	}
+
+	//Si la bala colisiona amb el tank
+	if (checkCollision(BalaBox, tank.getTankBox()))
+	{
+		colisio = true;
+	}
+	return colisio;
 }

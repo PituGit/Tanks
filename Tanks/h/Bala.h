@@ -11,11 +11,13 @@ public:
 
 	Bala();
 
-	void moveBala(Tile *tiles[]);
+	bool moveBala(Tile *tiles[], Tank tank);
 
 	void ObtenirDades( double angle, Tank tank);
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
+
+	void renderExplosio(Tank tank);
 
 	bool ControlaBales();
 
