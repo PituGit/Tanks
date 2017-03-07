@@ -358,7 +358,7 @@ int main( int argc, char* args[] )
 				{
 					if (cBales > 0)
 					{
-						if (bala[cBales - 1].getTemps() > 1000)
+						if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
 						{
 							bala.push_back(Bala());
 							cBales++;
@@ -367,10 +367,12 @@ int main( int argc, char* args[] )
 					}
 					else
 					{
+
 						bala.push_back(Bala());
 						cBales++;
 						bala[cBales - 1].ObtenirDades(angle, tank);
 					}
+				
 				}
 
 				for (int i = 0; i < cBales; i++)

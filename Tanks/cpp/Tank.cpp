@@ -43,7 +43,7 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		angle += 180;
 
 	//Si s'ha apretat el botó del ratoli
-	if (a->type == SDL_MOUSEBUTTONDOWN && e.button.clicks == 1)
+	if (a->type == SDL_MOUSEBUTTONDOWN && e.button.clicks >=1)
 	{
 		shoot = true;
 	}
