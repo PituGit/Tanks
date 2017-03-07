@@ -16,7 +16,7 @@ public:
 	Tank();
 
 	//Takes key presses and adjusts the dot's velocity
-	void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera);
+	void handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool &shoot);
 
 	//Moves the dot and check collision against tiles
 	void move(Tile *tiles[]);

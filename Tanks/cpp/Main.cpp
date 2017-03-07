@@ -92,6 +92,37 @@ bool loadMedia( Tile* tiles[] )
 		printf("Failed to load capsula texture!\n");
 		success = false;
 	}
+/*
+	if (!gExplosioATexture.loadFromFile("res/ExplosioA.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioBTexture.loadFromFile("res/ExplosioB.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioCTexture.loadFromFile("res/ExplosioC.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioDTexture.loadFromFile("res/ExplosioD.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
+	if (!gExplosioETexture.loadFromFile("res/ExplosioE.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+	*/
 
 	if (!gBalaTexture.loadFromFile("res/Bala.png"))
 	{
@@ -141,36 +172,6 @@ void close( Tile* tiles[] )
 	//Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
-}
-
-bool shoot(SDL_Event e, SDL_Event* a, Bala bala, int cBales)
-{
-	bool shoot=false;
-	//Si s'ha apretat el botó del ratoli
-	if (a->type == SDL_MOUSEBUTTONDOWN && e.button.clicks >= 1 && 
-		bala.getTemps() > TIEMPO_DE_VIDA)
-	{
-		shoot = true;
-	}
-	return shoot;
-
-	/*
-	if (cBales > 0)
-	{
-	if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
-	{
-	bala.push_back(Bala());
-	cBales++;
-	bala[cBales - 1].ObtenirDades(angle, tank);
-	}
-	}
-	else
-	{
-
-	bala.push_back(Bala());
-	cBales++;
-	bala[cBales - 1].ObtenirDades(angle, tank);
-	}*/
 }
 
 
@@ -339,6 +340,9 @@ int main( int argc, char* args[] )
 			//Les bales que es pintaran per pantalla
 			std::vector <Bala> bala(MAX_BALES);
 
+			//Variable per saber si s'ha disparat
+			bool shoot = false;
+
 			//La variable que indica si han colisionat
 			bool colisio = false;
 
@@ -360,7 +364,7 @@ int main( int argc, char* args[] )
 						quit = true;
 					}
 					//Gestiona les dades introduides
-					tank.handleEvent(e, &e, angle, camera);
+					tank.handleEvent(e, &e, angle, camera, shoot);
 				}
 				CalcularGraus(degrees, tank);
 
@@ -387,11 +391,25 @@ int main( int argc, char* args[] )
 				//Render tank
 				tank.render(degrees, flipType, angle);
 
-				if (shoot(e, &e, bala[cBales-1], cBales))
+				if (shoot)
 				{
-					bala.push_back(Bala());
-					cBales++;
-					bala[cBales - 1].ObtenirDades(angle, tank);
+					if (cBales > 0)
+					{
+						if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
+						{
+							bala.push_back(Bala());
+							cBales++;
+							bala[cBales - 1].ObtenirDades(angle, tank);
+						}
+					}
+					else
+					{
+
+						bala.push_back(Bala());
+						cBales++;
+						bala[cBales - 1].ObtenirDades(angle, tank);
+					}
+				
 				}
 
 				for (int i = 0; i < cBales; i++)
