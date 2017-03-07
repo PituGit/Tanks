@@ -1,5 +1,6 @@
 #include "../h/Bala.h"
 
+
 Bala::Bala()
 {
 	//Initialize the collision box

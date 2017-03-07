@@ -52,10 +52,14 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		//Adjust the velocity
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_UP: mVelY -= TANK_VEL; break;
-		case SDLK_DOWN: mVelY += TANK_VEL; break;
-		case SDLK_LEFT: mVelX -= TANK_VEL; break;
-		case SDLK_RIGHT: mVelX += TANK_VEL; break;
+		case SDLK_UP:
+		case SDLK_w: mVelY -= TANK_VEL; break;
+		case SDLK_DOWN:
+		case SDLK_s:mVelY += TANK_VEL; break;
+		case SDLK_LEFT:
+		case SDLK_a: mVelX -= TANK_VEL; break;
+		case SDLK_RIGHT:
+		case SDLK_d:mVelX += TANK_VEL; break;
 		}
 
 		
@@ -66,10 +70,14 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		//Adjust the velocity
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_UP: mVelY += TANK_VEL; break;
-		case SDLK_DOWN: mVelY -= TANK_VEL; break;
-		case SDLK_LEFT: mVelX += TANK_VEL; break;
-		case SDLK_RIGHT: mVelX -= TANK_VEL; break;
+		case SDLK_UP:
+		case SDLK_w: mVelY += TANK_VEL; break;
+		case SDLK_DOWN:
+		case SDLK_s: mVelY -= TANK_VEL; break;
+		case SDLK_LEFT:
+		case SDLK_a: mVelX += TANK_VEL; break;
+		case SDLK_RIGHT:
+		case SDLK_d: mVelX -= TANK_VEL; break;
 		}
 	}
 }
