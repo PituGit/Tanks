@@ -19,6 +19,8 @@ public:
 
 	void renderExplosio(Tank tank);
 
+	bool shoot();
+
 	bool ControlaBales();
 
 	//Retorna el Temps de la bala
