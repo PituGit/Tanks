@@ -54,16 +54,106 @@ bool init()
 	return success;
 }
 
+bool LoadMedia()
+{
+	bool success = true;
+
+	if (!gPlay_game_buttonTexture.loadFromFile("res/Play_game_button.png"))
+	{
+		printf("Failed to load Play_game_button texture!\n");
+
+		success = false;
+	}
+
+	return success;
+}
+
+bool HandleEvent(SDL_Event* e)
+{
+	bool jugar = false;
+	bool inside = false;
+
+	if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
+	{
+		//Obte la posicio del mouse
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+
+		if (x<(PosicioXBoto + MargeX) && x>(PosicioXBoto))
+		{
+			if (y<(PosicioYBoto + MargeY) && y>(PosicioYBoto))
+			{
+				inside = true;
+			}
+		}
+		if (inside)
+		{
+			if (e->type == SDL_MOUSEBUTTONDOWN)
+				jugar = true;
+		}
+	}
+	return jugar;
+}
+
 int main(int argc, char* args[])
 {
+	//vides amb les que es comença
 	int vides = 3;
+
+	//Si se supera el nivell
+	bool superat;
+
+	//Si es vol començar a jugar
+	bool jugar = false;
+
+	//Tancar l'aplicacio
+	bool quit = false;
+
+	//Event handler
+	SDL_Event e;
 
 	//Start up SDL and create window
 	if (!init())
 	{
 		printf("Failed to initialize!\n");
 	}
+	else
+	{
+		if (!LoadMedia())
+		{
+			printf("Faile to load media");
+		}
+		else
+		{
+			while (!quit)
+			{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					if (e.type == SDL_QUIT)
+						quit = true;
 
-	vides = joc(vides);
+					jugar=HandleEvent(&e);
+
+				}
+
+				if (jugar)
+				{
+					superat = joc();
+					if (!superat)
+						vides--;
+				}
+
+				//Clear screen
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderer);
+
+				gPlay_game_buttonTexture.render(PosicioXBoto, PosicioYBoto);
+
+				SDL_RenderPresent(gRenderer);
+			}
+		}
+		
+	}
+
 	return 0;
 }
