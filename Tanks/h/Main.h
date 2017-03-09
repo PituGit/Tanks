@@ -3,8 +3,8 @@
 #include "Tank.h"
 #include "Bala.h"
 
-//Starts up SDL and creates window
-bool init();
+int joc(int vides);
+
 
 //Loads media
 bool loadMedia(Tile* tiles[]);

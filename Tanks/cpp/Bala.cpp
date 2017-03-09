@@ -16,7 +16,6 @@ Bala::Bala()
 	Angle_Direccio = 0;
 
 	//Temps
-	Temps = 0;
 	Temps = SDL_GetTicks();
 }
 
@@ -47,7 +46,7 @@ void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, T
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
 }
 
-void Bala::renderExplosio(Tank tank)
+void Bala::renderExplosio(Tank tank, int &vides)
 {
 	SDL_Rect TankBox = tank.getTankBox();
 	for (int frame = 0; frame < 10; frame++)
@@ -84,12 +83,13 @@ void Bala::renderExplosio(Tank tank)
 		SDL_RenderPresent(gRenderer);
 	}
 	Sleep(1500);
+	vides--;
 }
 
 bool Bala::ControlaBales()
 {
 	bool trobat = false;
-	if ((SDL_GetTicks() - Temps) >= 2000)
+	if ((SDL_GetTicks() - Temps) > 2000)
 	{
 		trobat = true;
 	}
