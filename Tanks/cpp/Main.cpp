@@ -280,6 +280,11 @@ int joc(int vides)
 		std::vector <Bala> bala(MAX_BALES);
 		bala.erase(bala.begin());
 
+			//The tank that will be moving around on the screen
+			TankJugador tank(400,500);
+			TankDolent dolentProva(800,500);
+
+
 		//Variable per saber si s'ha disparat
 		bool shoot = false;
 
@@ -323,13 +328,16 @@ int joc(int vides)
 			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			SDL_RenderClear(gRenderer);
 
-			//Render level
-			for (int i = 0; i < TOTAL_TILES; ++i)
-			{
-				tileSet[i]->render(camera);
-			}
-			//Render tank
-			tank.render(degrees, flipType, angle);
+
+				//Render level
+				for (int i = 0; i < TOTAL_TILES; ++i)
+				{
+					tileSet[i]->render(camera);
+				}
+				//Render tank
+				tank.render(degrees, flipType, angle);
+				dolentProva.render(0, flipType, 180);
+
 
 			if (shoot)
 			{

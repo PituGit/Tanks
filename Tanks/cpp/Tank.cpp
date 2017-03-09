@@ -1,16 +1,18 @@
 #include "../h/Tank.h"
 
-Tank::Tank()
+Tank::Tank(int x, int y, int tankId)
 {
 	//Initialize the collision box
-	TankBox.x = 400;
-	TankBox.y = 500;
+	TankBox.x = x;
+	TankBox.y = y;
 	TankBox.w = Tank_WIDTH;
 	TankBox.h = Tank_HEIGHT;
 
 	//Initialize the velocity
 	mVelX = 0;
 	mVelY = 0;
+
+	mTankId = tankId;
 }
 
 float Tank::getVelocitatX()
@@ -28,7 +30,54 @@ SDL_Rect Tank::getTankBox()
 	return TankBox;
 }
 
-void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& camera, bool &shoot)
+/*
+void Tank::AjustarVelocitat()
+{
+	//Ajusta la velocitat perque no vagi mes rapid en diagonal
+	if (mVelX != 0 && mVelY != 0)
+	{
+		if (mVelX > 0 && mVelY > 0)
+		{
+			mVelX = TANK_VEL * cos( 7 * PI / 4 );
+			mVelY = TANK_VEL * sin( 7 * PI / 4 );
+		}
+		else if (mVelX > 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( PI / 4);
+			mVelY = TANK_VEL * sin( PI / 4);
+		}
+		else if (mVelX < 0 && mVelY > 0)
+		{ 
+			mVelX = TANK_VEL * cos( 3 * PI / 4);
+			mVelY = TANK_VEL * sin( 3 * PI / 4);
+		}
+		else if (mVelX < 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( 5 * PI / 4);
+			mVelY = TANK_VEL * sin( 5 * PI / 4);
+		}
+	}
+}
+*/
+
+
+void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
+{
+	//Centre de rotació del tanc
+	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
+	SDL_Point* center = &centre;
+
+	//Mostra el tank
+	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
+
+	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+}
+
+
+void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_Rect & camera, bool & shoot)
 {
 	shoot = false;
 	//Get la posicio del mouse
@@ -62,7 +111,7 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 		case SDLK_d:mVelX += TANK_VEL; break;
 		}
 
-		
+
 	}
 	//If a key was released
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -82,37 +131,30 @@ void Tank::handleEvent(SDL_Event& e, SDL_Event* a, double& angle, SDL_Rect& came
 	}
 }
 
-/*
-void Tank::AjustarVelocitat()
+void TankJugador::move(Tile * tiles[])
 {
-	//Ajusta la velocitat perque no vagi mes rapid en diagonal
-	if (mVelX != 0 && mVelY != 0)
+	//Move the dot left or right
+	TankBox.x += mVelX;
+
+	//If the dot went too far to the left or right or touched a wall
+	if ((TankBox.x < 0) || (TankBox.x + Tank_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
 	{
-		if (mVelX > 0 && mVelY > 0)
-		{
-			mVelX = TANK_VEL * cos( 7 * PI / 4 );
-			mVelY = TANK_VEL * sin( 7 * PI / 4 );
-		}
-		else if (mVelX > 0 && mVelY < 0)
-		{
-			mVelX = TANK_VEL * cos( PI / 4);
-			mVelY = TANK_VEL * sin( PI / 4);
-		}
-		else if (mVelX < 0 && mVelY > 0)
-		{ 
-			mVelX = TANK_VEL * cos( 3 * PI / 4);
-			mVelY = TANK_VEL * sin( 3 * PI / 4);
-		}
-		else if (mVelX < 0 && mVelY < 0)
-		{
-			mVelX = TANK_VEL * cos( 5 * PI / 4);
-			mVelY = TANK_VEL * sin( 5 * PI / 4);
-		}
+		//move back
+		TankBox.x -= mVelX;
+	}
+
+	//Move the dot up or down
+	TankBox.y += mVelY;
+
+	//If the dot went too far up or down or touched a wall
+	if ((TankBox.y < 0) || (TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
+	{
+		//move back
+		TankBox.y -= mVelY;
 	}
 }
-*/
 
-void Tank::setCamera(SDL_Rect& camera)
+void TankJugador::setCamera(SDL_Rect & camera)
 {
 	//Center the camera over the dot
 	camera.x = (TankBox.x + Tank_WIDTH / 2) - SCREEN_WIDTH / 2;
@@ -134,42 +176,5 @@ void Tank::setCamera(SDL_Rect& camera)
 	if (camera.y > LEVEL_HEIGHT - camera.h)
 	{
 		camera.y = LEVEL_HEIGHT - camera.h;
-	}
-}
-
-void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
-{
-	//Centre de rotació del tanc
-	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
-	SDL_Point* center = &centre;
-	//Mostra el tank
-	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
-	//Angle en el que apunta
-	degrees = angle;
-	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
-	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
-}
-
-
-void Tank::move(Tile *tiles[])
-{
-	//Move the dot left or right
-	TankBox.x += mVelX;
-
-	//If the dot went too far to the left or right or touched a wall
-	if ((TankBox.x < 0) || (TankBox.x + Tank_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
-	{
-		//move back
-		TankBox.x -= mVelX;
-	}
-
-	//Move the dot up or down
-	TankBox.y += mVelY;
-
-	//If the dot went too far up or down or touched a wall
-	if ((TankBox.y < 0) || (TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
-	{
-		//move back
-		TankBox.y -= mVelY;
 	}
 }
