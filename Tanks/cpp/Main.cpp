@@ -81,16 +81,29 @@ bool loadMedia(Tile* tiles[])
 	bool success = true;
 
 	//Load dot texture
-	if (!gBaseTankTexture.loadFromFile("res/Base_tank.png"))
+	if (!gBaseTankJugadorTexture.loadFromFile("res/Base_tank_Jugador.png"))
 	{
-		printf( "Failed to load tank texture!\n" );
+		printf( "Failed to load tank_jugador texture!\n" );
 
 		success = false;
 	}
 
-	if (!gCapsulaTexture.loadFromFile("res/Capsula&Cano_tank.png"))
+	if (!gCapsulaJugadorTexture.loadFromFile("res/CapsulaCano_tank_Jugador.png"))
 	{
-		printf("Failed to load capsula texture!\n");
+		printf("Failed to load capsula_jugador texture!\n");
+		success = false;
+	}
+
+	if (!gBaseTankDolentTexture.loadFromFile("res/Base_tank_Dolent.png"))
+	{
+		printf("Failed to load tank_jugador texture!\n");
+
+		success = false;
+	}
+
+	if (!gCapsulaDolentTexture.loadFromFile("res/CapsulaCano_tank_Dolent.png"))
+	{
+		printf("Failed to load capsula_jugador texture!\n");
 		success = false;
 	}
 
@@ -160,8 +173,17 @@ void close(Tile* tiles[])
 	}
 
 	//Free loaded images
-	gBaseTankTexture.free();
 	gTileTexture.free();
+	gBaseTankJugadorTexture.free();
+	gCapsulaJugadorTexture.free();
+	gBaseTankDolentTexture.free();
+	gCapsulaDolentTexture.free();
+	gBalaTexture.free();
+	gExplosioATexture.free();
+	gExplosioBTexture.free();
+	gExplosioCTexture.free();
+	gExplosioDTexture.free();
+	gExplosioETexture.free();
 
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
@@ -369,10 +391,9 @@ int main(int argc, char* args[])
 				}
 				CalcularGraus(degrees, tank);
 
-				//Mou el tank i camera
+				//Mou el tank
 				//tank.AjustarVelocitat();
 				tank.move(tileSet);
-				tank.setCamera(camera);
 
 				for (int i = 0; i < cBales; i++)
 				{
@@ -391,7 +412,7 @@ int main(int argc, char* args[])
 				}
 				//Render tank
 				tank.render(degrees, flipType, angle);
-				dolentProva.render(0, flipType, 180);
+				dolentProva.render(0, flipType, 180, tank);
 
 				if (shoot)
 				{

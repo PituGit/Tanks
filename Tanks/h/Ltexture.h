@@ -48,8 +48,10 @@ private:
 };
 
 extern LTexture gTileTexture;
-extern LTexture gBaseTankTexture;
-extern LTexture gCapsulaTexture;
+extern LTexture gBaseTankJugadorTexture;
+extern LTexture gCapsulaJugadorTexture;
+extern LTexture gBaseTankDolentTexture;
+extern LTexture gCapsulaDolentTexture;
 extern LTexture gBalaTexture;
 extern LTexture gExplosioATexture;
 extern LTexture gExplosioBTexture;
