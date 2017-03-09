@@ -16,7 +16,6 @@ Bala::Bala()
 	Angle_Direccio = 0;
 
 	//Temps
-	Temps = 0;
 	Temps = SDL_GetTicks();
 }
 
@@ -89,7 +88,7 @@ void Bala::renderExplosio(Tank tank)
 bool Bala::ControlaBales()
 {
 	bool trobat = false;
-	if ((SDL_GetTicks() - Temps) >= 2000)
+	if ((SDL_GetTicks() - Temps) > 2000)
 	{
 		trobat = true;
 	}

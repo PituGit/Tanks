@@ -339,6 +339,7 @@ int main(int argc, char* args[])
 
 			//Les bales que es pintaran per pantalla
 			std::vector <Bala> bala(MAX_BALES);
+			bala.erase(bala.begin());
 
 			//Variable per saber si s'ha disparat
 			bool shoot = false;
