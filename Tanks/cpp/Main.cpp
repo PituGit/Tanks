@@ -288,7 +288,7 @@ int joc(int vides)
 		//La variable que indica si han colisionat
 		bool colisio = false;
 
-		//Numero de bales
+		//Numero de bales que te
 		int cBales = 0;
 
 		//Level camera
