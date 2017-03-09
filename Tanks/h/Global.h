@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <math.h>
+#include <Windows.h>
 
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
