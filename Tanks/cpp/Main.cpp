@@ -295,9 +295,6 @@ int joc(int vides)
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
-		//The tank that will be moving around on the screen
-		Tank tank;
-
 		//Les bales que es pintaran per pantalla
 		std::vector <Bala> bala(MAX_BALES);
 		bala.erase(bala.begin());
