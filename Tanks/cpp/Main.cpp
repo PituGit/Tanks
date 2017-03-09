@@ -21,60 +21,6 @@ void CalcularGraus(double &degrees, Tank tank)
 	}
 }
 
-bool init()
-{
-	//Initialization flag
-	bool success = true;
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		success = false;
-	}
-	else
-	{
-		//Set texture filtering to linear
-		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-		{
-			printf("Warning: Linear texture filtering not enabled!");
-		}
-
-		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (gWindow == NULL)
-		{
-			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-			success = false;
-		}
-		else
-		{
-			//Create renderer for window
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (gRenderer == NULL)
-			{
-				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-				success = false;
-			}
-			else
-			{
-				//Initialize renderer color
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-				//Initialize PNG loading
-				int imgFlags = IMG_INIT_PNG;
-				if (!(IMG_Init(imgFlags) & imgFlags))
-				{
-					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-					success = false;
-				}
-			}
-		}
-	}
-
-	return success;
-}
-
 bool loadMedia(Tile* tiles[])
 {
 	//Loading success flag
@@ -303,144 +249,136 @@ bool setTiles(Tile* tiles[])
 	return tilesLoaded;
 }
 
-int main(int argc, char* args[])
+int joc(int vides)
 {
-	//Start up SDL and create window
-	if (!init())
+	//The level tiles
+	Tile* tileSet[TOTAL_TILES];
+
+	//Load media
+	if (!loadMedia(tileSet))
 	{
-		printf("Failed to initialize!\n");
+		printf("Failed to load media!\n");
 	}
 	else
 	{
-		//The level tiles
-		Tile* tileSet[TOTAL_TILES];
+		//Main loop flag
+		bool quit = false;
 
-		//Load media
-		if (!loadMedia(tileSet))
+		//Event handler
+		SDL_Event e;
+
+		//Angle de rotació
+		double degrees = 0, angle = 0;
+
+		//tipus de rotacio
+		SDL_RendererFlip flipType = SDL_FLIP_NONE;
+
+		//The tank that will be moving around on the screen
+		Tank tank;
+
+		//Les bales que es pintaran per pantalla
+		std::vector <Bala> bala(MAX_BALES);
+		bala.erase(bala.begin());
+
+		//Variable per saber si s'ha disparat
+		bool shoot = false;
+
+		//La variable que indica si han colisionat
+		bool colisio = false;
+
+		//Numero de bales
+		int cBales = 0;
+
+		//Level camera
+		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+		//While application is running
+		while (!quit && !colisio)
 		{
-			printf("Failed to load media!\n");
-		}
-		else
-		{
-			//Main loop flag
-			bool quit = false;
-
-			//Event handler
-			SDL_Event e;
-
-			//Angle de rotació
-			double degrees = 0, angle = 0;
-
-			//tipus de rotacio
-			SDL_RendererFlip flipType = SDL_FLIP_NONE;
-
-			//The tank that will be moving around on the screen
-			Tank tank;
-
-			//Les bales que es pintaran per pantalla
-			std::vector <Bala> bala(MAX_BALES);
-			bala.erase(bala.begin());
-
-			//Variable per saber si s'ha disparat
-			bool shoot = false;
-
-			//La variable que indica si han colisionat
-			bool colisio = false;
-
-			//Numero de bales
-			int cBales = 0;
-
-			//Level camera
-			SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-
-			//While application is running
-			while (!quit && !colisio)
+			//Handle events on queue
+			while (SDL_PollEvent(&e) != 0)
 			{
-				//Handle events on queue
-				while (SDL_PollEvent(&e) != 0)
+				//User requests quit
+				if (e.type == SDL_QUIT)
 				{
-					//User requests quit
-					if (e.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-					//Gestiona les dades introduides
-					tank.handleEvent(e, &e, angle, camera, shoot);
+					quit = true;
 				}
-				CalcularGraus(degrees, tank);
+				//Gestiona les dades introduides
+				tank.handleEvent(e, &e, angle, camera, shoot);
+			}
+			CalcularGraus(degrees, tank);
 
-				//Mou el tank i camera
-				//tank.AjustarVelocitat();
-				tank.move(tileSet);
-				tank.setCamera(camera);
+			//Mou el tank i camera
+			//tank.AjustarVelocitat();
+			tank.move(tileSet);
+			tank.setCamera(camera);
 
-				for (int i = 0; i < cBales; i++)
+			for (int i = 0; i < cBales; i++)
+			{
+				if (bala[i].moveBala(tileSet, tank))
+					colisio = true;
+			}
+
+			//Clear screen
+			SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderClear(gRenderer);
+
+			//Render level
+			for (int i = 0; i < TOTAL_TILES; ++i)
+			{
+				tileSet[i]->render(camera);
+			}
+			//Render tank
+			tank.render(degrees, flipType, angle);
+
+			if (shoot)
+			{
+				if (cBales > 0)
 				{
-					if (bala[i].moveBala(tileSet, tank))
-						colisio = true;
-				}
-
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
-
-				//Render level
-				for (int i = 0; i < TOTAL_TILES; ++i)
-				{
-					tileSet[i]->render(camera);
-				}
-				//Render tank
-				tank.render(degrees, flipType, angle);
-
-				if (shoot)
-				{
-					if (cBales > 0)
+					if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
 					{
-						if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
-						{
-							bala.push_back(Bala());
-							cBales++;
-							bala[cBales - 1].ObtenirDades(angle, tank);
-						}
-					}
-					else
-					{
-
 						bala.push_back(Bala());
 						cBales++;
 						bala[cBales - 1].ObtenirDades(angle, tank);
 					}
-				
 				}
-
-				for (int i = 0; i < cBales; i++)
+				else
 				{
-					if (bala[i].ControlaBales())
-					{
-						for (int j = i; j < cBales - 1; j++)
-						{
-							bala[j] = bala[j + 1];
-						}
-						bala.erase(bala.begin() + (cBales-1));
-						cBales--;
-					}
+
+					bala.push_back(Bala());
+					cBales++;
+					bala[cBales - 1].ObtenirDades(angle, tank);
 				}
-
-				//Renderitza totes les bales
-				for (int i = 0; i<cBales; i++)
-					bala[i].renderBala(degrees, flipType, angle, tank);
-
-
-
-				//Update screen
-				SDL_RenderPresent(gRenderer);
+				
 			}
-			bala[0].renderExplosio(tank);
-		}
 
-		//Free resources and close SDL
-		close(tileSet);
+			for (int i = 0; i < cBales; i++)
+			{
+				if (bala[i].ControlaBales())
+				{
+					for (int j = i; j < cBales - 1; j++)
+					{
+						bala[j] = bala[j + 1];
+					}
+					bala.erase(bala.begin() + (cBales-1));
+					cBales--;
+				}
+			}
+
+			//Renderitza totes les bales
+			for (int i = 0; i<cBales; i++)
+				bala[i].renderBala(degrees, flipType, angle, tank);
+
+
+
+			//Update screen
+			SDL_RenderPresent(gRenderer);
+		}
+		bala[0].renderExplosio(tank, vides);
 	}
 
-	return 0;
+	//Free resources and close SDL
+	close(tileSet);
+
+return (vides);
 }
