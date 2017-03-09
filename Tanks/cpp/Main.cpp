@@ -353,7 +353,7 @@ int joc(int vides)
 				{
 					tileSet[i]->render(camera);
 				}
-				//Render tank
+				//Render el tank
 				tank.render(degrees, flipType, angle);
 				dolentProva.render(0, flipType, 180, tank);
 
