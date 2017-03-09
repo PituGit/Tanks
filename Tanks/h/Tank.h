@@ -24,9 +24,6 @@ public:
 	//Initializes the variables
 	Tank(int x, int y, int tankId);
 
-	//Mostra el tank en pantalla
-	void render(double degrees, SDL_RendererFlip flipType, double angle);
-
 	//Obté dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
@@ -55,13 +52,12 @@ public:
 	//Moves the dot and check collision against tiles
 	void move(Tile *tiles[]);
 
-	//Centers the camera over the dot
-	void setCamera(SDL_Rect& camera);
+	void render(double degrees, SDL_RendererFlip flipType, double angle);
 
 };
 
 class TankDolent : public Tank {
 public:
 	TankDolent(int x, int y) : Tank(x, y, ID_DOLENT) {};
-
+	void render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador);
 };

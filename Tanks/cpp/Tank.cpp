@@ -60,23 +60,6 @@ void Tank::AjustarVelocitat()
 }
 */
 
-
-void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
-{
-	//Centre de rotació del tanc
-	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
-	SDL_Point* center = &centre;
-
-	//Mostra el tank
-	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
-	//Angle en el que apunta
-	degrees = angle;
-	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
-
-	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
-}
-
-
 void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_Rect & camera, bool & shoot)
 {
 	shoot = false;
@@ -154,27 +137,42 @@ void TankJugador::move(Tile * tiles[])
 	}
 }
 
-void TankJugador::setCamera(SDL_Rect & camera)
+void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
-	//Center the camera over the dot
-	camera.x = (TankBox.x + Tank_WIDTH / 2) - SCREEN_WIDTH / 2;
-	camera.y = (TankBox.y + Tank_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+	//Centre de rotació del tanc
+	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
+	SDL_Point* center = &centre;
 
-	//Keep the camera in bounds
-	if (camera.x < 0)
-	{
-		camera.x = 0;
-	}
-	if (camera.y < 0)
-	{
-		camera.y = 0;
-	}
-	if (camera.x > LEVEL_WIDTH - camera.w)
-	{
-		camera.x = LEVEL_WIDTH - camera.w;
-	}
-	if (camera.y > LEVEL_HEIGHT - camera.h)
-	{
-		camera.y = LEVEL_HEIGHT - camera.h;
-	}
+	//Mostra el tank
+	gBaseTankJugadorTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
+
+	gCapsulaJugadorTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+}
+
+void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador)
+{
+	SDL_Rect jugador;
+	jugador = tankJugador.getTankBox();
+
+	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) != 0)
+		angle = atan((double(jugador.y - TankBox.y - MEITAT_CAPSULA_Y)) / double(jugador.x - TankBox.x - MEITAT_CAPSULA_X));
+	angle *= 57.3;
+	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) < 0)
+		angle += 180;
+
+	//Centre de rotació del tanc
+	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
+	SDL_Point* center = &centre;
+
+	//Mostra el tank
+	gBaseTankDolentTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
+	//Angle en el que apunta
+	degrees = angle;
+	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
+
+	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }

@@ -1,8 +1,10 @@
 #include "../h/LTexture.h"
 
 LTexture gTileTexture;
-LTexture gBaseTankTexture;
-LTexture gCapsulaTexture;
+LTexture gBaseTankJugadorTexture;
+LTexture gCapsulaJugadorTexture;
+LTexture gBaseTankDolentTexture;
+LTexture gCapsulaDolentTexture;
 LTexture gBalaTexture;
 LTexture gExplosioATexture;
 LTexture gExplosioBTexture;

@@ -18,13 +18,19 @@
     <Image Include="res\Bala.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\Base_tank.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Capsula&amp;Cano_tank.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\tiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Base_tank_Dolent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Base_tank_Jugador.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\CapsulaCano_tank_Dolent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\CapsulaCano_tank_Jugador.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

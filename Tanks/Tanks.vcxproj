@@ -147,8 +147,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Image Include="res\Bala.png" />
-    <Image Include="res\Base_tank.png" />
-    <Image Include="res\Capsula&amp;Cano_tank.png" />
+    <Image Include="res\Base_tank_Dolent.png" />
+    <Image Include="res\Base_tank_Jugador.png" />
+    <Image Include="res\CapsulaCano_tank_Dolent.png" />
+    <Image Include="res\CapsulaCano_tank_Jugador.png" />
     <Image Include="res\tiles.png" />
   </ItemGroup>
   <ItemGroup>
