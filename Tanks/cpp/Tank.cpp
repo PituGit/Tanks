@@ -67,29 +67,11 @@ void Tank::render(double degrees, SDL_RendererFlip flipType, double angle)
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
-	switch (mTankId){
-	case ID_DOLENT:
-		gBaseTankTexture.setColor(255, 0, 0);
-		break;
-	default:
-		gBaseTankTexture.setColor(0, 0, 0);
-		break;
-	}
-
 	//Mostra el tank
 	gBaseTankTexture.render(TankBox.x, TankBox.y, NULL, degrees, center, flipType);
 	//Angle en el que apunta
 	degrees = angle;
 	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
-
-	switch (mTankId) {
-	case ID_DOLENT:
-		gCapsulaTexture.setColor(255, 0, 0);
-		break;
-	default:
-		gCapsulaTexture.setColor(0, 0, 0);
-		break;
-	}
 
 	gCapsulaTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
