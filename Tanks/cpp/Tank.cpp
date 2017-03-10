@@ -63,20 +63,22 @@ void Tank::AjustarVelocitat()
 void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_Rect & camera, bool & shoot)
 {
 	shoot = false;
+
 	//Get la posicio del mouse
 	int x, y;
 	SDL_GetMouseState(&x, &y);
+
 	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
 		angle = atan((double(y - TankBox.y - MEITAT_CAPSULA_Y)) / double(x - TankBox.x - MEITAT_CAPSULA_X));
+
 	angle *= 57.3;
+
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) < 0)
 		angle += 180;
 
 	if (a->type == SDL_MOUSEBUTTONDOWN)
-	{
 		shoot = true;
-	}
 
 	//If a key was pressed
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)

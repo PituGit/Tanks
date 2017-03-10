@@ -271,8 +271,10 @@ bool setTiles(Tile* tiles[])
 	return tilesLoaded;
 }
 
-int joc(int vides)
+bool joc()
 {
+	//si sha superat el nivell
+	bool superat = true;
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
 
@@ -299,10 +301,9 @@ int joc(int vides)
 		std::vector <Bala> bala(MAX_BALES);
 		bala.erase(bala.begin());
 
-			//The tank that will be moving around on the screen
-			TankJugador tank(400,500);
-			TankDolent dolentProva(800,500);
-
+		//The tank that will be moving around on the screen
+		TankJugador tank(400,500);
+		TankDolent dolentProva(800,500);
 
 		//Variable per saber si s'ha disparat
 		bool shoot = false;
@@ -310,7 +311,7 @@ int joc(int vides)
 		//La variable que indica si han colisionat
 		bool colisio = false;
 
-		//Numero de bales
+		//Numero de bales que te
 		int cBales = 0;
 
 		//Level camera
@@ -332,9 +333,9 @@ int joc(int vides)
 			}
 			CalcularGraus(degrees, tank);
 
-				//Mou el tank
-				//tank.AjustarVelocitat();
-				tank.move(tileSet);
+			//Mou el tank
+			//tank.AjustarVelocitat();
+			tank.move(tileSet);
 
 
 			for (int i = 0; i < cBales; i++)
@@ -348,14 +349,15 @@ int joc(int vides)
 			SDL_RenderClear(gRenderer);
 
 
-				//Render level
-				for (int i = 0; i < TOTAL_TILES; ++i)
-				{
-					tileSet[i]->render(camera);
-				}
-				//Render tank
-				tank.render(degrees, flipType, angle);
-				dolentProva.render(0, flipType, 180, tank);
+			//Render level
+			for (int i = 0; i < TOTAL_TILES; ++i)
+			{
+				tileSet[i]->render(camera);
+			}
+
+			//Render el tank
+			tank.render(degrees, flipType, angle);
+			dolentProva.render(0, flipType, 180, tank);
 
 
 			if (shoot)
@@ -401,11 +403,11 @@ int joc(int vides)
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
-		bala[0].renderExplosio(tank, vides);
+		bala[0].renderExplosio(tank);
 	}
 
 	//Free resources and close SDL
 	close(tileSet);
 
-return (vides);
+	return superat;
 }

@@ -17,7 +17,7 @@ public:
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
-	void renderExplosio(Tank tank, int &vides);
+	void renderExplosio(Tank tank);
 
 	bool ControlaBales();
 

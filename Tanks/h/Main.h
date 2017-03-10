@@ -3,7 +3,7 @@
 #include "Tank.h"
 #include "Bala.h"
 
-int joc(int vides);
+bool joc();
 
 
 //Loads media
