@@ -12,6 +12,7 @@ LTexture gExplosioCTexture;
 LTexture gExplosioDTexture;
 LTexture gExplosioETexture;
 LTexture gPlay_game_buttonTexture;
+LTexture gExplosioTexture;
 
 LTexture::LTexture()
 {

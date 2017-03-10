@@ -48,6 +48,7 @@ void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, T
 
 void Bala::renderExplosio(Tank tank)
 {
+
 	SDL_Rect TankBox = tank.getTankBox();
 	for (int frame = 0; frame < 10; frame++)
 	{

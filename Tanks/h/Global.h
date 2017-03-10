@@ -15,6 +15,10 @@ const int TILE_HEIGHT = 80;
 const int TOTAL_TILES = 192;
 const int TOTAL_TILE_SPRITES = 12;
 
+const int EXPLOSIO_WIDTH = 64;
+const int EXPLOSIO_HEIGHT = 64;
+const int TOTAL_SPRITES_EXPLOSIONS = 16;
+
 //The different tile sprites
 enum TILE
 {
@@ -57,3 +61,4 @@ extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 
 extern SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
+extern SDL_Rect gExplosioClips[TOTAL_SPRITES_EXPLOSIONS];

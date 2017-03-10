@@ -59,3 +59,4 @@ extern LTexture gExplosioCTexture;
 extern LTexture gExplosioDTexture;
 extern LTexture gExplosioETexture;
 extern LTexture gPlay_game_buttonTexture;
+extern LTexture gExplosioTexture;

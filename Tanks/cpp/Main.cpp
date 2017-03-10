@@ -83,6 +83,12 @@ bool loadMedia(Tile* tiles[])
 		success = false;
 	}
 
+	if (!gExplosioTexture.loadFromFile("res/Explosio.png"))
+	{
+		printf("Failed to load explosio texture!\n");
+		success = false;
+	}
+
 	if (!gBalaTexture.loadFromFile("res/Bala.png"))
 	{
 		printf("Failed to load bala texture!\n");
@@ -130,9 +136,38 @@ void close(Tile* tiles[])
 	gExplosioCTexture.free();
 	gExplosioDTexture.free();
 	gExplosioETexture.free();
+	gExplosioTexture.free();
 
 	
 }
+
+void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
+{
+	gExplosioTexture.render(x , y, &Caixa_Explosions);
+	SDL_RenderPresent(gRenderer);
+	Sleep(10);
+}
+
+void setExplosions(int x, int y)
+{
+	SDL_Rect Caixa_Explosions;
+
+	Caixa_Explosions.w = EXPLOSIO_WIDTH;
+	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
+
+	for (int i = 3; i >= 0; i--)
+	{
+		for (int j = 3; j >= 0; j--)
+		{
+			Caixa_Explosions.x = j*64;
+			Caixa_Explosions.y = i*64;
+
+			renderExplosio(x, y, Caixa_Explosions);
+		}
+	}
+
+}
+
 
 
 bool setTiles(Tile* tiles[])
@@ -263,10 +298,12 @@ bool setTiles(Tile* tiles[])
 	return tilesLoaded;
 }
 
+
 bool joc()
 {
 	//si sha superat el nivell
 	bool superat = true;
+
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
 
@@ -395,7 +432,9 @@ bool joc()
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
-		bala[0].renderExplosio(tank);
+		//bala[0].renderExplosio(tank);
+		setExplosions(tank.getTankBox().x, tank.getTankBox().y);
+		Sleep(1500);
 	}
 
 	//Free resources and close SDL
