@@ -348,9 +348,9 @@ bool joc()
 
 		tank.InicialitzaDades(ID[0], x[0], y[0]);
 
-		for (int i = 1; i < comptador; i++)
+		for (int i = 0; i < (comptador-1); i++)
 		{
-			tankdolent[i-1].InicialitzaDades(ID[i], x[i], y[i]);
+			tankdolent[i].InicialitzaDades(ID[i+1], x[i+1], y[i+1]);
 			tankdolent.push_back(TankDolent());
 		}
 
@@ -368,7 +368,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!mort)
+		while (!colisio)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -417,7 +417,7 @@ bool joc()
 			}
 			
 
-
+			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
 			{
 				if (cBales > 0)
@@ -436,9 +436,10 @@ bool joc()
 					cBales++;
 					bala[cBales - 1].ObtenirDades(angle, tank);
 				}
-				
+
 			}
 
+			//Eliminem bales si es necessari
 			for (int i = 0; i < cBales; i++)
 			{
 				if (bala[i].ControlaBales())

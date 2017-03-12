@@ -102,12 +102,15 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> ta
 		mort = true;
 	}
 
-	for (int i = 1; i < comptador; i++)
+	int i = 0;
+
+	while(!colisio && i<(comptador-1))
 	{
 		if (checkCollision(BalaBox, tankdolent[i].getTankBox()))
 		{
 			colisio = true;
 		}
+		i++;
 	}
 	
 	return colisio;
