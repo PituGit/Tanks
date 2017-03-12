@@ -46,45 +46,6 @@ void Bala::renderBala(double degrees, SDL_RendererFlip flipType, double angle, T
 	gBalaTexture.render(BalaBox.x, BalaBox.y);
 }
 
-void Bala::renderExplosio(Tank tank)
-{
-	SDL_Rect TankBox = tank.getTankBox();
-	for (int frame = 0; frame < 10; frame++)
-	{
-		if (frame < 2)
-		{
-			gExplosioATexture.render(TankBox.x, TankBox.y);
-			Sleep(30);
-		}
-
-		else if (frame < 4)
-		{
-			gExplosioBTexture.render(TankBox.x, TankBox.y);
-			Sleep(30);
-		}
-
-		else if (frame < 6)
-		{
-			gExplosioCTexture.render(TankBox.x, TankBox.y);
-			Sleep(30);
-		}
-
-		else if (frame < 8)
-		{
-			gExplosioDTexture.render(TankBox.x, TankBox.y);
-			Sleep(30);
-		}
-
-		else if (frame < 10)
-		{
-			gExplosioETexture.render(TankBox.x, TankBox.y);
-			Sleep(30);
-		}
-		SDL_RenderPresent(gRenderer);
-	}
-	Sleep(1500);
-}
-
 bool Bala::ControlaBales()
 {
 	bool trobat = false;

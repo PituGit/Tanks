@@ -53,31 +53,7 @@ bool loadMedia(Tile* tiles[])
 		success = false;
 	}
 
-	if (!gExplosioATexture.loadFromFile("res/ExplosioA.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioBTexture.loadFromFile("res/ExplosioB.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioCTexture.loadFromFile("res/ExplosioC.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioDTexture.loadFromFile("res/ExplosioD.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioETexture.loadFromFile("res/ExplosioE.png"))
+	if (!gExplosioTexture.loadFromFile("res/Explosio.png"))
 	{
 		printf("Failed to load explosio texture!\n");
 		success = false;
@@ -125,22 +101,36 @@ void close(Tile* tiles[])
 	gBaseTankDolentTexture.free();
 	gCapsulaDolentTexture.free();
 	gBalaTexture.free();
-	gExplosioATexture.free();
-	gExplosioBTexture.free();
-	gExplosioCTexture.free();
-	gExplosioDTexture.free();
-	gExplosioETexture.free();
-
-	//Destroy window	
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	gRenderer = NULL;
-
-	//Quit SDL subsystems
-	IMG_Quit();
-	SDL_Quit();
+	gExplosioTexture.free();
 }
+
+void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
+{
+	gExplosioTexture.render(x , y, &Caixa_Explosions);
+	SDL_RenderPresent(gRenderer);
+	Sleep(10);
+}
+
+void setExplosions(int x, int y)
+{
+	SDL_Rect Caixa_Explosions;
+
+	Caixa_Explosions.w = EXPLOSIO_WIDTH;
+	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
+
+	for (int i = 3; i >= 0; i--)
+	{
+		for (int j = 3; j >= 0; j--)
+		{
+			Caixa_Explosions.x = j*64;
+			Caixa_Explosions.y = i*64;
+
+			renderExplosio(x, y, Caixa_Explosions);
+		}
+	}
+
+}
+
 
 
 bool setTiles(Tile* tiles[])
@@ -271,10 +261,12 @@ bool setTiles(Tile* tiles[])
 	return tilesLoaded;
 }
 
+
 bool joc()
 {
 	//si sha superat el nivell
 	bool superat = true;
+
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
 
@@ -318,7 +310,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!quit && !colisio)
+		while (!colisio)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -403,10 +395,12 @@ bool joc()
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
-		bala[0].renderExplosio(tank);
+		//bala[0].renderExplosio(tank);
+		setExplosions(tank.getTankBox().x, tank.getTankBox().y);
+		Sleep(1500);
 	}
 
-	//Free resources and close SDL
+	//Free resources
 	close(tileSet);
 
 	return superat;

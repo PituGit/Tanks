@@ -1,6 +1,6 @@
 #include "../h/Tile.h"
 
-//PENE
+
 
 void Tile::render(SDL_Rect& camera)
 {

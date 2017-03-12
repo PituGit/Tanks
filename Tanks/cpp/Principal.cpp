@@ -68,6 +68,19 @@ bool LoadMedia()
 	return success;
 }
 
+void close()
+{
+	//Destroy window	
+	SDL_DestroyRenderer(gRenderer);
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+	gRenderer = NULL;
+
+	//Quit SDL subsystems
+	IMG_Quit();
+	SDL_Quit();
+}
+
 bool HandleEvent(SDL_Event* e)
 {
 	bool jugar = false;
@@ -138,9 +151,18 @@ int main(int argc, char* args[])
 
 				if (jugar)
 				{
-					superat = joc();
-					if (!superat)
-						vides--;
+					while (vides > 0 && e.type!=SDL_QUIT)
+					{
+						superat = joc();
+						if (!superat)
+							vides--;
+						while (SDL_PollEvent(&e) != 0)
+						{
+							if (e.type == SDL_QUIT)
+								quit = true;
+							
+						}
+					}
 				}
 
 				//Clear screen
@@ -154,6 +176,6 @@ int main(int argc, char* args[])
 		}
 		
 	}
-
+	close();
 	return 0;
 }
