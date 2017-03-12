@@ -106,6 +106,8 @@ void close(Tile* tiles[])
 
 void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
 {
+	x -= 32;
+	y -= 32;
 	gExplosioTexture.render(x , y, &Caixa_Explosions);
 	SDL_RenderPresent(gRenderer);
 	Sleep(10);
@@ -131,6 +133,40 @@ void setExplosions(int x, int y)
 
 }
 
+int setTanks(std::vector <int> &ID,std::vector <int> &x, std::vector <int> &y)
+{
+	//Comptador per el while
+	int comptador = 0;
+
+	//Obrir l'arxiu de les dades del nivell
+	std::ifstream DadesNivell("res/DadesNivell.map");
+
+	if (DadesNivell.fail())
+	{
+		printf("Error al carregar DadesNivell: Unexpected end of file!\n");
+	}
+
+	while (!DadesNivell.eof())
+	{
+		//Obte l'id del tank
+		DadesNivell >> ID[comptador];
+
+		//Obte la posicio x i y del tank
+		DadesNivell >> x[comptador];
+		DadesNivell >> y[comptador];
+
+		if (!DadesNivell.eof())
+		{
+			ID.push_back(int());
+			x.push_back(int());
+			y.push_back(int());
+		}
+		comptador++;
+	}
+
+	DadesNivell.close();
+	return comptador;
+}
 
 
 bool setTiles(Tile* tiles[])
@@ -267,6 +303,12 @@ bool joc()
 	//si sha superat el nivell
 	bool superat = true;
 
+	//Si el tank del jugador ha explotat
+	bool mort = false;
+
+	//Lloc on explota la bala
+	SDL_Point Lloc_Explosio;
+
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
 
@@ -294,8 +336,24 @@ bool joc()
 		bala.erase(bala.begin());
 
 		//The tank that will be moving around on the screen
-		TankJugador tank(400,500);
-		TankDolent dolentProva(800,500);
+		TankJugador tank;
+		std::vector <TankDolent> tankdolent(1);
+
+		std::vector<int> ID(1);
+		std::vector<int> x(1);
+		std::vector<int> y(1);
+		
+		//Obtenim el numero de tanks enemics
+		int comptador = setTanks(ID, x, y);
+
+		tank.InicialitzaDades(ID[0], x[0], y[0]);
+
+		for (int i = 0; i < (comptador-1); i++)
+		{
+			tankdolent[i].InicialitzaDades(ID[i+1], x[i+1], y[i+1]);
+			tankdolent.push_back(TankDolent());
+		}
+
 
 		//Variable per saber si s'ha disparat
 		bool shoot = false;
@@ -332,8 +390,12 @@ bool joc()
 
 			for (int i = 0; i < cBales; i++)
 			{
-				if (bala[i].moveBala(tileSet, tank))
+				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, comptador))
+				{
 					colisio = true;
+					Lloc_Explosio.x = bala[i].getBalaBox().x;
+					Lloc_Explosio.y = bala[i].getBalaBox().y;
+				}			
 			}
 
 			//Clear screen
@@ -349,9 +411,13 @@ bool joc()
 
 			//Render el tank
 			tank.render(degrees, flipType, angle);
-			dolentProva.render(0, flipType, 180, tank);
+			for (int i = 0; i < comptador; i++)
+			{
+				tankdolent[i].render(0, flipType, 180, tank);
+			}
+			
 
-
+			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
 			{
 				if (cBales > 0)
@@ -370,9 +436,10 @@ bool joc()
 					cBales++;
 					bala[cBales - 1].ObtenirDades(angle, tank);
 				}
-				
+
 			}
 
+			//Eliminem bales si es necessari
 			for (int i = 0; i < cBales; i++)
 			{
 				if (bala[i].ControlaBales())
@@ -396,7 +463,7 @@ bool joc()
 			SDL_RenderPresent(gRenderer);
 		}
 		//bala[0].renderExplosio(tank);
-		setExplosions(tank.getTankBox().x, tank.getTankBox().y);
+		setExplosions(Lloc_Explosio.x, Lloc_Explosio.y);
 		Sleep(1500);
 	}
 
