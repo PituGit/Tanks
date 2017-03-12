@@ -42,7 +42,8 @@ protected:
 	int mTankId;
 };
 
-class TankJugador : public Tank {
+class TankJugador : public Tank 
+{
 public:	
 	TankJugador(int x, int y) : Tank(x, y, ID_JUGADOR) {};
 
@@ -56,7 +57,8 @@ public:
 
 };
 
-class TankDolent : public Tank {
+class TankDolent : public Tank 
+{
 public:
 	TankDolent(int x, int y) : Tank(x, y, ID_DOLENT) {};
 	void render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador);

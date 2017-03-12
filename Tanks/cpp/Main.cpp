@@ -106,6 +106,8 @@ void close(Tile* tiles[])
 
 void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
 {
+	x -= 32;
+	y -= 32;
 	gExplosioTexture.render(x , y, &Caixa_Explosions);
 	SDL_RenderPresent(gRenderer);
 	Sleep(10);
@@ -267,6 +269,9 @@ bool joc()
 	//si sha superat el nivell
 	bool superat = true;
 
+	//Lloc on explota la bala
+	SDL_Point Lloc_Explosio;
+
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
 
@@ -332,8 +337,13 @@ bool joc()
 
 			for (int i = 0; i < cBales; i++)
 			{
-				if (bala[i].moveBala(tileSet, tank))
+				if (bala[i].moveBala(tileSet, tank, dolentProva))
+				{
 					colisio = true;
+					Lloc_Explosio.x = bala[i].getBalaBox().x;
+					Lloc_Explosio.y = bala[i].getBalaBox().y;
+				}
+					
 			}
 
 			//Clear screen
@@ -396,7 +406,7 @@ bool joc()
 			SDL_RenderPresent(gRenderer);
 		}
 		//bala[0].renderExplosio(tank);
-		setExplosions(tank.getTankBox().x, tank.getTankBox().y);
+		setExplosions(Lloc_Explosio.x, Lloc_Explosio.y);
 		Sleep(1500);
 	}
 

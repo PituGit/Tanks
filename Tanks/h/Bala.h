@@ -11,13 +11,15 @@ public:
 
 	Bala();
 
-	bool moveBala(Tile *tiles[], Tank tank);
+	bool moveBala(Tile *tiles[], TankJugador tank, TankDolent Prova);
 
 	void ObtenirDades( double angle, Tank tank);
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
 	bool ControlaBales();
+
+	SDL_Rect getBalaBox();
 
 	//Retorna el Temps de la bala
 	Uint32 Bala::getTemps();

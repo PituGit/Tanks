@@ -70,9 +70,9 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 
 	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan((double(y - TankBox.y - MEITAT_CAPSULA_Y)) / double(x - TankBox.x - MEITAT_CAPSULA_X));
+		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X+1));
 
-	angle *= 57.3;
+	angle *= 57.2957795;
 
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) < 0)
 		angle += 180;
@@ -88,12 +88,15 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 		{
 		case SDLK_UP:
 		case SDLK_w: mVelY -= TANK_VEL; break;
+
 		case SDLK_DOWN:
-		case SDLK_s:mVelY += TANK_VEL; break;
+		case SDLK_s: mVelY += TANK_VEL; break;
+
 		case SDLK_LEFT:
 		case SDLK_a: mVelX -= TANK_VEL; break;
+
 		case SDLK_RIGHT:
-		case SDLK_d:mVelX += TANK_VEL; break;
+		case SDLK_d: mVelX += TANK_VEL; break;
 		}
 
 

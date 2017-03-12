@@ -61,7 +61,12 @@ Uint32 Bala::getTemps()
 	return (SDL_GetTicks() - Temps);
 }
 
-bool Bala::moveBala(Tile *tiles[], Tank tank)
+SDL_Rect Bala::getBalaBox()
+{
+	return BalaBox;
+}
+
+bool Bala::moveBala(Tile *tiles[], TankJugador tank, TankDolent dolentProva)
 {
 	//La variable que indica si colisiona
 	bool colisio = false;
@@ -95,5 +100,11 @@ bool Bala::moveBala(Tile *tiles[], Tank tank)
 	{
 		colisio = true;
 	}
+
+	if (checkCollision(BalaBox, dolentProva.getTankBox()))
+	{
+		colisio = true;
+	}
+
 	return colisio;
 }
