@@ -53,7 +53,7 @@ const int LEVEL_WIDTH = 1280;
 const int LEVEL_HEIGHT = 960;
 
 //Màxim de bales
-const int MAX_BALES = 1;
+const int MAX_BALES = 0;
 
 const Uint32 TIEMPO_DE_VIDA = 1000;
 

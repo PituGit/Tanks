@@ -33,8 +33,6 @@ public:
 	SDL_Rect getTankBox();
 
 protected:
-	//The X and Y offsets of the tank
-	int mPosX, mPosY;
 
 	//The velocity of the tank
 	float mVelX, mVelY;

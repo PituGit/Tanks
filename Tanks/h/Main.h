@@ -18,3 +18,5 @@ bool setTiles(Tile *tiles[]);
 //Retallar la tile d'explosions i imprimirles
 void setExplosions(int x, int y);
 void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions);
+
+int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y);
