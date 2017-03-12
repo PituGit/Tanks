@@ -53,36 +53,6 @@ bool loadMedia(Tile* tiles[])
 		success = false;
 	}
 
-	if (!gExplosioATexture.loadFromFile("res/ExplosioA.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioBTexture.loadFromFile("res/ExplosioB.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioCTexture.loadFromFile("res/ExplosioC.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioDTexture.loadFromFile("res/ExplosioD.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
-	if (!gExplosioETexture.loadFromFile("res/ExplosioE.png"))
-	{
-		printf("Failed to load explosio texture!\n");
-		success = false;
-	}
-
 	if (!gExplosioTexture.loadFromFile("res/Explosio.png"))
 	{
 		printf("Failed to load explosio texture!\n");
@@ -131,14 +101,7 @@ void close(Tile* tiles[])
 	gBaseTankDolentTexture.free();
 	gCapsulaDolentTexture.free();
 	gBalaTexture.free();
-	gExplosioATexture.free();
-	gExplosioBTexture.free();
-	gExplosioCTexture.free();
-	gExplosioDTexture.free();
-	gExplosioETexture.free();
 	gExplosioTexture.free();
-
-	
 }
 
 void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
@@ -347,7 +310,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!quit && !colisio)
+		while (!colisio)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -437,7 +400,7 @@ bool joc()
 		Sleep(1500);
 	}
 
-	//Free resources and close SDL
+	//Free resources
 	close(tileSet);
 
 	return superat;

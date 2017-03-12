@@ -17,8 +17,6 @@ public:
 
 	void renderBala(double degrees, SDL_RendererFlip flipType, double angle, Tank tank);
 
-	void renderExplosio(Tank tank);
-
 	bool ControlaBales();
 
 	//Retorna el Temps de la bala
