@@ -133,6 +133,40 @@ void setExplosions(int x, int y)
 
 }
 
+int setTanks(std::vector <int> &ID,std::vector <int> &x, std::vector <int> &y)
+{
+	//Comptador per el while
+	int comptador = 0;
+
+	//Obrir l'arxiu de les dades del nivell
+	std::ifstream DadesNivell("res/DadesNivell.map");
+
+	if (DadesNivell.fail())
+	{
+		printf("Error al carregar DadesNivell: Unexpected end of file!\n");
+	}
+
+	while (!DadesNivell.eof())
+	{
+		//Obte l'id del tank
+		DadesNivell >> ID[comptador];
+
+		//Obte la posicio x i y del tank
+		DadesNivell >> x[comptador];
+		DadesNivell >> y[comptador];
+
+		if (!DadesNivell.eof())
+		{
+			ID.push_back(int());
+			x.push_back(int());
+			y.push_back(int());
+		}
+		comptador++;
+	}
+
+	DadesNivell.close();
+	return comptador;
+}
 
 
 bool setTiles(Tile* tiles[])
@@ -269,6 +303,9 @@ bool joc()
 	//si sha superat el nivell
 	bool superat = true;
 
+	//Si el tank del jugador ha explotat
+	bool mort = false;
+
 	//Lloc on explota la bala
 	SDL_Point Lloc_Explosio;
 
@@ -299,8 +336,24 @@ bool joc()
 		bala.erase(bala.begin());
 
 		//The tank that will be moving around on the screen
-		TankJugador tank(400,500);
-		TankDolent dolentProva(800,500);
+		TankJugador tank;
+		std::vector <TankDolent> tankdolent(1);
+
+		std::vector<int> ID(1);
+		std::vector<int> x(1);
+		std::vector<int> y(1);
+		
+		//Obtenim el numero de tanks enemics
+		int comptador = setTanks(ID, x, y);
+
+		tank.InicialitzaDades(ID[0], x[0], y[0]);
+
+		for (int i = 1; i < comptador; i++)
+		{
+			tankdolent[i-1].InicialitzaDades(ID[i], x[i], y[i]);
+			tankdolent.push_back(TankDolent());
+		}
+
 
 		//Variable per saber si s'ha disparat
 		bool shoot = false;
@@ -315,7 +368,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!colisio)
+		while (!mort)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -337,13 +390,12 @@ bool joc()
 
 			for (int i = 0; i < cBales; i++)
 			{
-				if (bala[i].moveBala(tileSet, tank, dolentProva))
+				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, comptador))
 				{
 					colisio = true;
 					Lloc_Explosio.x = bala[i].getBalaBox().x;
 					Lloc_Explosio.y = bala[i].getBalaBox().y;
-				}
-					
+				}			
 			}
 
 			//Clear screen
@@ -359,7 +411,11 @@ bool joc()
 
 			//Render el tank
 			tank.render(degrees, flipType, angle);
-			dolentProva.render(0, flipType, 180, tank);
+			for (int i = 0; i < comptador; i++)
+			{
+				tankdolent[i].render(0, flipType, 180, tank);
+			}
+			
 
 
 			if (shoot)

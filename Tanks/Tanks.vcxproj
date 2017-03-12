@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="res\DadesNivell.map" />
     <None Include="res\lazy.map" />
   </ItemGroup>
   <ItemGroup>

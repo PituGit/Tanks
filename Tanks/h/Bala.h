@@ -11,7 +11,7 @@ public:
 
 	Bala();
 
-	bool moveBala(Tile *tiles[], TankJugador tank, TankDolent Prova);
+	bool moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> tankdolent, bool& mort, int comptador);
 
 	void ObtenirDades( double angle, Tank tank);
 

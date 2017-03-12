@@ -1,10 +1,8 @@
 #include "../h/Tank.h"
 
-Tank::Tank(int x, int y, int tankId)
+Tank::Tank(int tankId)
 {
 	//Initialize the collision box
-	TankBox.x = x;
-	TankBox.y = y;
 	TankBox.w = Tank_WIDTH;
 	TankBox.h = Tank_HEIGHT;
 
@@ -12,7 +10,16 @@ Tank::Tank(int x, int y, int tankId)
 	mVelX = 0;
 	mVelY = 0;
 
+	//Identifica el tank
 	mTankId = tankId;
+}
+
+void Tank::InicialitzaDades(int tankId, int x, int y)
+{
+	//Inicialitza la posicio
+	TankBox.x = x;
+	TankBox.y = y;
+
 }
 
 float Tank::getVelocitatX()
