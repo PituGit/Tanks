@@ -104,34 +104,44 @@ void close(Tile* tiles[])
 	gExplosioTexture.free();
 }
 
-void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
+void renderExplosio(int x, int y, int imatge)
 {
+	//Ajusta l'imatge a on esta la bala
 	x -= 32;
 	y -= 32;
-	gExplosioTexture.render(x , y, &Caixa_Explosions);
-	SDL_RenderPresent(gRenderer);
-	Sleep(10);
-}
 
-void setExplosions(int x, int y)
-{
+	//Cada 4 frames actualitzarem l'imatge
+	int comptadorX = 0;
+	int comptadorY = 0;
+	int frame = imatge / 3;
+
+	//Serveix per retallar l'imatge de les explosions
 	SDL_Rect Caixa_Explosions;
 
 	Caixa_Explosions.w = EXPLOSIO_WIDTH;
 	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
 
-	for (int i = 3; i >= 0; i--)
+	//Divideix per saber quina imatge necessitem
+	while (frame > 0 && comptadorX != 3)
 	{
-		for (int j = 3; j >= 0; j--)
-		{
-			Caixa_Explosions.x = j*64;
-			Caixa_Explosions.y = i*64;
-
-			renderExplosio(x, y, Caixa_Explosions);
-		}
+		comptadorX++;
+		frame--;
 	}
+	
+	while (frame > 0)
+	{
+		comptadorY++;
+		frame -= 4;
+	}
+	
+	//Indica quina posicio esta l'imatge
+	Caixa_Explosions.x = (192 - comptadorX * 64);
+	Caixa_Explosions.y = (192 - comptadorY * 64);
 
+	//Renderitzem
+	gExplosioTexture.render(x , y, &Caixa_Explosions);
 }
+
 
 int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y)
 {
@@ -308,8 +318,13 @@ bool joc()
 	//Si el tank del jugador ha explotat
 	bool mort = false;
 
+	bool primercop = true;
+
+	//Temps per controlar la renderitzacio de l'explosio
+	UINT32 temps=0, tempsinicial=0;
+
 	//Lloc on explota la bala
-	SDL_Point Lloc_Explosio;
+	SDL_Point Lloc_Explosio, Explosio;
 
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
@@ -330,6 +345,8 @@ bool joc()
 		//tanks i bales que exploten
 		int Bala_que_explota = 0;
 		int numerotank = 0;
+
+		int frame=0;
 
 		//Angle de rotació
 		double degrees = 0, angle = 0;
@@ -467,15 +484,33 @@ bool joc()
 			//Renderitza i elimina bales/tanks
 			if (colisio)
 			{
-				setExplosions(Lloc_Explosio.x, Lloc_Explosio.y);
-				colisio = false;
+				if (primercop)
+				{
+					Explosio = Lloc_Explosio;
 
-				bala.erase(bala.begin() + (cBales - 1));
-				cBales--;
+					primercop = false;
 
-				//S'ha de corregir i eliminar el tank que toca
-				cTanks--;
+					bala.erase(bala.begin() + (cBales - 1));
+					cBales--;
+
+					//S'ha de corregir i eliminar el tank que toca
+					cTanks--;
+				}
+
+				renderExplosio(Explosio.x, Explosio.y, frame);
+
+				frame++;
+
+				if (frame / 4 >= 24)
+				{
+					frame = 0;
+					colisio = false;
+					primercop = true;
+				}
+
+				
 			}
+
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);

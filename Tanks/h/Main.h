@@ -1,6 +1,5 @@
 #include "LTexture.h"
 #include "Tile.h"
-#include "Tank.h"
 #include "Bala.h"
 
 bool joc();
@@ -16,7 +15,6 @@ void close(Tile* tiles[]);
 bool setTiles(Tile *tiles[]);
 
 //Retallar la tile d'explosions i imprimirles
-void setExplosions(int x, int y);
-void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions);
+void renderExplosio(int x, int y, int imatge);
 
 int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y);
