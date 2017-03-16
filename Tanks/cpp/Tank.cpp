@@ -5,6 +5,8 @@ Tank::Tank(int tankId)
 	//Initialize the collision box
 	TankBox.w = Tank_WIDTH;
 	TankBox.h = Tank_HEIGHT;
+	TankBox.x = 0;
+	TankBox.y = 0;
 
 	//Initialize the velocity
 	mVelX = 0;

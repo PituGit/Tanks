@@ -19,6 +19,8 @@ const int EXPLOSIO_WIDTH = 64;
 const int EXPLOSIO_HEIGHT = 64;
 const int TOTAL_SPRITES_EXPLOSIONS = 16;
 
+const int TEMPS_ENTRE_EXPLOSIONS = 1000;
+
 //The different tile sprites
 enum TILE
 {
@@ -53,7 +55,7 @@ const int LEVEL_WIDTH = 1280;
 const int LEVEL_HEIGHT = 960;
 
 //Màxim de bales
-const int MAX_BALES = 1;
+const int MAX_BALES = 0;
 
 const Uint32 TIEMPO_DE_VIDA = 1000;
 

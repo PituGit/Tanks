@@ -104,37 +104,48 @@ void close(Tile* tiles[])
 	gExplosioTexture.free();
 }
 
-void renderExplosio(int x, int y, SDL_Rect Caixa_Explosions)
+void renderExplosio(int x, int y, int imatge)
 {
+	//Ajusta l'imatge a on esta la bala
 	x -= 32;
 	y -= 32;
-	gExplosioTexture.render(x , y, &Caixa_Explosions);
-	SDL_RenderPresent(gRenderer);
-	Sleep(10);
-}
 
-void setExplosions(int x, int y)
-{
+	//Cada 4 frames actualitzarem l'imatge
+	int comptadorX = 0;
+	int comptadorY = 0;
+	int frame = imatge / 3;
+
+	//Serveix per retallar l'imatge de les explosions
 	SDL_Rect Caixa_Explosions;
 
 	Caixa_Explosions.w = EXPLOSIO_WIDTH;
 	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
 
-	for (int i = 3; i >= 0; i--)
+	//Divideix per saber quina imatge necessitem
+	while (frame > 0 && comptadorX != 3)
 	{
-		for (int j = 3; j >= 0; j--)
-		{
-			Caixa_Explosions.x = j*64;
-			Caixa_Explosions.y = i*64;
-
-			renderExplosio(x, y, Caixa_Explosions);
-		}
+		comptadorX++;
+		frame--;
 	}
+	
+	while (frame > 0)
+	{
+		comptadorY++;
+		frame -= 4;
+	}
+	
+	//Indica quina posicio esta l'imatge
+	Caixa_Explosions.x = (192 - comptadorX * 64);
+	Caixa_Explosions.y = (192 - comptadorY * 64);
 
+	//Renderitzem
+	gExplosioTexture.render(x , y, &Caixa_Explosions);
 }
 
-int setTanks(std::vector <int> &ID,std::vector <int> &x, std::vector <int> &y)
+
+int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y)
 {
+
 	//Comptador per el while
 	int comptador = 0;
 
@@ -165,6 +176,7 @@ int setTanks(std::vector <int> &ID,std::vector <int> &x, std::vector <int> &y)
 	}
 
 	DadesNivell.close();
+
 	return comptador;
 }
 
@@ -306,8 +318,13 @@ bool joc()
 	//Si el tank del jugador ha explotat
 	bool mort = false;
 
+	bool primercop = true;
+
+	//Temps per controlar la renderitzacio de l'explosio
+	UINT32 temps=0, tempsinicial=0;
+
 	//Lloc on explota la bala
-	SDL_Point Lloc_Explosio;
+	SDL_Point Lloc_Explosio, Explosio;
 
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
@@ -325,6 +342,12 @@ bool joc()
 		//Event handler
 		SDL_Event e;
 
+		//tanks i bales que exploten
+		int Bala_que_explota = 0;
+		int numerotank = 0;
+
+		int frame=0;
+
 		//Angle de rotació
 		double degrees = 0, angle = 0;
 
@@ -333,25 +356,25 @@ bool joc()
 
 		//Les bales que es pintaran per pantalla
 		std::vector <Bala> bala(MAX_BALES);
-		bala.erase(bala.begin());
 
 		//The tank that will be moving around on the screen
 		TankJugador tank;
-		std::vector <TankDolent> tankdolent(1);
+		std::vector <TankDolent> tankdolent(0);
 
 		std::vector<int> ID(1);
 		std::vector<int> x(1);
 		std::vector<int> y(1);
 		
 		//Obtenim el numero de tanks enemics
-		int comptador = setTanks(ID, x, y);
+		int cTanks = setTanks(ID, x, y) - 1;
 
 		tank.InicialitzaDades(ID[0], x[0], y[0]);
 
-		for (int i = 0; i < (comptador-1); i++)
+
+		for (int i = 0; i < cTanks; i++)
 		{
-			tankdolent[i].InicialitzaDades(ID[i+1], x[i+1], y[i+1]);
 			tankdolent.push_back(TankDolent());
+			tankdolent[i].InicialitzaDades(ID[i+1], x[i+1], y[i+1]);
 		}
 
 
@@ -368,7 +391,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!colisio)
+		while (!mort)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -390,11 +413,12 @@ bool joc()
 
 			for (int i = 0; i < cBales; i++)
 			{
-				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, comptador))
+				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
 				{
 					colisio = true;
 					Lloc_Explosio.x = bala[i].getBalaBox().x;
 					Lloc_Explosio.y = bala[i].getBalaBox().y;
+					Bala_que_explota = i;
 				}			
 			}
 
@@ -411,7 +435,7 @@ bool joc()
 
 			//Render el tank
 			tank.render(degrees, flipType, angle);
-			for (int i = 0; i < comptador; i++)
+			for (int i = 0; i < cTanks; i++)
 			{
 				tankdolent[i].render(0, flipType, 180, tank);
 			}
@@ -431,7 +455,6 @@ bool joc()
 				}
 				else
 				{
-
 					bala.push_back(Bala());
 					cBales++;
 					bala[cBales - 1].ObtenirDades(angle, tank);
@@ -458,12 +481,41 @@ bool joc()
 				bala[i].renderBala(degrees, flipType, angle, tank);
 
 
+			//Renderitza i elimina bales/tanks
+			if (colisio)
+			{
+				if (primercop)
+				{
+					Explosio = Lloc_Explosio;
+
+					primercop = false;
+
+					bala.erase(bala.begin() + (cBales - 1));
+					cBales--;
+
+					//S'ha de corregir i eliminar el tank que toca
+					cTanks--;
+				}
+
+				renderExplosio(Explosio.x, Explosio.y, frame);
+
+				frame++;
+
+				if (frame / 4 >= 24)
+				{
+					frame = 0;
+					colisio = false;
+					primercop = true;
+				}
+
+				
+			}
+
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
-		//bala[0].renderExplosio(tank);
-		setExplosions(Lloc_Explosio.x, Lloc_Explosio.y);
+		
 		Sleep(1500);
 	}
 
