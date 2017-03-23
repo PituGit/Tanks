@@ -16,6 +16,8 @@ Tank::Tank(int tankId)
 	mTankId = tankId;
 }
 
+Tank::Tank(const Tank &Tank2) : TankBox(Tank2.TankBox), mTankId(Tank2.mTankId) {}
+
 void Tank::InicialitzaDades(int tankId, int x, int y)
 {
 	//Inicialitza la posicio
