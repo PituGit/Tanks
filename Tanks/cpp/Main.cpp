@@ -510,9 +510,7 @@ bool joc()
 					frame = 0;
 					colisio = false;
 					primercop = true;
-				}
-
-				
+				}				
 			}
 
 
