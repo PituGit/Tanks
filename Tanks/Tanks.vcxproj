@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="cpp\Bala.cpp" />
     <ClCompile Include="cpp\Global.cpp" />
+    <ClCompile Include="cpp\IA.cpp" />
     <ClCompile Include="cpp\LTexture.cpp" />
     <ClCompile Include="cpp\Main.cpp" />
     <ClCompile Include="cpp\Principal.cpp" />
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="h\Bala.h" />
     <ClInclude Include="h\Global.h" />
+    <ClInclude Include="h\IA.h" />
     <ClInclude Include="h\LTexture.h" />
     <ClInclude Include="h\Main.h" />
     <ClInclude Include="h\Principal.h" />

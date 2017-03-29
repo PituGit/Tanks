@@ -113,7 +113,7 @@ void renderExplosio(int x, int y, int imatge)
 	//Cada 4 frames actualitzarem l'imatge
 	int comptadorX = 0;
 	int comptadorY = 0;
-	int frame = imatge / 3;
+	int frame = imatge / 2;
 
 	//Serveix per retallar l'imatge de les explosions
 	SDL_Rect Caixa_Explosions;
@@ -122,7 +122,7 @@ void renderExplosio(int x, int y, int imatge)
 	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
 
 	//Divideix per saber quina imatge necessitem
-	while (frame > 0 && comptadorX != 3)
+	while (frame >= 0 && frame % 3 != 0)
 	{
 		comptadorX++;
 		frame--;
@@ -355,12 +355,13 @@ bool joc()
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 		//Les bales que es pintaran per pantalla
-		std::vector <Bala> bala(MAX_BALES);
+		std::vector <Bala> bala(0);
 
 		//The tank that will be moving around on the screen
 		TankJugador tank;
 		std::vector <TankDolent> tankdolent(0);
 
+		//Vectors de les dades a llegir del fitxer 
 		std::vector<int> ID(1);
 		std::vector<int> x(1);
 		std::vector<int> y(1);
@@ -494,10 +495,13 @@ bool joc()
 					cBales--;
 
 					//S'ha de corregir i eliminar el tank que toca
+					tankdolent.erase(tankdolent.begin());
 					cTanks--;
+					
 				}
 
 				renderExplosio(Explosio.x, Explosio.y, frame);
+				
 
 				frame++;
 
