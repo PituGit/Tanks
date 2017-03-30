@@ -32,7 +32,7 @@ public:
 	float getVelocitatX();
 	float getVelocitatY();
 
-	SDL_Rect getTankBox();
+	SDL_Rect getTankBox() const;
 
 protected:
 

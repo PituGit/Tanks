@@ -36,7 +36,8 @@ float Tank::getVelocitatY()
 	return mVelY;
 }
 
-SDL_Rect Tank::getTankBox()
+
+SDL_Rect Tank::getTankBox() const
 {
 	return TankBox;
 }
