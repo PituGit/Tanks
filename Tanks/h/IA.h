@@ -4,6 +4,8 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 
 bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[]);
 
+void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
+
 const int MAX_X = 1280;
 const int MAX_Y = 960;
 
@@ -39,6 +41,10 @@ public:
 
 	void setDistancia(TankDolent tankdolent, TankJugador tank);
 
+	void setRecorregut(int x, int y);
+
+	void setCost();
+
 private:
 	int cost;
 
@@ -46,6 +52,6 @@ private:
 
 	double costTotal;
 
-	std::vector<Punt> recorregut;
+	std::vector <SDL_Point> recorregut;
 
 };
