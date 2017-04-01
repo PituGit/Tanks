@@ -526,8 +526,21 @@ bool joc()
 				}				
 			}
 
-
 			//Update screen
+			SDL_RenderPresent(gRenderer);
+		}
+
+		while (colisio)
+		{
+			renderExplosio(Explosio.x, Explosio.y, frame);
+
+			frame++;
+
+			if (frame / 4 >= 24)
+			{
+				frame = 0;
+				colisio = false;
+			}
 			SDL_RenderPresent(gRenderer);
 		}
 		
