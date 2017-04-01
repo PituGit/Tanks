@@ -2,7 +2,10 @@
 
 void CalcularGraus(double &degrees, Tank tank)
 {
+	
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	//Dues possibilitats: que hi hagi moviment nomes a l'eix y o que no
+	//Si hi ha moviment a l'eix de les x calculem la velocitat com l'atan de les velocitats x i y
 	if (tank.getVelocitatX() != 0)
 	{
 		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
@@ -127,19 +130,19 @@ void renderExplosio(int x, int y, int imatge)
 		comptadorX++;
 		frame--;
 	}
-	
+
 	while (frame > 0)
 	{
 		comptadorY++;
 		frame -= 4;
 	}
-	
+
 	//Indica quina posicio esta l'imatge
 	Caixa_Explosions.x = (192 - comptadorX * 64);
 	Caixa_Explosions.y = (192 - comptadorY * 64);
 
 	//Renderitzem
-	gExplosioTexture.render(x , y, &Caixa_Explosions);
+	gExplosioTexture.render(x, y, &Caixa_Explosions);
 }
 
 
@@ -405,6 +408,7 @@ bool joc()
 				//Gestiona les dades introduides
 				tank.handleEvent(e, &e, angle, camera, shoot);
 			}
+			//Calcula els graus en que hem de renderitzar la base del tank
 			CalcularGraus(degrees, tank);
 
 			//Mou el tank
@@ -434,12 +438,22 @@ bool joc()
 				tileSet[i]->render(camera);
 			}
 
-			//Render el tank
+			//Render els tanks
 			tank.render(degrees, flipType, angle);
 			for (int i = 0; i < cTanks; i++)
 			{
 				tankdolent[i].render(0, flipType, 180, tank);
+				
+				if (esVeuen(tankdolent[i], tank, tileSet))
+				{
+					bala.push_back(Bala());
+					cBales++;
+					bala[cBales - 1].ObtenirDades(angle, tank);
+				}
+				
 			}
+
+			
 			
 
 			//si es dispara augmentem el vector i el numero de bales (cBales)
@@ -495,7 +509,6 @@ bool joc()
 					cBales--;
 
 					//S'ha de corregir i eliminar el tank que toca
-					tankdolent.erase(tankdolent.begin());
 					cTanks--;
 					
 				}
@@ -518,6 +531,22 @@ bool joc()
 			SDL_RenderPresent(gRenderer);
 		}
 		
+		while (colisio)
+		{
+			renderExplosio(Explosio.x, Explosio.y, frame);
+
+			frame++;
+
+			if (frame / 4 >= 24)
+			{
+				frame = 0;
+				colisio = false;
+				primercop = true;
+			}
+
+			SDL_RenderPresent(gRenderer);
+		}
+
 		Sleep(1500);
 	}
 

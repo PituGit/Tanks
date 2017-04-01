@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tank.h"
+#include "IA.h"
 
 class Bala
 {
