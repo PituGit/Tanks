@@ -70,6 +70,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	//Conjunt de tots els camins possibles
 	std::vector <Cami> camins(0);
 
+
 	int comptador = 0;
 
 	//Variable que ens indica si hem trobat el final
