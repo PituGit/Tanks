@@ -113,7 +113,7 @@ void renderExplosio(int x, int y, int imatge)
 	//Cada 4 frames actualitzarem l'imatge
 	int comptadorX = 0;
 	int comptadorY = 0;
-	int frame = imatge / 3;
+	int frame = imatge / 2;
 
 	//Serveix per retallar l'imatge de les explosions
 	SDL_Rect Caixa_Explosions;
@@ -122,24 +122,24 @@ void renderExplosio(int x, int y, int imatge)
 	Caixa_Explosions.h = EXPLOSIO_HEIGHT;
 
 	//Divideix per saber quina imatge necessitem
-	while (frame > 0 && comptadorX != 3)
+	while (frame >= 0 && frame % 3 != 0)
 	{
 		comptadorX++;
 		frame--;
 	}
-	
+
 	while (frame > 0)
 	{
 		comptadorY++;
 		frame -= 4;
 	}
-	
+
 	//Indica quina posicio esta l'imatge
 	Caixa_Explosions.x = (192 - comptadorX * 64);
 	Caixa_Explosions.y = (192 - comptadorY * 64);
 
 	//Renderitzem
-	gExplosioTexture.render(x , y, &Caixa_Explosions);
+	gExplosioTexture.render(x, y, &Caixa_Explosions);
 }
 
 
@@ -516,6 +516,22 @@ bool joc()
 			SDL_RenderPresent(gRenderer);
 		}
 		
+		while (colisio)
+		{
+			renderExplosio(Explosio.x, Explosio.y, frame);
+
+			frame++;
+
+			if (frame / 4 >= 24)
+			{
+				frame = 0;
+				colisio = false;
+				primercop = true;
+			}
+
+			SDL_RenderPresent(gRenderer);
+		}
+
 		Sleep(1500);
 	}
 
