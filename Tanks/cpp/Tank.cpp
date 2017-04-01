@@ -16,8 +16,6 @@ Tank::Tank(int tankId)
 	mTankId = tankId;
 }
 
-Tank::Tank(const Tank &Tank2) : TankBox(Tank2.TankBox), mTankId(Tank2.mTankId) {}
-
 void Tank::InicialitzaDades(int tankId, int x, int y)
 {
 	//Inicialitza la posicio
@@ -36,8 +34,7 @@ float Tank::getVelocitatY()
 	return mVelY;
 }
 
-
-SDL_Rect Tank::getTankBox() const
+SDL_Rect Tank::getTankBox()
 {
 	return TankBox;
 }
@@ -45,30 +42,30 @@ SDL_Rect Tank::getTankBox() const
 /*
 void Tank::AjustarVelocitat()
 {
-	//Ajusta la velocitat perque no vagi mes rapid en diagonal
-	if (mVelX != 0 && mVelY != 0)
-	{
-		if (mVelX > 0 && mVelY > 0)
-		{
-			mVelX = TANK_VEL * cos( 7 * PI / 4 );
-			mVelY = TANK_VEL * sin( 7 * PI / 4 );
-		}
-		else if (mVelX > 0 && mVelY < 0)
-		{
-			mVelX = TANK_VEL * cos( PI / 4);
-			mVelY = TANK_VEL * sin( PI / 4);
-		}
-		else if (mVelX < 0 && mVelY > 0)
-		{ 
-			mVelX = TANK_VEL * cos( 3 * PI / 4);
-			mVelY = TANK_VEL * sin( 3 * PI / 4);
-		}
-		else if (mVelX < 0 && mVelY < 0)
-		{
-			mVelX = TANK_VEL * cos( 5 * PI / 4);
-			mVelY = TANK_VEL * sin( 5 * PI / 4);
-		}
-	}
+//Ajusta la velocitat perque no vagi mes rapid en diagonal
+if (mVelX != 0 && mVelY != 0)
+{
+if (mVelX > 0 && mVelY > 0)
+{
+mVelX = TANK_VEL * cos( 7 * PI / 4 );
+mVelY = TANK_VEL * sin( 7 * PI / 4 );
+}
+else if (mVelX > 0 && mVelY < 0)
+{
+mVelX = TANK_VEL * cos( PI / 4);
+mVelY = TANK_VEL * sin( PI / 4);
+}
+else if (mVelX < 0 && mVelY > 0)
+{
+mVelX = TANK_VEL * cos( 3 * PI / 4);
+mVelY = TANK_VEL * sin( 3 * PI / 4);
+}
+else if (mVelX < 0 && mVelY < 0)
+{
+mVelX = TANK_VEL * cos( 5 * PI / 4);
+mVelY = TANK_VEL * sin( 5 * PI / 4);
+}
+}
 }
 */
 
@@ -82,7 +79,7 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 
 	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X+1));
+		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X + 1));
 
 	angle *= 57.2957795;
 

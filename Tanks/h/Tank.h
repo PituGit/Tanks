@@ -24,15 +24,13 @@ public:
 	//Initializes the variables
 	Tank(int tankId);
 
-	Tank(const Tank &Tank2);
-
 	void InicialitzaDades(int x, int y, int tankId);
 
 	//Obté dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 
-	SDL_Rect getTankBox() const;
+	SDL_Rect getTankBox();
 
 protected:
 
@@ -44,9 +42,9 @@ protected:
 	int mTankId;
 };
 
-class TankJugador : public Tank 
+class TankJugador : public Tank
 {
-public:	
+public:
 	TankJugador() : Tank(ID_JUGADOR) {};
 
 	//Takes key presses and adjusts the dot's velocity
@@ -59,7 +57,7 @@ public:
 
 };
 
-class TankDolent : public Tank 
+class TankDolent : public Tank
 {
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
