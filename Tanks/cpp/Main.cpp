@@ -2,7 +2,10 @@
 
 void CalcularGraus(double &degrees, Tank tank)
 {
+	
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	//Dues possibilitats: que hi hagi moviment nomes a l'eix y o que no
+	//Si hi ha moviment a l'eix de les x calculem la velocitat com l'atan de les velocitats x i y
 	if (tank.getVelocitatX() != 0)
 	{
 		degrees = atan(tank.getVelocitatY() / tank.getVelocitatX());
@@ -355,12 +358,13 @@ bool joc()
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 		//Les bales que es pintaran per pantalla
-		std::vector <Bala> bala(MAX_BALES);
+		std::vector <Bala> bala(0);
 
 		//The tank that will be moving around on the screen
 		TankJugador tank;
 		std::vector <TankDolent> tankdolent(0);
 
+		//Vectors de les dades a llegir del fitxer 
 		std::vector<int> ID(1);
 		std::vector<int> x(1);
 		std::vector<int> y(1);
@@ -404,6 +408,7 @@ bool joc()
 				//Gestiona les dades introduides
 				tank.handleEvent(e, &e, angle, camera, shoot);
 			}
+			//Calcula els graus en que hem de renderitzar la base del tank
 			CalcularGraus(degrees, tank);
 
 			//Mou el tank
@@ -433,12 +438,22 @@ bool joc()
 				tileSet[i]->render(camera);
 			}
 
-			//Render el tank
+			//Render els tanks
 			tank.render(degrees, flipType, angle);
 			for (int i = 0; i < cTanks; i++)
 			{
 				tankdolent[i].render(0, flipType, 180, tank);
+				
+				if (esVeuen(tankdolent[i], tank, tileSet))
+				{
+					bala.push_back(Bala());
+					cBales++;
+					bala[cBales - 1].ObtenirDades(angle, tank);
+				}
+				
 			}
+
+			
 			
 
 			//si es dispara augmentem el vector i el numero de bales (cBales)
@@ -495,9 +510,11 @@ bool joc()
 
 					//S'ha de corregir i eliminar el tank que toca
 					cTanks--;
+					
 				}
 
 				renderExplosio(Explosio.x, Explosio.y, frame);
+				
 
 				frame++;
 
@@ -506,9 +523,7 @@ bool joc()
 					frame = 0;
 					colisio = false;
 					primercop = true;
-				}
-
-				
+				}				
 			}
 
 
