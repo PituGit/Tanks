@@ -24,13 +24,15 @@ public:
 	//Initializes the variables
 	Tank(int tankId);
 
+	Tank(const Tank &Tank2);
+
 	void InicialitzaDades(int x, int y, int tankId);
 
 	//Obté dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 
-	SDL_Rect getTankBox();
+	SDL_Rect getTankBox() const;
 
 protected:
 
