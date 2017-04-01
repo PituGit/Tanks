@@ -75,6 +75,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	//Variable que ens indica si hem trobat el final
 	bool trobat = false;
 
+	//Conjut de punts que configuren tot el mapa
 	Punt punts[MAX_X][MAX_Y];
 
 	//Punt que estarem analitzant 
