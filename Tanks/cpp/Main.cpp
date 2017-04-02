@@ -322,7 +322,7 @@ bool joc()
 	bool primercop = true;
 
 	//Temps per controlar la renderitzacio de l'explosio
-	UINT32 temps = 0, tempsinicial = 0;
+	Uint32 temps = 0, tempsinicial = 0;
 
 	//Lloc on explota la bala
 	SDL_Point Lloc_Explosio, Explosio;
@@ -445,7 +445,7 @@ bool joc()
 			{
 				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
 			}
-			
+
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
 			{

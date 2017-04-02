@@ -1,9 +1,10 @@
 #include "Tank.h"
 #include "Bala.h"
+#include "Global.h"
 
 bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 
-bool move(SDL_Rect CapsulaDolent, double angle, Tile * tiles[]);
+bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[]);
 
 void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 

@@ -99,7 +99,7 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> ta
 	}
 
 	//Si la bala colisiona amb el tank
-	if (checkCollision(BalaBox, tank.getTankBox()))
+	if (checkCollision(BalaBox, tank.getTankBox()) && shooterId == ID_JUGADOR) //Debug, cambiar
 	{
 		colisio = true;
 		mort = true;
