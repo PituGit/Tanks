@@ -43,6 +43,8 @@ public:
 
 	int getCost();
 
+	SDL_Point getRecorregut();
+
 	void setDistancia(SDL_Point actual, SDL_Point objectiu);
 
 	void setRecorregut(int x, int y);

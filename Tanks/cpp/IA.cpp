@@ -46,6 +46,11 @@ double Cami::getCostTotal()
 	return costTotal;
 }
 
+SDL_Point Cami::getRecorregut()
+{
+	return recorregut[recorregut.size() - 1];
+}
+
 void Cami::setDistancia(SDL_Point actual,SDL_Point objectiu)
 {
 	distancia = CalculaDistancia(actual, objectiu);
@@ -75,7 +80,22 @@ double CalculaDistancia(SDL_Point actual, SDL_Point objectiu)
 
 int BuscaCami(std::vector <Cami> camins)
 {
+	int comptador = 1;
 
+	//Variable que contindrà el valor de la posicio del cami més òptim
+	int variable = 0;
+
+	while (comptador < camins.size())
+	{
+		if (camins[variable].getCostTotal() > camins[comptador].getCostTotal())
+		{
+			variable = comptador;
+		}
+
+		comptador++;
+	}
+
+	return variable;
 }
 
 
@@ -220,8 +240,11 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 			comptador++;
 		}
 
-		
+		//Variable que indica quina es la posicio del cami més òptim actualment
+		int variable = BuscaCami(camins);
 
+		actual = camins[variable].getRecorregut();
+		
 
 	}
 }
