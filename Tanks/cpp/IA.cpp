@@ -46,10 +46,9 @@ double Cami::getCostTotal()
 	return costTotal;
 }
 
-void Cami::setDistancia(TankDolent tankdolent, TankJugador tank)
+void Cami::setDistancia(SDL_Point actual,SDL_Point objectiu)
 {
-	distancia = sqrt(pow(tankdolent.getTankBox().x - tank.getTankBox().x, 2) + pow(tankdolent.getTankBox().y
-		- tank.getTankBox().y, 2));
+	distancia = CalculaDistancia(actual, objectiu);
 }
 
 void Cami::setRecorregut(int x, int y)
@@ -64,6 +63,21 @@ void Cami::setCost()
 	cost++;
 }
 
+void Cami::setCostTotal()
+{
+	costTotal = sqrt(pow(distancia, 2) + pow(cost, 2));
+}
+
+double CalculaDistancia(SDL_Point actual, SDL_Point objectiu)
+{
+	return (sqrt(pow(actual.x - objectiu.x, 2) + pow(actual.y - objectiu.y, 2)));
+}
+
+int BuscaCami(std::vector <Cami> camins)
+{
+
+}
+
 
 void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 {
@@ -71,7 +85,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	std::vector <Cami> camins(0);
 
 
-	int comptador = 0;
+	int comptador = 0, comptador2 = 0;
 
 	//Variable que ens indica si hem trobat el final
 	bool trobat = false;
@@ -83,6 +97,11 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	SDL_Point actual;
 	actual.x = tankdolent.getTankBox().x;
 	actual.y = tankdolent.getTankBox().y;
+
+	//Punt objectiu en el que volem anar
+	SDL_Point objectiu;
+	objectiu.x = tank.getTankBox().x;
+	objectiu.y = tank.getTankBox().y;
 
 	//Comencem el recorregut en el punt del tank
 	camins[0].setRecorregut(actual.x, actual.y);
@@ -107,13 +126,23 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size()-1].setCost();
 				camins[camins.size()-1].setRecorregut(actual.x - 1, actual.y);
+				actual.x--;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.x++;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 1 && punts[actual.x - 1][actual.y - 1].getNou())
 			{
 				punts[actual.x - 1][actual.y - 1].setNou();
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
-				camins[camins.size() - 1].setRecorregut(actual.x - 1, actual.y - 1);	
+				camins[camins.size() - 1].setRecorregut(actual.x - 1, actual.y - 1);
+				actual.x--;
+				actual.y--;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.x++;
+				actual.y++;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 2 && punts[actual.x][actual.y - 1].getNou())
 			{
@@ -121,6 +150,10 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x, actual.y - 1);
+				actual.y--;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.y++;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 3 && punts[actual.x + 1][actual.y - 1].getNou())
 			{
@@ -128,6 +161,12 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x + 1, actual.y - 1);
+				actual.y--;
+				actual.x++;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.y++;
+				actual.x--;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 4 && punts[actual.x + 1][actual.y].getNou())
 			{
@@ -135,6 +174,10 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x + 1, actual.y);
+				actual.x++;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.x--;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 5 && punts[actual.x + 1][actual.y + 1].getNou())
 			{
@@ -142,6 +185,12 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x + 1, actual.y + 1);
+				actual.x++;
+				actual.y++;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.x--;
+				actual.y--;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 6 && punts[actual.x][actual.y + 1].getNou())
 			{
@@ -149,6 +198,10 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x, actual.y + 1);
+				actual.y++;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.y--;
+				camins[camins.size() - 1].setCostTotal();
 			}
 			else if (comptador == 7 && punts[actual.x - 1][actual.y + 1].getNou())
 			{
@@ -156,10 +209,18 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins.push_back(Cami());
 				camins[camins.size() - 1].setCost();
 				camins[camins.size() - 1].setRecorregut(actual.x - 1, actual.y + 1);
+				actual.y++;
+				actual.x--;
+				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				actual.x++;
+				actual.y--;
+				camins[camins.size() - 1].setCostTotal();
 			}
 
 			comptador++;
 		}
+
+		
 
 
 	}
@@ -181,7 +242,7 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 	double angle = 0;
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	
 	if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) != 0)
 		angle = atan((double(CapsulaJugador.y - CapsulaDolent.y - MEITAT_CAPSULA_Y)) / double(CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X));
 		angle *= 57.3;
