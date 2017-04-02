@@ -361,8 +361,8 @@ bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[])
 	bool continuar = true;
 
 	//Moure la capsula cap al tank del jugador
-	CapsulaDolent.x = cos(angle);
-	CapsulaDolent.y = sin(angle);
+	CapsulaDolent.x += cos(angle);
+	CapsulaDolent.y += sin(angle);
 
 	if (touchesWall(CapsulaDolent, tiles))
 		continuar = false;
