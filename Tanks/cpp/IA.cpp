@@ -155,8 +155,16 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins[camins.size()-1].setRecorregut(actual.x - 1, actual.y);
 				actual.x--;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
-				actual.x++;
 				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
+				actual.x++;
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 1 && punts[actual.x - 1][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -167,9 +175,17 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual.x--;
 				actual.y--;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
 				actual.x++;
 				actual.y++;
-				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 2 && punts[actual.x][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -179,8 +195,16 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins[camins.size() - 1].setRecorregut(actual.x, actual.y - 1);
 				actual.y--;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
-				actual.y++;
 				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
+				actual.y++;
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 3 && punts[actual.x + 1][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -191,9 +215,17 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual.y--;
 				actual.x++;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
 				actual.y++;
 				actual.x--;
-				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 4 && punts[actual.x + 1][actual.y].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -203,8 +235,16 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins[camins.size() - 1].setRecorregut(actual.x + 1, actual.y);
 				actual.x++;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
-				actual.x--;
 				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
+				actual.x--;
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 5 && punts[actual.x + 1][actual.y + 1].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -215,9 +255,17 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual.x++;
 				actual.y++;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
 				actual.x--;
 				actual.y--;
-				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 			else if (comptador == 6 && punts[actual.x][actual.y + 1].getNou() && !touchesWall(actual_Box, tiles))
 			{
@@ -227,10 +275,18 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				camins[camins.size() - 1].setRecorregut(actual.x, actual.y + 1);
 				actual.y++;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
-				actual.y--;
 				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
+				actual.y--;
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
-			else if (comptador == 7 && punts[actual.x - 1][actual.y + 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 7 && punts[actual.x - 1][actual.y + 1].getNou())
 			{
 				punts[actual.x - 1][actual.y + 1].setNou();
 				camins.push_back(Cami());
@@ -239,13 +295,22 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual.y++;
 				actual.x--;
 				camins[camins.size() - 1].setDistancia(actual, objectiu);
+				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
+				if (touchesWall(actual_Box, tiles))
+				{
+					camins.pop_back();
+				}
 				actual.x++;
 				actual.y--;
-				camins[camins.size() - 1].setCostTotal();
+				actual_Box.x = actual.x;
+				actual_Box.y = actual.y;
 			}
 
 			comptador++;
 		}
+		comptador = 0;
 
 		//Variable que indica quina es la posicio del cami més òptim actualment
 		int variable = BuscaCami(camins);
