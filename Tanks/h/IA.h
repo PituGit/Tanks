@@ -6,8 +6,6 @@ bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[]);
 
 void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 
-int BuscaCami(std::vector <Cami> camins);
-
 double CalculaDistancia(SDL_Point actual, SDL_Point objectiu);
 
 const int MAX_X = 1280;
@@ -63,3 +61,5 @@ private:
 	std::vector <SDL_Point> recorregut;
 
 };
+
+int BuscaCami(std::vector <Cami> camins);
