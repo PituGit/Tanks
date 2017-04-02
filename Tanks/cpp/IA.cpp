@@ -118,6 +118,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	actual.x = tankdolent.getTankBox().x;
 	actual.y = tankdolent.getTankBox().y;
 
+	//Capsa de 1x1 al voltant del punt actual, simplement per poder fer servir la funcio toucheswall
 	SDL_Rect actual_Box;
 	actual_Box.x = actual.x;
 	actual_Box.y = actual.y;
