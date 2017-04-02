@@ -411,6 +411,9 @@ bool joc()
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
 
+			//Mou el tank enemic
+			//moveTankEnemic(tankdolent[0], tank, tileSet);
+
 
 			for (int i = 0; i < cBales; i++)
 			{

@@ -46,9 +46,14 @@ double Cami::getCostTotal()
 	return costTotal;
 }
 
-SDL_Point Cami::getRecorregut()
+SDL_Point Cami::getUltimPunt()
 {
 	return recorregut[recorregut.size() - 1];
+}
+
+std::vector <SDL_Point> Cami::getRecorregut()
+{
+	return recorregut;
 }
 
 void Cami::setDistancia(SDL_Point actual,SDL_Point objectiu)
@@ -99,10 +104,13 @@ int BuscaCami(std::vector <Cami> camins)
 }
 
 
-void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
+Cami GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 {
 	//Conjunt de tots els camins possibles
 	std::vector <Cami> camins(0);
+
+	//Ens indica en quina posicio esta el cami més òptim
+	int variable = 0;
 
 
 	int comptador = 0, comptador2 = 0;
@@ -148,7 +156,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 		//Generador de camins nous possibles
 		while (comptador < CAMINS_NOUS)
 		{
-			if (comptador == 0 && punts[actual.x - 1][actual.y].getNou() && !touchesWall(actual_Box, tiles))
+			if (comptador == 0 && punts[actual.x - 1][actual.y].getNou())
 			{
 				punts[actual.x - 1][actual.y].setNou();
 				camins.push_back(Cami());
@@ -167,7 +175,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 1 && punts[actual.x - 1][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 1 && punts[actual.x - 1][actual.y - 1].getNou())
 			{
 				punts[actual.x - 1][actual.y - 1].setNou();
 				camins.push_back(Cami());
@@ -188,7 +196,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 2 && punts[actual.x][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 2 && punts[actual.x][actual.y - 1].getNou())
 			{
 				punts[actual.x][actual.y - 1].setNou();
 				camins.push_back(Cami());
@@ -207,7 +215,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 3 && punts[actual.x + 1][actual.y - 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 3 && punts[actual.x + 1][actual.y - 1].getNou())
 			{
 				punts[actual.x + 1][actual.y - 1].setNou();
 				camins.push_back(Cami());
@@ -228,7 +236,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 4 && punts[actual.x + 1][actual.y].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 4 && punts[actual.x + 1][actual.y].getNou())
 			{
 				punts[actual.x + 1][actual.y].setNou();
 				camins.push_back(Cami());
@@ -247,7 +255,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 5 && punts[actual.x + 1][actual.y + 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 5 && punts[actual.x + 1][actual.y + 1].getNou())
 			{
 				punts[actual.x + 1][actual.y + 1].setNou();
 				camins.push_back(Cami());
@@ -268,7 +276,7 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 				actual_Box.x = actual.x;
 				actual_Box.y = actual.y;
 			}
-			else if (comptador == 6 && punts[actual.x][actual.y + 1].getNou() && !touchesWall(actual_Box, tiles))
+			else if (comptador == 6 && punts[actual.x][actual.y + 1].getNou())
 			{
 				punts[actual.x][actual.y + 1].setNou();
 				camins.push_back(Cami());
@@ -314,15 +322,25 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 		comptador = 0;
 
 		//Variable que indica quina es la posicio del cami més òptim actualment
-		int variable = BuscaCami(camins);
+		variable = BuscaCami(camins);
 
-		actual = camins[variable].getRecorregut();
+		actual = camins[variable].getUltimPunt();
 		actual_Box.x = actual.x;
 		actual_Box.y = actual.y;
-		
-
 	}
+
+	return camins[variable];
 }
+
+void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
+{
+	Cami cami = GeneraCami(tankdolent, tank, tiles);
+
+	std::vector <SDL_Point> recorregut = cami.getRecorregut();
+
+	tankdolent.setPosicio(recorregut[1].x, recorregut[1].y);
+}
+	
 
 
 bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])

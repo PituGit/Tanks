@@ -61,5 +61,8 @@ class TankDolent : public Tank
 {
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
+
 	void render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador);
+
+	void setPosicio(int x, int y);
 };
