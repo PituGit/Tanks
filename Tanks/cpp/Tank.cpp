@@ -3,8 +3,8 @@
 Tank::Tank(int tankId)
 {
 	//Initialize the collision box
-	TankBox.w = Tank_WIDTH;
-	TankBox.h = Tank_HEIGHT;
+	TankBox.w = TANK_WIDTH;
+	TankBox.h = TANK_HEIGHT;
 	TankBox.x = 0;
 	TankBox.y = 0;
 
@@ -134,7 +134,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.x += mVelX;
 
 	//If the dot went too far to the left or right or touched a wall
-	if ((TankBox.x < 0) || (TankBox.x + Tank_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
+	if ((TankBox.x < 0) || (TankBox.x + TANK_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.x -= mVelX;
@@ -144,7 +144,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.y += mVelY;
 
 	//If the dot went too far up or down or touched a wall
-	if ((TankBox.y < 0) || (TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
+	if ((TankBox.y < 0) || (TankBox.y + TANK_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.y -= mVelY;
@@ -166,17 +166,14 @@ void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle
 	gCapsulaJugadorTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
-void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador)
+void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador)
 {
 	SDL_Rect jugador;
 	jugador = tankJugador.getTankBox();
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
-	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan((double(jugador.y - TankBox.y - MEITAT_CAPSULA_Y)) / double(jugador.x - TankBox.x - MEITAT_CAPSULA_X));
-	angle *= 57.3;
-	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) < 0)
-		angle += 180;
+	if (angle > calculAngle(*this, tankJugador, true) + RANG_DESVIACIO || angle < calculAngle(*this, tankJugador, true) - RANG_DESVIACIO) {
+		angle = calculAngle(*this, tankJugador, false);
+	}
 
 	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
@@ -189,4 +186,43 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle,
 	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+}
+
+void TankDolent::setAngle(double angleNou)
+{
+	angle = angleNou;
+}
+
+double TankDolent::getAngle()
+{
+	return angle;
+}
+
+double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
+{
+	double angle = 0;
+
+	int desviació = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
+
+	SDL_Rect jugador;
+	SDL_Rect dolent;
+	jugador = tank.getTankBox();
+	dolent = tankDolent.getTankBox();
+
+	//Calcula l'angle de rotació, per imprimirlo apuntant al jugador
+	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) != 0) {
+		angle = atan((double(jugador.y - dolent.y - MEITAT_CAPSULA_Y)) / double(jugador.x - dolent.x - MEITAT_CAPSULA_X));
+	}
+
+	angle *= 57.3;
+
+	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) < 0) {
+		angle += 180;
+	}
+
+	if (!esExacte) {
+		angle += desviació;
+	}
+
+	return angle;
 }

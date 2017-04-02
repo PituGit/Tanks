@@ -165,6 +165,35 @@ void GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	}
 }
 
+void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int * pCBales, Tile * tiles[])
+{
+	double angle = calculAngle(tankdolent, tank, false);
+
+	vector<Bala> bala = *pBala;
+	int cBales = *pCBales;
+
+	if (esVeuen(tankdolent, tank, tiles))
+	{
+		if (cBales > 0)
+		{
+			if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
+			{
+				bala.push_back(Bala());
+				cBales++;
+				bala[cBales - 1].ObtenirDades(angle, tank);
+			}
+		} else
+		{
+			bala.push_back(Bala());
+			cBales++;
+			bala[cBales - 1].ObtenirDades(angle, tank);
+		}
+	}
+
+	*pBala = bala;
+	*pCBales = cBales;
+}
+
 
 bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 {
@@ -179,25 +208,21 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	Caixa.h = CapsulaJugador.h + 5;
 	Caixa.x = CapsulaJugador.x;
 
-	double angle = 0;
+	double angle = calculAngle(tankdolent,tank, tiles);
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
-	if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan((double(CapsulaJugador.y - CapsulaDolent.y - MEITAT_CAPSULA_Y)) / double(CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X));
-		angle *= 57.3;
-		if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) < 0)
-		angle += 180;
-
-	while (move(CapsulaDolent, angle, tiles))
+	while (move(CapsulaDolent, angle, tiles)&& !esVeuen)
 	{
-
+		if (checkCollision(Caixa,CapsulaDolent))
+		{
+			esVeuen = true;
+		}
 	}
 
 	return esVeuen;
 }
 
 
-bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[])
+bool move(SDL_Rect CapsulaDolent, double angle, Tile * tiles[])
 {
 	bool continuar = true;
 

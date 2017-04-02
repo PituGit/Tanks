@@ -438,10 +438,14 @@ bool joc()
 			tank.render(degrees, flipType, angle);
 			for (int i = 0; i < cTanks; i++)
 			{
-				tankdolent[i].render(0, flipType, 180, tank);
+				tankdolent[i].render(0, flipType, tank);
 			}
 
-
+			for (int i = 0; i < cTanks; i++)
+			{
+				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
+			}
+			
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
 			{
