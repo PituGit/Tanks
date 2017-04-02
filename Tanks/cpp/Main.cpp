@@ -453,14 +453,14 @@ bool joc()
 				{
 					if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
 					{
-						bala.push_back(Bala());
+						bala.push_back(Bala(ID_JUGADOR));
 						cBales++;
 						bala[cBales - 1].ObtenirDades(angle, tank);
 					}
 				}
 				else
 				{
-					bala.push_back(Bala());
+					bala.push_back(Bala(ID_JUGADOR));
 					cBales++;
 					bala[cBales - 1].ObtenirDades(angle, tank);
 				}
