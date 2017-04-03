@@ -180,7 +180,7 @@ void TankJugador::move(Tile * tiles[])
 
 void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
-	//Centre de rotaciÃ³ del tanc
+	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -239,29 +239,6 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
-
-TankDolent::TankDolent(const TankDolent &t)
-{
-	mVelX = t.mVelX;
-	mVelY = t.mVelY;
-
-	TankBox = t.TankBox;
-	mTankId = t.mTankId;
-	angle = t.angle;
-}
-
-TankDolent &TankDolent::operator=(const TankDolent &t)
-{
-	if (this != &t) {
-		mVelX = t.mVelX;
-		mVelY = t.mVelY;
-
-		TankBox = t.TankBox;
-		mTankId = t.mTankId;
-		angle = t.angle;
-	}
-	return *this;
-}
 
 void TankDolent::setPosicio(int x, int y)
 {

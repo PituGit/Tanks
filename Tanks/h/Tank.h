@@ -67,6 +67,9 @@ class TankDolent : public Tank
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
 
+	TankDolent(const TankDolent &t);
+	TankDolent &operator=(const TankDolent &t);
+
 	void setPosicio(int x, int y);
 
 	void render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador);
@@ -74,10 +77,11 @@ public:
 	void setAngle(double angleNou);
 	double getAngle();
   
-  double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
 
 private:
 	double angle;
 
 
 };
+
+double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
