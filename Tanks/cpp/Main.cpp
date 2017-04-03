@@ -417,6 +417,7 @@ bool joc()
 				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
 				{
 					colisio = true;
+					primercop = true;
 					Lloc_Explosio.x = bala[i].getBalaBox().x;
 					Lloc_Explosio.y = bala[i].getBalaBox().y;
 					Bala_que_explota = i;
@@ -440,11 +441,14 @@ bool joc()
 			{
 				tankdolent[i].render(0, flipType, tank);
 			}
-
+			
+			/*
 			for (int i = 0; i < cTanks; i++)
 			{
 				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
 			}
+			*/
+			
 
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
@@ -492,13 +496,32 @@ bool joc()
 				{
 					Explosio = Lloc_Explosio;
 
-					primercop = false;
+					//Busquem quin tank hem tocat
+					bool trobat2 = false;
+					int comptadore = 0;
 
-					bala.erase(bala.begin() + (cBales - 1));
-					cBales--;
-					tankdolent.erase(tankdolent.begin() + 0);
-					//S'ha de corregir i eliminar el tank que toca
-					cTanks--;
+					if (primercop)
+					{
+						while (!trobat2)
+						{
+							if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 6) >= Explosio.x
+								&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 6) >= Explosio.y
+								&& (tankdolent[comptadore].getTankBox().x - 6) <= Explosio.x
+								&& (tankdolent[comptadore].getTankBox().y - 6) <= Explosio.y)
+							{
+								trobat2 = true;
+								comptadore--;
+							}
+							comptadore++;
+						}
+						bala.erase(bala.begin() + (cBales - 1));
+						cBales--;
+
+						//S'ha de corregir i eliminar el tank que toca
+						tankdolent.erase(tankdolent.begin() + comptadore);
+						cTanks--;
+					}	
+					primercop = false;
 				}
 
 				renderExplosio(Explosio.x, Explosio.y, frame);
