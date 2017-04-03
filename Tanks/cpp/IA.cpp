@@ -1,5 +1,6 @@
 #include "../h/IA.h"
 
+
 Punt::Punt()
 {
 	nou = true;
@@ -87,7 +88,7 @@ int BuscaCami(std::vector <Cami> camins)
 {
 	int comptador = 1;
 
-	//Variable que contindrà el valor de la posicio del cami més òptim
+	//Variable que contindrï¿½ el valor de la posicio del cami mï¿½s ï¿½ptim
 	int variable = 0;
 
 	while (comptador < camins.size())
@@ -109,7 +110,7 @@ Cami GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	//Conjunt de tots els camins possibles
 	std::vector <Cami> camins(0);
 
-	//Ens indica en quina posicio esta el cami més òptim
+	//Ens indica en quina posicio esta el cami mï¿½s ï¿½ptim
 	int variable = 0;
 
 
@@ -321,7 +322,7 @@ Cami GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 		}
 		comptador = 0;
 
-		//Variable que indica quina es la posicio del cami més òptim actualment
+		//Variable que indica quina es la posicio del cami mï¿½s ï¿½ptim actualment
 		variable = BuscaCami(camins);
 
 		actual = camins[variable].getUltimPunt();
@@ -332,6 +333,7 @@ Cami GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	return camins[variable];
 }
 
+
 void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 {
 	Cami cami = GeneraCami(tankdolent, tank, tiles);
@@ -341,6 +343,7 @@ void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	tankdolent.setPosicio(recorregut[1].x, recorregut[1].y);
 }
 	
+
 void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int * pCBales, Tile * tiles[])
 {
 	double angle = calculAngle(tankdolent, tank, false);
@@ -358,8 +361,11 @@ void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int 
 				cBales++;
 				bala[cBales - 1].ObtenirDades(angle, tankdolent);
 			}
+
 		}
-		else
+
+  else
+
 		{
 			bala.push_back(Bala(ID_DOLENT));
 			cBales++;
@@ -387,9 +393,10 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 	double angle = calculAngle(tankdolent, tank, false);
 
-	while (move(capsulaDolent, angle, tiles) && !esVeuen)
+	while (move(capsulaDolent, angle, tiles)&& !esVeuen)
 	{
-		if (checkCollision(Caixa, capsulaDolent))
+		if (checkCollision(Caixa,capsulaDolent))
+
 		{
 			esVeuen = true;
 			capsulaDolent = tankdolent.getTankBox();
@@ -404,6 +411,13 @@ bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 {
 	//Continuem movent la capsa
 	bool continuar = true;
+	
+	int movX = 10 * cos(angle);
+	int movY = 10 * sin(angle);
+	
+	capsulaDolent.x += movX;
+	capsulaDolent.y += movY;
+
 
 	int movX = 10 * cos(angle);
 	int movY = 10 * sin(angle);
@@ -413,7 +427,10 @@ bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 
 	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
 
-	if (touchesWall(capsulaDolent, tiles)) {
+
+	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
+  if (touchesWall(capsulaDolent, tiles)) 
+  {
 		continuar = false;
 	}
 
