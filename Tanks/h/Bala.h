@@ -35,7 +35,7 @@ private:
 
 	//Temps de la bala
 	Uint32 Temps, TempsFinal;
-
+  
 	//L'angle en el qual està anant la bala
 	double Angle_Direccio;
 

@@ -239,7 +239,6 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
-
 void TankDolent::setPosicio(int x, int y)
 {
   TankBox.x=x;

@@ -73,8 +73,8 @@ public:
 	void render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador);
 
 	void setAngle(double angleNou);
-	double getAngle();
   
+	double getAngle();
 
 private:
 	double angle;
