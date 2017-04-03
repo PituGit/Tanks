@@ -351,6 +351,8 @@ bool joc()
 		//Angle de rotació
 		double degrees = 0, angle = 0;
 
+		Uint32 tempsmoviment = SDL_GetTicks();
+
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -410,6 +412,10 @@ bool joc()
 			//Mou el tank
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
+			for (int i = 0; i < cTanks; i++)
+			{
+				moveTankRandom(tankdolent[i], tileSet, tempsmoviment);
+			}
 
 
 			for (int i = 0; i < cBales; i++)
@@ -489,15 +495,31 @@ bool joc()
 				{
 					Explosio = Lloc_Explosio;
 
+					if (primercop)
+					{
+						bool trobat2 = false;
+						int comptadore = 0;
+
+						while (!trobat2)
+						{
+							if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 5) >= Explosio.x
+								&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 5) >= Explosio.y
+								&& tankdolent[comptadore].getTankBox().x < Explosio.x
+								&& tankdolent[comptadore].getTankBox().y < Explosio.y)
+							{
+								trobat2 = true;
+								comptadore--;
+							}
+							comptadore++;
+						}
+
+						bala.erase(bala.begin() + (cBales - 1));
+						cBales--;
+
+						tankdolent.erase(tankdolent.begin() + comptadore);
+						cTanks--;
+					}
 					primercop = false;
-
-					bala.erase(bala.begin() + (cBales - 1));
-					cBales--;
-
-					//S'ha de corregir i eliminar el tank que toca
-					tankdolent.erase(tankdolent.begin());
-					cTanks--;
-					
 				}
 
 				renderExplosio(Explosio.x, Explosio.y, frame);
