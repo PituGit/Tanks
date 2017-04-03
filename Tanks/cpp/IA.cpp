@@ -348,6 +348,7 @@ void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int 
 {
 	double angle = calculAngle(tankdolent, tank, false);
 
+
 	vector<Bala> bala = *pBala;
 	int cBales = *pCBales;
 
@@ -417,13 +418,14 @@ bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 	
 	capsulaDolent.x += movX;
 	capsulaDolent.y += movY;
-
-
+  
 	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
   if (touchesWall(capsulaDolent, tiles)) 
-  {
+	{
 		continuar = false;
 	}
 
 	return continuar;
 }
+
+
