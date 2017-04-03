@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Tile.h"
 
 const int RANG_DESVIACIO = 5;
@@ -31,7 +29,7 @@ public:
 
 	void InicialitzaDades(int x, int y, int tankId);
 
-	//Obté dades del tanc
+	//ObtÃ© dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 

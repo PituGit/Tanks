@@ -36,7 +36,7 @@ private:
 	//Temps de la bala
 	Uint32 Temps, TempsFinal;
 
-	//L'angle en el qual est‡ anant la bala
+	//L'angle en el qual est√† anant la bala
 	double Angle_Direccio;
 
 	SDL_Rect BalaBox;
