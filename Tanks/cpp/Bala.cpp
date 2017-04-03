@@ -1,7 +1,7 @@
 #include "../h/Bala.h"
 
 
-Bala::Bala(int id)
+Bala::Bala()
 {
 	//Initialize the collision box
 	BalaBox.w = BALA_WIDTH;
@@ -17,8 +17,6 @@ Bala::Bala(int id)
 
 	//Temps
 	Temps = SDL_GetTicks();
-
-	shooterId = id;
 }
 
 void Bala::ObtenirDades( double angle, Tank tank)
@@ -99,7 +97,7 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> ta
 	}
 
 	//Si la bala colisiona amb el tank
-	if (checkCollision(BalaBox, tank.getTankBox()) && shooterId == ID_JUGADOR) //Debug, cambiar
+	if (checkCollision(BalaBox, tank.getTankBox()))
 	{
 		colisio = true;
 		mort = true;
@@ -109,7 +107,7 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> ta
 
 	while(!colisio && i<(comptador))
 	{
-		if (checkCollision(BalaBox, tankdolent[i].getTankBox()) && shooterId == ID_JUGADOR)
+		if (checkCollision(BalaBox, tankdolent[i].getTankBox()))
 		{
 			colisio = true;
 			numerotank = i-1;

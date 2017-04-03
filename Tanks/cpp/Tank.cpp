@@ -1,26 +1,10 @@
 #include "../h/Tank.h"
 
-Tank::Tank()
-{
-	//Initialize the collision box
-	TankBox.w = TANK_WIDTH;
-	TankBox.h = TANK_HEIGHT;
-	TankBox.x = 0;
-	TankBox.y = 0;
-
-	//Initialize the velocity
-	mVelX = 0;
-	mVelY = 0;
-
-	//Identifica el tank Fet per poder fer remove
-	//mTankId = tankId;
-}
-
 Tank::Tank(int tankId)
 {
 	//Initialize the collision box
-	TankBox.w = TANK_WIDTH;
-	TankBox.h = TANK_HEIGHT;
+	TankBox.w = Tank_WIDTH;
+	TankBox.h = Tank_HEIGHT;
 	TankBox.x = 0;
 	TankBox.y = 0;
 
@@ -32,16 +16,7 @@ Tank::Tank(int tankId)
 	mTankId = tankId;
 }
 
-Tank::Tank(const Tank &t)
-{
-	TankBox = t.TankBox;
-	//Initialize the velocity
-	mVelX = t.mVelX;
-	mVelY = t.mVelY;
-
-	//Identifica el tank
-	mTankId = t.mTankId;
-}
+Tank::Tank(const Tank &Tank2) : TankBox(Tank2.TankBox), mTankId(Tank2.mTankId) {}
 
 void Tank::InicialitzaDades(int tankId, int x, int y)
 {
@@ -69,30 +44,30 @@ SDL_Rect Tank::getTankBox()
 /*
 void Tank::AjustarVelocitat()
 {
-//Ajusta la velocitat perque no vagi mes rapid en diagonal
-if (mVelX != 0 && mVelY != 0)
-{
-if (mVelX > 0 && mVelY > 0)
-{
-mVelX = TANK_VEL * cos( 7 * PI / 4 );
-mVelY = TANK_VEL * sin( 7 * PI / 4 );
-}
-else if (mVelX > 0 && mVelY < 0)
-{
-mVelX = TANK_VEL * cos( PI / 4);
-mVelY = TANK_VEL * sin( PI / 4);
-}
-else if (mVelX < 0 && mVelY > 0)
-{
-mVelX = TANK_VEL * cos( 3 * PI / 4);
-mVelY = TANK_VEL * sin( 3 * PI / 4);
-}
-else if (mVelX < 0 && mVelY < 0)
-{
-mVelX = TANK_VEL * cos( 5 * PI / 4);
-mVelY = TANK_VEL * sin( 5 * PI / 4);
-}
-}
+	//Ajusta la velocitat perque no vagi mes rapid en diagonal
+	if (mVelX != 0 && mVelY != 0)
+	{
+		if (mVelX > 0 && mVelY > 0)
+		{
+			mVelX = TANK_VEL * cos( 7 * PI / 4 );
+			mVelY = TANK_VEL * sin( 7 * PI / 4 );
+		}
+		else if (mVelX > 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( PI / 4);
+			mVelY = TANK_VEL * sin( PI / 4);
+		}
+		else if (mVelX < 0 && mVelY > 0)
+		{ 
+			mVelX = TANK_VEL * cos( 3 * PI / 4);
+			mVelY = TANK_VEL * sin( 3 * PI / 4);
+		}
+		else if (mVelX < 0 && mVelY < 0)
+		{
+			mVelX = TANK_VEL * cos( 5 * PI / 4);
+			mVelY = TANK_VEL * sin( 5 * PI / 4);
+		}
+	}
 }
 */
 
@@ -104,9 +79,9 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al mouse
+	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X + 1));
+		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X+1));
 
 	angle *= 57.2957795;
 
@@ -161,7 +136,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.x += mVelX;
 
 	//If the dot went too far to the left or right or touched a wall
-	if ((TankBox.x < 0) || (TankBox.x + TANK_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
+	if ((TankBox.x < 0) || (TankBox.x + Tank_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.x -= mVelX;
@@ -171,7 +146,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.y += mVelY;
 
 	//If the dot went too far up or down or touched a wall
-	if ((TankBox.y < 0) || (TankBox.y + TANK_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
+	if ((TankBox.y < 0) || (TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.y -= mVelY;
@@ -180,7 +155,7 @@ void TankJugador::move(Tile * tiles[])
 
 void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
-	//Centre de rotaciÃ³ del tanc
+	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -193,40 +168,19 @@ void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle
 	gCapsulaJugadorTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
-
-TankDolent::TankDolent(const TankDolent &t)
-{
-	mVelX = t.mVelX;
-	mVelY = t.mVelY;
-
-	TankBox = t.TankBox;
-	mTankId = t.mTankId;
-	angle = t.angle;
-}
-
-TankDolent &TankDolent::operator=(const TankDolent &t) 
-{
-	if (this != &t) {
-		mVelX = t.mVelX;
-		mVelY = t.mVelY;
-
-		TankBox = t.TankBox;
-		mTankId = t.mTankId;
-		angle = t.angle;
-	}
-	return *this;
-}
-
-void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador)
+void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador)
 {
 	SDL_Rect jugador;
 	jugador = tankJugador.getTankBox();
 
-	if (angle > calculAngle(*this, tankJugador, true) + RANG_DESVIACIO || angle < calculAngle(*this, tankJugador, true) - RANG_DESVIACIO) {
-		angle = calculAngle(*this, tankJugador, false);
-	}
+	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) != 0)
+		angle = atan((double(jugador.y - TankBox.y - MEITAT_CAPSULA_Y)) / double(jugador.x - TankBox.x - MEITAT_CAPSULA_X));
+	angle *= 57.3;
+	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) < 0)
+		angle += 180;
 
-	//Centre de rotaciÃ³ del tanc
+	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -237,76 +191,4 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
-}
-
-
-TankDolent::TankDolent(const TankDolent &t)
-{
-	mVelX = t.mVelX;
-	mVelY = t.mVelY;
-
-	TankBox = t.TankBox;
-	mTankId = t.mTankId;
-	angle = t.angle;
-}
-
-TankDolent &TankDolent::operator=(const TankDolent &t)
-{
-	if (this != &t) {
-		mVelX = t.mVelX;
-		mVelY = t.mVelY;
-
-		TankBox = t.TankBox;
-		mTankId = t.mTankId;
-		angle = t.angle;
-	}
-	return *this;
-}
-
-void TankDolent::setPosicio(int x, int y)
-{
-  TankBox.x=x;
-  TankBox.y=y;
-}
-
-void TankDolent::setAngle(double angleNou)
-{
-	angle = angleNou;
-}
-
-double TankDolent::getAngle()
-{
-	return angle;
-}
-
-double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
-
-{
-	double angle = 0;
-
-	int desviaciÃ³ = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
-
-	SDL_Rect jugador;
-	SDL_Rect dolent;
-	jugador = tank.getTankBox();
-	dolent = tankDolent.getTankBox();
-
-	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al jugador
-	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) != 0) {
-		angle = atan((double(jugador.y - dolent.y - MEITAT_CAPSULA_Y)) / double(jugador.x - dolent.x - MEITAT_CAPSULA_X));
-	}
-
-	angle *= 57.3;
-
-	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) < 0) {
-		angle += 180;
-	}
-
-	if (!esExacte) 
-  {
-		angle += desviaciÃ³;
-	}
-
-	return angle;
-
 }

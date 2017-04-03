@@ -2,8 +2,6 @@
 
 #include "Tile.h"
 
-const int RANG_DESVIACIO = 5;
-
 enum TANK_ID
 {
 	ID_JUGADOR,
@@ -14,24 +12,23 @@ class Tank
 {
 public:
 	//Les dimensions del tank
-	const int TANK_WIDTH = 45;
-	const int TANK_HEIGHT = 45;
+	const int Tank_WIDTH = 45;
+	const int Tank_HEIGHT = 45;
 
-
-	//Maximum axis velocity of the tank
+	//Maximum axis velocity of the dot
 	static const int TANK_VEL = 5;
-	
+
 	//Ajusta la velocitat perque no vagi mes rapid en diagonal
 	//void AjustarVelocitat();
 
 	//Initializes the variables
-	Tank();
 	Tank(int tankId);
-	Tank(const Tank &t);
+
+	Tank(const Tank &Tank2);
 
 	void InicialitzaDades(int x, int y, int tankId);
 
-	//ObtÃ© dades del tanc
+	//Obté dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 
@@ -47,9 +44,9 @@ protected:
 	int mTankId;
 };
 
-class TankJugador : public Tank
+class TankJugador : public Tank 
 {
-public:
+public:	
 	TankJugador() : Tank(ID_JUGADOR) {};
 
 	//Takes key presses and adjusts the dot's velocity
@@ -62,22 +59,9 @@ public:
 
 };
 
-class TankDolent : public Tank
+class TankDolent : public Tank 
 {
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
-
-	void setPosicio(int x, int y);
-
-	void render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador);
-
-	void setAngle(double angleNou);
-	double getAngle();
-  
-  double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
-
-private:
-	double angle;
-
-
+	void render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador);
 };

@@ -10,8 +10,6 @@
 #include <math.h>
 #include <Windows.h>
 
-using namespace std;
-
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
 const int TOTAL_TILES = 192;
