@@ -2,6 +2,8 @@
 
 #include "Tile.h"
 
+const int RANG_DESVIACIO = 5;
+
 enum TANK_ID
 {
 	ID_JUGADOR,
@@ -12,17 +14,19 @@ class Tank
 {
 public:
 	//Les dimensions del tank
-	const int Tank_WIDTH = 45;
-	const int Tank_HEIGHT = 45;
+	const int TANK_WIDTH = 45;
+	const int TANK_HEIGHT = 45;
 
-	//Maximum axis velocity of the dot
+	//Maximum axis velocity of the tank
 	static const int TANK_VEL = 5;
-
+	
 	//Ajusta la velocitat perque no vagi mes rapid en diagonal
 	//void AjustarVelocitat();
 
 	//Initializes the variables
+	Tank();
 	Tank(int tankId);
+	Tank(const Tank &t);
 
 	void InicialitzaDades(int x, int y, int tankId);
 
@@ -62,7 +66,16 @@ class TankDolent : public Tank
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
 
-	void render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador);
+	TankDolent(const TankDolent &t);
+	TankDolent &operator=(const TankDolent &t);
 
-	void setPosicio(int x, int y);
+	void render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador);
+
+	void setAngle(double angleNou);
+	double getAngle();
+
+private:
+	double angle;
 };
+
+double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
