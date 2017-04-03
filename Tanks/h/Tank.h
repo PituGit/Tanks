@@ -28,7 +28,7 @@ public:
 
 	void InicialitzaDades(int x, int y, int tankId);
 
-	//Obté dades del tanc
+	//Obtï¿½ dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 

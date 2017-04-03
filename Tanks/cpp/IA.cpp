@@ -14,7 +14,7 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 	double angle = 0;
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	//Calcula l'angle de rotaciï¿½, per imprimirlo apuntant al mouse
 	if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) != 0)
 		angle = atan((double(CapsulaJugador.y - CapsulaDolent.y - MEITAT_CAPSULA_Y)) / double(CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X));
 	angle *= 57.3;
