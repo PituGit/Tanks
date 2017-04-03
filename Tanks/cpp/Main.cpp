@@ -492,13 +492,33 @@ bool joc()
 				{
 					Explosio = Lloc_Explosio;
 
+					if (primercop)
+					{
+						bool trobat2 = false;
+						int comptadore = 0;
+
+						while (!trobat2)
+						{
+							if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 5) >= Explosio.x
+								&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 5) >= Explosio.y
+								&& tankdolent[comptadore].getTankBox().x < Explosio.x
+								&& tankdolent[comptadore].getTankBox().y < Explosio.y)
+							{
+								trobat2 = true;
+								comptadore--;
+							}
+							comptadore++;
+						}
+
+						bala.erase(bala.begin() + (cBales - 1));
+						cBales--;
+
+						tankdolent.erase(tankdolent.begin() + comptadore);
+						cTanks--;
+					}
+
 					primercop = false;
 
-					bala.erase(bala.begin() + (cBales - 1));
-					cBales--;
-					tankdolent.erase(tankdolent.begin() + 0);
-					//S'ha de corregir i eliminar el tank que toca
-					cTanks--;
 				}
 
 				renderExplosio(Explosio.x, Explosio.y, frame);

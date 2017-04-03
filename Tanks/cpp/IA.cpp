@@ -419,15 +419,6 @@ bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 	capsulaDolent.y += movY;
 
 
-	int movX = 10 * cos(angle);
-	int movY = 10 * sin(angle);
-
-	capsulaDolent.x += movX;
-	capsulaDolent.y += movY;
-
-	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
-
-
 	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
   if (touchesWall(capsulaDolent, tiles)) 
   {
