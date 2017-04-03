@@ -1,8 +1,7 @@
-#pragma once
-
 #include "Tank.h"
 
 class Bala
+
 {
 public:
 	//es 8 (amplada) x8 (altura)
@@ -10,6 +9,7 @@ public:
 	static const int BALA_HEIGHT = 8;
 
 	Bala();
+	Bala(int id);
 
 	bool moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> tankdolent,
 		bool& mort, int comptador, int &numerotank);
@@ -36,9 +36,11 @@ private:
 	//Temps de la bala
 	Uint32 Temps, TempsFinal;
 
-	//L'angle en el qual est‡ anant la bala
+	//L'angle en el qual est√† anant la bala
 	double Angle_Direccio;
 
 	SDL_Rect BalaBox;
+
+	int shooterId;
 
 };
