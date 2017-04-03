@@ -368,16 +368,17 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 
 	tankdolent.setPosicio(mVelX, 0);
 
-	//Corretgim el moviment i calculem una nova velocitat
+	//si toca la paret el tirem enrera i generem de nou una nova velocitat
 	if (touchesWall(tankdolent.getTankBox(), tiles))
 	{
+
 		mVelX = -mVelX;
 		tankdolent.setPosicio(mVelX, 0);
 
 		mVelX = rand() % 3;
 		if (mVelX == 2)
 			mVelX = -1;
-		mVelX *= 5;
+		mVelX *= 3;
 
 		tankdolent.setVelocitatX(mVelX);
 	}
@@ -386,13 +387,14 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 
 	if (touchesWall(tankdolent.getTankBox(), tiles))
 	{
+		
 		mVelY = -mVelY;
 		tankdolent.setPosicio(0, mVelY);
 
 		mVelY = rand() % 3;
 		if (mVelY == 2)
 			mVelY = -1;
-		mVelY *= 5;
+		mVelY *= 3;
 
 		tankdolent.setVelocitatY(mVelY);
 	}
