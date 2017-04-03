@@ -345,6 +345,7 @@ void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int 
 {
 	double angle = calculAngle(tankdolent, tank, false);
 
+
 	vector<Bala> bala = *pBala;
 	int cBales = *pCBales;
 
