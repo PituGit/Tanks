@@ -341,48 +341,81 @@ void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 	tankdolent.setPosicio(recorregut[1].x, recorregut[1].y);
 }
 	
+void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int * pCBales, Tile * tiles[])
+{
+	double angle = calculAngle(tankdolent, tank, false);
 
+	vector<Bala> bala = *pBala;
+	int cBales = *pCBales;
+
+	if (esVeuen(tankdolent, tank, tiles))
+	{
+		if (cBales > 0)
+		{
+			if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
+			{
+				bala.push_back(Bala(ID_DOLENT));
+				cBales++;
+				bala[cBales - 1].ObtenirDades(angle, tankdolent);
+			}
+		}
+		else
+		{
+			bala.push_back(Bala(ID_DOLENT));
+			cBales++;
+			bala[cBales - 1].ObtenirDades(angle, tankdolent);
+		}
+
+		*pBala = bala;
+		*pCBales = cBales;
+	}
+}
 
 bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 {
-	SDL_Rect CapsulaDolent = tankdolent.getTankBox();
-	SDL_Rect CapsulaJugador = tank.getTankBox();
+	SDL_Rect capsulaDolent = tankdolent.getTankBox();
+	SDL_Rect capsulaJugador = tank.getTankBox();
 
 	bool esVeuen = false;
 
 	//Capsula que encercla la posicio del jugador
 	SDL_Rect Caixa;
-	Caixa.w = CapsulaJugador.w + 5;
-	Caixa.h = CapsulaJugador.h + 5;
-	Caixa.x = CapsulaJugador.x;
+	Caixa.w = capsulaJugador.w + 5;
+	Caixa.h = capsulaJugador.h + 5;
+	Caixa.x = capsulaJugador.x - 5;
+	Caixa.y = capsulaJugador.y - 5;
 
-	double angle = 0;
+	double angle = calculAngle(tankdolent, tank, false);
 
-	
-	if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan((double(CapsulaJugador.y - CapsulaDolent.y - MEITAT_CAPSULA_Y)) / double(CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X));
-		angle *= 57.3;
-		if ((CapsulaJugador.x - CapsulaDolent.x - MEITAT_CAPSULA_X) < 0)
-		angle += 180;
-
-	while (move(CapsulaDolent, angle, tiles))
+	while (move(capsulaDolent, angle, tiles) && !esVeuen)
 	{
-
+		if (checkCollision(Caixa, capsulaDolent))
+		{
+			esVeuen = true;
+			capsulaDolent = tankdolent.getTankBox();
+		}
 	}
 
 	return esVeuen;
 }
 
 
-bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[])
+bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 {
+	//Continuem movent la capsa
 	bool continuar = true;
 
-	//Moure la capsula cap al tank del jugador
-	CapsulaDolent.x += cos(angle);
-	CapsulaDolent.y += sin(angle);
+	int movX = 10 * cos(angle);
+	int movY = 10 * sin(angle);
 
-	if (touchesWall(CapsulaDolent, tiles))
+	capsulaDolent.x += movX;
+	capsulaDolent.y += movY;
+
+	//printf("%d %d : %f : %f (int %d), %f (int %d) / ", capsula.x, capsula.y, angle, cos(angle), movX, sin(angle), movY);
+
+	if (touchesWall(capsulaDolent, tiles)) {
 		continuar = false;
+	}
+
 	return continuar;
 }

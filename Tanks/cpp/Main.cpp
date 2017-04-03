@@ -322,7 +322,7 @@ bool joc()
 	bool primercop = true;
 
 	//Temps per controlar la renderitzacio de l'explosio
-	UINT32 temps = 0, tempsinicial = 0;
+	Uint32 temps = 0, tempsinicial = 0;
 
 	//Lloc on explota la bala
 	SDL_Point Lloc_Explosio, Explosio;
@@ -411,9 +411,6 @@ bool joc()
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
 
-			//Mou el tank enemic
-			//moveTankEnemic(tankdolent[0], tank, tileSet);
-
 
 			for (int i = 0; i < cBales; i++)
 			{
@@ -441,9 +438,13 @@ bool joc()
 			tank.render(degrees, flipType, angle);
 			for (int i = 0; i < cTanks; i++)
 			{
-				tankdolent[i].render(0, flipType, 180, tank);
+				tankdolent[i].render(0, flipType, tank);
 			}
 
+			for (int i = 0; i < cTanks; i++)
+			{
+				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
+			}
 
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
@@ -452,14 +453,14 @@ bool joc()
 				{
 					if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
 					{
-						bala.push_back(Bala());
+						bala.push_back(Bala(ID_JUGADOR));
 						cBales++;
 						bala[cBales - 1].ObtenirDades(angle, tank);
 					}
 				}
 				else
 				{
-					bala.push_back(Bala());
+					bala.push_back(Bala(ID_JUGADOR));
 					cBales++;
 					bala[cBales - 1].ObtenirDades(angle, tank);
 				}
@@ -488,7 +489,6 @@ bool joc()
 			//Renderitza i elimina bales/tanks
 			if (colisio)
 			{
-				if (primercop)
 				{
 					Explosio = Lloc_Explosio;
 
@@ -496,7 +496,7 @@ bool joc()
 
 					bala.erase(bala.begin() + (cBales - 1));
 					cBales--;
-
+					tankdolent.erase(tankdolent.begin() + 0);
 					//S'ha de corregir i eliminar el tank que toca
 					cTanks--;
 				}

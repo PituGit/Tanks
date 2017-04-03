@@ -193,17 +193,37 @@ void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle
 	gCapsulaJugadorTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
-void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle, TankJugador tankJugador)
+TankDolent::TankDolent(const TankDolent &t)
+{
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	TankBox = t.TankBox;
+	mTankId = t.mTankId;
+	angle = t.angle;
+}
+
+TankDolent &TankDolent::operator=(const TankDolent &t) 
+{
+	if (this != &t) {
+		mVelX = t.mVelX;
+		mVelY = t.mVelY;
+
+		TankBox = t.TankBox;
+		mTankId = t.mTankId;
+		angle = t.angle;
+	}
+	return *this;
+}
+
+void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador)
 {
 	SDL_Rect jugador;
 	jugador = tankJugador.getTankBox();
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
-	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) != 0)
-		angle = atan((double(jugador.y - TankBox.y - MEITAT_CAPSULA_Y)) / double(jugador.x - TankBox.x - MEITAT_CAPSULA_X));
-	angle *= 57.3;
-	if ((jugador.x - TankBox.x - MEITAT_CAPSULA_X) < 0)
-		angle += 180;
+	if (angle > calculAngle(*this, tankJugador, true) + RANG_DESVIACIO || angle < calculAngle(*this, tankJugador, true) - RANG_DESVIACIO) {
+		angle = calculAngle(*this, tankJugador, false);
+	}
 
 	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
@@ -243,8 +263,29 @@ TankDolent &TankDolent::operator=(const TankDolent &t)
 
 void TankDolent::setPosicio(int x, int y)
 {
-	TankBox.x = x;
+	double angle = 0;
+
+	int desviació = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
+
+	SDL_Rect jugador;
+	SDL_Rect dolent;
+	jugador = tank.getTankBox();
+	dolent = tankDolent.getTankBox();
+
+	//Calcula l'angle de rotació, per imprimirlo apuntant al jugador
+	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) != 0) {
+		angle = atan((double(jugador.y - dolent.y - MEITAT_CAPSULA_Y)) / double(jugador.x - dolent.x - MEITAT_CAPSULA_X));
+	}
+
+	angle *= 57.3;
+
+	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) < 0) {
+		angle += 180;
+	}
+
+	if (!esExacte) {
+		angle += desviació;
+	}
 
 	TankBox.y = y;
 }
-
