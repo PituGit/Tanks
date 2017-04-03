@@ -427,3 +427,5 @@ bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 
 	return continuar;
 }
+
+

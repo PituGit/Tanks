@@ -104,7 +104,7 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
 		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X + 1));
 
@@ -180,7 +180,7 @@ void TankJugador::move(Tile * tiles[])
 
 void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
-	//Centre de rotaci� del tanc
+	//Centre de rotació del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -226,7 +226,7 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 		angle = calculAngle(*this, tankJugador, false);
 	}
 
-	//Centre de rotació del tanc
+	//Centre de rotaciÃ³ del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -261,14 +261,14 @@ double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
 {
 	double angle = 0;
 
-	int desviació = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
+	int desviaciÃ³ = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
 
 	SDL_Rect jugador;
 	SDL_Rect dolent;
 	jugador = tank.getTankBox();
 	dolent = tankDolent.getTankBox();
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al jugador
+	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al jugador
 	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) != 0) {
 		angle = atan((double(jugador.y - dolent.y - MEITAT_CAPSULA_Y)) / double(jugador.x - dolent.x - MEITAT_CAPSULA_X));
 	}
@@ -281,7 +281,7 @@ double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
 
 	if (!esExacte) 
   {
-		angle += desviació;
+		angle += desviaciÃ³;
 	}
 
 	return angle;
