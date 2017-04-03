@@ -1,5 +1,21 @@
 #include "../h/Tank.h"
 
+Tank::Tank()
+{
+	//Initialize the collision box
+	TankBox.w = TANK_WIDTH;
+	TankBox.h = TANK_HEIGHT;
+	TankBox.x = 0;
+	TankBox.y = 0;
+
+	//Initialize the velocity
+	mVelX = 0;
+	mVelY = 0;
+
+	//Identifica el tank Fet per poder fer remove
+	//mTankId = tankId;
+}
+
 Tank::Tank(int tankId)
 {
 	//Initialize the collision box
@@ -14,6 +30,17 @@ Tank::Tank(int tankId)
 
 	//Identifica el tank
 	mTankId = tankId;
+}
+
+Tank::Tank(const Tank &t)
+{
+	TankBox = t.TankBox;
+	//Initialize the velocity
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	//Identifica el tank
+	mTankId = t.mTankId;
 }
 
 void Tank::InicialitzaDades(int tankId, int x, int y)
@@ -77,7 +104,7 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al mouse
+	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al mouse
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) != 0)
 		angle = atan(double(y - TankBox.y - MEITAT_CAPSULA_Y) / double(x - TankBox.x - MEITAT_CAPSULA_X + 1));
 
@@ -153,7 +180,7 @@ void TankJugador::move(Tile * tiles[])
 
 void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle)
 {
-	//Centre de rotació del tanc
+	//Centre de rotaciÃ³ del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -166,6 +193,30 @@ void TankJugador::render(double degrees, SDL_RendererFlip flipType, double angle
 	gCapsulaJugadorTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
+
+TankDolent::TankDolent(const TankDolent &t)
+{
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	TankBox = t.TankBox;
+	mTankId = t.mTankId;
+	angle = t.angle;
+}
+
+TankDolent &TankDolent::operator=(const TankDolent &t) 
+{
+	if (this != &t) {
+		mVelX = t.mVelX;
+		mVelY = t.mVelY;
+
+		TankBox = t.TankBox;
+		mTankId = t.mTankId;
+		angle = t.angle;
+	}
+	return *this;
+}
+
 void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador)
 {
 	SDL_Rect jugador;
@@ -175,7 +226,7 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 		angle = calculAngle(*this, tankJugador, false);
 	}
 
-	//Centre de rotació del tanc
+	//Centre de rotaciÃ³ del tanc
 	SDL_Point centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y };
 	SDL_Point* center = &centre;
 
@@ -186,6 +237,36 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 	centre = { MEITAT_CAPSULA_X, MEITAT_CAPSULA_Y - 4 };
 
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
+}
+
+
+TankDolent::TankDolent(const TankDolent &t)
+{
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	TankBox = t.TankBox;
+	mTankId = t.mTankId;
+	angle = t.angle;
+}
+
+TankDolent &TankDolent::operator=(const TankDolent &t)
+{
+	if (this != &t) {
+		mVelX = t.mVelX;
+		mVelY = t.mVelY;
+
+		TankBox = t.TankBox;
+		mTankId = t.mTankId;
+		angle = t.angle;
+	}
+	return *this;
+}
+
+void TankDolent::setPosicio(int x, int y)
+{
+  TankBox.x=x;
+  TankBox.y=y;
 }
 
 void TankDolent::setAngle(double angleNou)
@@ -199,17 +280,18 @@ double TankDolent::getAngle()
 }
 
 double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
+
 {
 	double angle = 0;
 
-	int desviació = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
+	int desviaciÃ³ = (-RANG_DESVIACIO) + (rand() % (RANG_DESVIACIO - (-RANG_DESVIACIO) + 1)); //min + (rand() % (max - min + 1))
 
 	SDL_Rect jugador;
 	SDL_Rect dolent;
 	jugador = tank.getTankBox();
 	dolent = tankDolent.getTankBox();
 
-	//Calcula l'angle de rotació, per imprimirlo apuntant al jugador
+	//Calcula l'angle de rotaciÃ³, per imprimirlo apuntant al jugador
 	if ((jugador.x - dolent.x - MEITAT_CAPSULA_X) != 0) {
 		angle = atan((double(jugador.y - dolent.y - MEITAT_CAPSULA_Y)) / double(jugador.x - dolent.x - MEITAT_CAPSULA_X));
 	}
@@ -220,9 +302,11 @@ double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte)
 		angle += 180;
 	}
 
-	if (!esExacte) {
-		angle += desviació;
+	if (!esExacte) 
+  {
+		angle += desviaciÃ³;
 	}
 
 	return angle;
+
 }

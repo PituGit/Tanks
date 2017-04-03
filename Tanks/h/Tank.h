@@ -17,18 +17,21 @@ public:
 	const int TANK_WIDTH = 45;
 	const int TANK_HEIGHT = 45;
 
+
 	//Maximum axis velocity of the tank
 	static const int TANK_VEL = 5;
-
+	
 	//Ajusta la velocitat perque no vagi mes rapid en diagonal
 	//void AjustarVelocitat();
 
 	//Initializes the variables
+	Tank();
 	Tank(int tankId);
+	Tank(const Tank &t);
 
 	void InicialitzaDades(int x, int y, int tankId);
 
-	//Obté dades del tanc
+	//ObtÃ© dades del tanc
 	float getVelocitatX();
 	float getVelocitatY();
 
@@ -64,13 +67,17 @@ class TankDolent : public Tank
 public:
 	TankDolent() : Tank(ID_DOLENT) {};
 
+	void setPosicio(int x, int y);
+
 	void render(double degrees, SDL_RendererFlip flipType, TankJugador tankJugador);
 
 	void setAngle(double angleNou);
 	double getAngle();
+  
+  double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
 
 private:
 	double angle;
-};
 
-double calculAngle(TankDolent tankDolent, TankJugador tank, bool esExacte);
+
+};

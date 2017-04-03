@@ -489,7 +489,6 @@ bool joc()
 			//Renderitza i elimina bales/tanks
 			if (colisio)
 			{
-				if (primercop)
 				{
 					Explosio = Lloc_Explosio;
 
@@ -497,7 +496,7 @@ bool joc()
 
 					bala.erase(bala.begin() + (cBales - 1));
 					cBales--;
-
+					tankdolent.erase(tankdolent.begin() + 0);
 					//S'ha de corregir i eliminar el tank que toca
 					cTanks--;
 				}
