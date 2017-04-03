@@ -71,3 +71,5 @@ int BuscaCami(std::vector <Cami> camins);
 Cami GeneraCami(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 
 void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
+
+void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmoviment);

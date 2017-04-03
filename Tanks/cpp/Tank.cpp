@@ -157,20 +157,20 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 
 void TankJugador::move(Tile * tiles[])
 {
-	//Move the dot left or right
+	//Move the tank left or right
 	TankBox.x += mVelX;
 
-	//If the dot went too far to the left or right or touched a wall
+	//If the tank went too far to the left or right or touched a wall
 	if ((TankBox.x < 0) || (TankBox.x + TANK_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.x -= mVelX;
 	}
 
-	//Move the dot up or down
+	//Move the tank up or down
 	TankBox.y += mVelY;
 
-	//If the dot went too far up or down or touched a wall
+	//If the tank went too far up or down or touched a wall
 	if ((TankBox.y < 0) || (TankBox.y + TANK_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
 	{
 		//move back
@@ -241,8 +241,18 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, TankJugador t
 
 void TankDolent::setPosicio(int x, int y)
 {
-  TankBox.x=x;
-  TankBox.y=y;
+  TankBox.x+=x;
+  TankBox.y+=y;
+}
+
+void Tank::setVelocitatX(int x)
+{
+	mVelX = x;
+}
+
+void Tank::setVelocitatY(int y)
+{
+	mVelY = y;
 }
 
 void TankDolent::setAngle(double angleNou)

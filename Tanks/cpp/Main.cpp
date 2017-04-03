@@ -352,6 +352,8 @@ bool joc()
 		//Angle de rotació
 		double degrees = 0, angle = 0;
 
+		Uint32 tempsmoviment = SDL_GetTicks();
+
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -410,6 +412,10 @@ bool joc()
 			//Mou el tank
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
+			for (int i = 0; i < cTanks; i++)
+			{
+				moveTankRandom(tankdolent[i], tileSet, tempsmoviment);
+			}
 
 
 			for (int i = 0; i < cBales; i++)

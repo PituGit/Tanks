@@ -35,6 +35,9 @@ public:
 	float getVelocitatX();
 	float getVelocitatY();
 
+	void setVelocitatX(int x);
+	void setVelocitatY(int y);
+
 	SDL_Rect getTankBox();
 
 protected:
@@ -80,7 +83,6 @@ public:
 
 private:
 	double angle;
-
 
 };
 

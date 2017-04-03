@@ -342,6 +342,46 @@ void moveTankEnemic(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 	tankdolent.setPosicio(recorregut[1].x, recorregut[1].y);
 }
+
+void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmoviment)
+{
+	int mVelX = tankdolent.getVelocitatX();
+	int mVelY = tankdolent.getVelocitatY();
+	if (tempsmoviment < 1000)
+	{
+		mVelX = rand() % 3;
+		if (mVelX == 2)
+			mVelX = -1;
+		mVelX *= 5;
+
+		tankdolent.setVelocitatX(mVelX);
+
+		mVelY = rand() % 3;
+		if (mVelY == 2)
+			mVelY = -1;
+		mVelY *= 5;
+
+		tankdolent.setVelocitatY(mVelY);
+	}
+
+	tankdolent.setPosicio(mVelX, 0);
+
+	if (touchesWall(tankdolent.getTankBox(), tiles))
+	{
+		mVelX = -2*mVelX;
+		tankdolent.setPosicio(mVelX, 0);
+	}
+
+	tankdolent.setPosicio(0, mVelY);
+
+	if (touchesWall(tankdolent.getTankBox(), tiles))
+	{
+		mVelY = -2*mVelY;
+		tankdolent.setPosicio(0, mVelY);
+	}
+
+
+}
 	
 
 void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int * pCBales, Tile * tiles[])
