@@ -1,10 +1,26 @@
 #include "../h/Tank.h"
 
+Tank::Tank()
+{
+	//Initialize the collision box
+	TankBox.w = TANK_WIDTH;
+	TankBox.h = TANK_HEIGHT;
+	TankBox.x = 0;
+	TankBox.y = 0;
+
+	//Initialize the velocity
+	mVelX = 0;
+	mVelY = 0;
+
+	//Identifica el tank Fet per poder fer remove
+	//mTankId = tankId;
+}
+
 Tank::Tank(int tankId)
 {
 	//Initialize the collision box
-	TankBox.w = Tank_WIDTH;
-	TankBox.h = Tank_HEIGHT;
+	TankBox.w = TANK_WIDTH;
+	TankBox.h = TANK_HEIGHT;
 	TankBox.x = 0;
 	TankBox.y = 0;
 
@@ -14,6 +30,17 @@ Tank::Tank(int tankId)
 
 	//Identifica el tank
 	mTankId = tankId;
+}
+
+Tank::Tank(const Tank &t)
+{
+	TankBox = t.TankBox;
+	//Initialize the velocity
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	//Identifica el tank
+	mTankId = t.mTankId;
 }
 
 void Tank::InicialitzaDades(int tankId, int x, int y)
@@ -134,7 +161,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.x += mVelX;
 
 	//If the dot went too far to the left or right or touched a wall
-	if ((TankBox.x < 0) || (TankBox.x + Tank_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
+	if ((TankBox.x < 0) || (TankBox.x + TANK_WIDTH > LEVEL_WIDTH) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.x -= mVelX;
@@ -144,7 +171,7 @@ void TankJugador::move(Tile * tiles[])
 	TankBox.y += mVelY;
 
 	//If the dot went too far up or down or touched a wall
-	if ((TankBox.y < 0) || (TankBox.y + Tank_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
+	if ((TankBox.y < 0) || (TankBox.y + TANK_HEIGHT > LEVEL_HEIGHT) || touchesWall(TankBox, tiles))
 	{
 		//move back
 		TankBox.y -= mVelY;
@@ -191,9 +218,33 @@ void TankDolent::render(double degrees, SDL_RendererFlip flipType, double angle,
 	gCapsulaDolentTexture.render(TankBox.x, TankBox.y + 4, NULL, degrees, center, flipType);
 }
 
+TankDolent::TankDolent(const TankDolent &t)
+{
+	mVelX = t.mVelX;
+	mVelY = t.mVelY;
+
+	TankBox = t.TankBox;
+	mTankId = t.mTankId;
+	angle = t.angle;
+}
+
+TankDolent &TankDolent::operator=(const TankDolent &t)
+{
+	if (this != &t) {
+		mVelX = t.mVelX;
+		mVelY = t.mVelY;
+
+		TankBox = t.TankBox;
+		mTankId = t.mTankId;
+		angle = t.angle;
+	}
+	return *this;
+}
+
 void TankDolent::setPosicio(int x, int y)
 {
 	TankBox.x = x;
 
 	TankBox.y = y;
 }
+
