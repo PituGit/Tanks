@@ -440,11 +440,16 @@ bool joc()
 				tileSet[i]->render(camera);
 			}
 
+			for (int i = 0; i < cTanks; i++)
+			{
+				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
+			}
+
 			//Render el tank
 			tank.render(degrees, flipType, angle);
 			for (int i = 0; i < cTanks; i++)
 			{
-				tankdolent[i].render(0, flipType, 180, tank);
+				tankdolent[i].render(0, flipType, tank);
 			}
 			
 

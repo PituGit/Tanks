@@ -17,7 +17,7 @@ public:
 
 
 	//Maximum axis velocity of the tank
-	static const int TANK_VEL = 5;
+	static const int TANK_VEL = 3;
 	
 	//Ajusta la velocitat perque no vagi mes rapid en diagonal
 	//void AjustarVelocitat();

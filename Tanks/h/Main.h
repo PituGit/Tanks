@@ -1,6 +1,4 @@
-#include "LTexture.h"
-#include "Tile.h"
-#include "Bala.h"
+#include "IA.h"
 
 bool joc();
 

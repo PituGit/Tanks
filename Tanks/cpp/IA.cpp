@@ -347,14 +347,47 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 {
 	int mVelX = tankdolent.getVelocitatX();
 	int mVelY = tankdolent.getVelocitatY();
-	if (tempsmoviment < 1000)
+	if (tempsmoviment + 1000 < SDL_GetTicks())
 	{
+		mVelX = rand() % 3;
+		if (mVelX == 2)
+			mVelX = -1;
+		mVelX *= 3;
+
+		tankdolent.setVelocitatX(mVelX);
+
+		mVelY = rand() % 3;
+		if (mVelY == 2)
+			mVelY = -1;
+		mVelY *= 3;
+
+		tankdolent.setVelocitatY(mVelY);
+
+		tempsmoviment = SDL_GetTicks();
+	}
+
+	tankdolent.setPosicio(mVelX, 0);
+
+	//Corretgim el moviment i calculem una nova velocitat
+	if (touchesWall(tankdolent.getTankBox(), tiles))
+	{
+		mVelX = -mVelX;
+		tankdolent.setPosicio(mVelX, 0);
+
 		mVelX = rand() % 3;
 		if (mVelX == 2)
 			mVelX = -1;
 		mVelX *= 5;
 
 		tankdolent.setVelocitatX(mVelX);
+	}
+
+	tankdolent.setPosicio(0, mVelY);
+
+	if (touchesWall(tankdolent.getTankBox(), tiles))
+	{
+		mVelY = -mVelY;
+		tankdolent.setPosicio(0, mVelY);
 
 		mVelY = rand() % 3;
 		if (mVelY == 2)
@@ -362,22 +395,6 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 		mVelY *= 5;
 
 		tankdolent.setVelocitatY(mVelY);
-	}
-
-	tankdolent.setPosicio(mVelX, 0);
-
-	if (touchesWall(tankdolent.getTankBox(), tiles))
-	{
-		mVelX = -2*mVelX;
-		tankdolent.setPosicio(mVelX, 0);
-	}
-
-	tankdolent.setPosicio(0, mVelY);
-
-	if (touchesWall(tankdolent.getTankBox(), tiles))
-	{
-		mVelY = -2*mVelY;
-		tankdolent.setPosicio(0, mVelY);
 	}
 
 

@@ -1,6 +1,5 @@
-#include "Tank.h"
 #include "Bala.h"
-#include "Global.h"
+
 
 bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
 
