@@ -402,6 +402,7 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 bool move(SDL_Rect &capsulaDolent, double angle, Tile * tiles[])
 {
+	//Continuem movent la capsa
 	bool continuar = true;
 
 	int movX = 10 * cos(angle);
