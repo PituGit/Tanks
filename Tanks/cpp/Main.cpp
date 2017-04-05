@@ -21,6 +21,71 @@ void CalcularGraus(double &degrees, Tank tank)
 	}
 }
 
+void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
+	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio, 
+	int &frame, bool &colisio, bool &colisio2)
+{
+	
+	SDL_Point Explosio = Lloc_Explosio;
+
+	//El primer cop que s'executa necessitem eliminar tank i bala
+	if (primercop)
+	{
+		bool trobat = false;
+		int comptadore = 0;
+
+		
+		//Busquem quin tank hem tocat i posteriorment l'eliminarem
+		while (!trobat)
+		{
+			if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 5) >= Explosio.x
+				&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 5) >= Explosio.y
+				&& (tankdolent[comptadore].getTankBox().x - 5)< Explosio.x
+				&& (tankdolent[comptadore].getTankBox().y - 5) <= Explosio.y)
+			{
+				trobat = true;
+				comptadore--;
+			}
+			comptadore++;
+		}
+
+		if (colisio)
+		{
+			balesenemigues.erase(balesenemigues.begin() + (cBalesE - 1));
+			cBalesE--;
+
+			tankdolent.erase(tankdolent.begin() + comptadore);
+			cTanks--;
+		}
+
+		else if (colisio2)
+		{
+			balajugador.erase(balajugador.begin() + (cBalesJ - 1));
+			cBalesJ--;
+
+			tankdolent.erase(tankdolent.begin() + comptadore);
+			cTanks--;
+		}
+
+	}
+	
+
+	primercop = false;
+
+	renderExplosio(Explosio.x, Explosio.y, frame);
+
+	frame++;
+
+	if (frame / 4 >= 24)
+	{
+		frame = 0;
+		colisio = false;
+		colisio2 = false;
+		primercop = true;
+	}
+
+}
+
 bool loadMedia(Tile* tiles[])
 {
 	//Loading success flag
@@ -351,13 +416,17 @@ bool joc()
 		//Angle de rotació
 		double degrees = 0, angle = 0;
 
-		Uint32 tempsmoviment = SDL_GetTicks();
+		//Variable que controla cada quan canvia la direccio dels tanks enemics
+		std::vector <Uint32> tempsmoviment(2);
+		tempsmoviment[0] = SDL_GetTicks() + 500;
+		tempsmoviment[0] = SDL_GetTicks() + 500;
 
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 		//Les bales que es pintaran per pantalla
-		std::vector <Bala> bala(0);
+		std::vector <Bala> balesenemigues(0);
+		std::vector <Bala> balajugador(0);
 
 		//The tank that will be moving around on the screen
 		TankJugador tank;
@@ -386,9 +455,11 @@ bool joc()
 
 		//La variable que indica si han colisionat
 		bool colisio = false;
+		bool colisio2 = false;
 
 		//Numero de bales que te
-		int cBales = 0;
+		int cBalesE = 0;
+		int cBalesJ = 0;
 
 		//Level camera
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -409,24 +480,60 @@ bool joc()
 			}
 			CalcularGraus(degrees, tank);
 
+			//Eliminem bales si es necessari
+			for (int i = 0; i < cBalesE; i++)
+			{
+				if (balesenemigues[i].ControlaBales())
+				{
+					for (int j = i; j < cBalesE - 1; j++)
+					{
+						balesenemigues[j] = balesenemigues[j + 1];
+					}
+					balesenemigues.erase(balesenemigues.begin() + (cBalesE - 1));
+					cBalesE--;
+				}
+			}
+			for (int i = 0; i < cBalesJ; i++)
+			{
+				if (balajugador[i].ControlaBales())
+				{
+					for (int j = i; j < cBalesJ - 1; j++)
+					{
+						balajugador[j] = balajugador[j + 1];
+					}
+					balajugador.erase(balajugador.begin() + (cBalesJ - 1));
+					cBalesJ--;
+				}
+			}
+
 			//Mou el tank
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
 			for (int i = 0; i < cTanks; i++)
 			{
-				moveTankRandom(tankdolent[i], tileSet, tempsmoviment);
+				moveTankRandom(tankdolent[i], tileSet, tempsmoviment[i]);
 			}
 
-
-			for (int i = 0; i < cBales; i++)
+			//Movem els dos vectors de bales
+			for (int i = 0; i < cBalesE; i++)
 			{
-				if (bala[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
+				if (balesenemigues[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
 				{
 					colisio = true;
-					Lloc_Explosio.x = bala[i].getBalaBox().x;
-					Lloc_Explosio.y = bala[i].getBalaBox().y;
+					Lloc_Explosio.x = balesenemigues[i].getBalaBox().x;
+					Lloc_Explosio.y = balesenemigues[i].getBalaBox().y;
 					Bala_que_explota = i;
-				}			
+				}
+			}
+			for (int i = 0; i < cBalesJ; i++)
+			{
+				if (balajugador[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
+				{
+					colisio2 = true;
+					Lloc_Explosio.x = balajugador[i].getBalaBox().x;
+					Lloc_Explosio.y = balajugador[i].getBalaBox().y;
+					Bala_que_explota = i;
+				}
 			}
 
 			//Clear screen
@@ -442,7 +549,7 @@ bool joc()
 
 			for (int i = 0; i < cTanks; i++)
 			{
-				disparar(tankdolent[i], tank, &bala, &cBales, tileSet);
+				disparar(tankdolent[i], tank, &balesenemigues, &cBalesE, tileSet);
 			}
 
 			//Render el tank
@@ -456,94 +563,59 @@ bool joc()
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
 			{
-				if (cBales > 0)
+				if (cBalesJ > 0)
 				{
-					if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
+					if (balajugador[cBalesJ - 1].getTemps() > TIEMPO_DE_VIDA)
 					{
-						bala.push_back(Bala());
-						cBales++;
-						bala[cBales - 1].ObtenirDades(angle, tank);
+						balajugador.push_back(Bala());
+						cBalesJ++;
+						balajugador[cBalesJ - 1].ObtenirDades(angle, tank);
 					}
 				}
 				else
 				{
-					bala.push_back(Bala());
-					cBales++;
-					bala[cBales - 1].ObtenirDades(angle, tank);
+					balajugador.push_back(Bala());
+					cBalesJ++;
+					balajugador[cBalesJ - 1].ObtenirDades(angle, tank);
 				}
 
-			}
-
-			//Eliminem bales si es necessari
-			for (int i = 0; i < cBales; i++)
-			{
-				if (bala[i].ControlaBales())
-				{
-					for (int j = i; j < cBales - 1; j++)
-					{
-						bala[j] = bala[j + 1];
-					}
-					bala.erase(bala.begin() + (cBales-1));
-					cBales--;
-				}
 			}
 
 			//Renderitza totes les bales
-			for (int i = 0; i<cBales; i++)
-				bala[i].renderBala(degrees, flipType, angle, tank);
+			for (int i = 0; i<cBalesE; i++)
+				balesenemigues[i].renderBala(degrees, flipType, angle, tank);
+			for (int i = 0; i<cBalesJ; i++)
+				balajugador[i].renderBala(degrees, flipType, angle, tank);
 
 
 			//Renderitza i elimina bales/tanks
-			if (colisio)
+			if ((colisio || colisio2) && !mort)
 			{
-				if (primercop)
-				{
-					Explosio = Lloc_Explosio;
-
-					if (primercop)
-					{
-						bool trobat2 = false;
-						int comptadore = 0;
-
-						while (!trobat2)
-						{
-							if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 5) >= Explosio.x
-								&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 5) >= Explosio.y
-								&& tankdolent[comptadore].getTankBox().x < Explosio.x
-								&& tankdolent[comptadore].getTankBox().y < Explosio.y)
-							{
-								trobat2 = true;
-								comptadore--;
-							}
-							comptadore++;
-						}
-
-						bala.erase(bala.begin() + (cBales - 1));
-						cBales--;
-
-						tankdolent.erase(tankdolent.begin() + comptadore);
-						cTanks--;
-					}
-					primercop = false;
-				}
-
-				renderExplosio(Explosio.x, Explosio.y, frame);
-				
-
-				frame++;
-
-				if (frame / 4 >= 24)
-				{
-					frame = 0;
-					colisio = false;
-					primercop = true;
-				}				
+				GestionaColisio(tankdolent, tank, cBalesE, cBalesJ, cTanks, balesenemigues,
+								balajugador, primercop, Lloc_Explosio, frame, colisio, colisio2);
 			}
 
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
+
+		while (colisio || colisio2)
+		{
+			renderExplosio(tank.getTankBox().x + MEITAT_CAPSULA_X, tank.getTankBox().y + MEITAT_CAPSULA_Y, frame);
+
+			frame++;
+
+			if (frame / 4 >= 24)
+			{
+				frame = 0;
+				colisio = false;
+				colisio2 = false;
+				primercop = true;
+			}	//Update screen
+			SDL_RenderPresent(gRenderer);
+		}
+	
 		
 		Sleep(1500);
 	}

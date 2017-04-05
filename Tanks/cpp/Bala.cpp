@@ -1,5 +1,24 @@
 #include "../h/Bala.h"
 
+Bala::Bala()
+{
+	//Initialize the collision box
+	BalaBox.w = BALA_WIDTH;
+	BalaBox.h = BALA_HEIGHT;
+
+	//Initialize the velocity
+	Vel = 10;
+	signeX = 1;
+	signeY = 1;
+	VelX = 0;
+	VelY = 0;
+	Angle_Direccio = 0;
+
+	//Temps
+	Temps = SDL_GetTicks();
+
+}
+
 Bala::Bala(int id)
 {
 	//Initialize the collision box
@@ -106,9 +125,9 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> ta
 
 	int i = 0;
 
-	while(!colisio && i<(comptador))
+	while(!colisio && i<comptador)
 	{
-		if (checkCollision(BalaBox, tankdolent[i].getTankBox()) && shooterId == ID_JUGADOR)
+		if (checkCollision(BalaBox, tankdolent[i].getTankBox()))
 		{
 			colisio = true;
 			numerotank = i-1;
