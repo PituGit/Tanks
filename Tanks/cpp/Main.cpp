@@ -375,7 +375,7 @@ bool setTiles(Tile* tiles[])
 }
 
 
-bool joc()
+bool joc(bool &quit)
 {
 	//si sha superat el nivell
 	bool superat = true;
@@ -401,8 +401,6 @@ bool joc()
 	}
 	else
 	{
-		//Main loop flag
-		bool quit = false;
 
 		//Event handler
 		SDL_Event e;
@@ -418,8 +416,8 @@ bool joc()
 
 		//Variable que controla cada quan canvia la direccio dels tanks enemics
 		std::vector <Uint32> tempsmoviment(2);
-		tempsmoviment[0] = SDL_GetTicks() + 500;
-		tempsmoviment[0] = SDL_GetTicks() + 500;
+		tempsmoviment[0] = SDL_GetTicks() - 500;
+		tempsmoviment[0] = SDL_GetTicks() - 500;
 
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -465,7 +463,7 @@ bool joc()
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!mort)
+		while (!mort && !quit)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -612,8 +610,10 @@ bool joc()
 				colisio = false;
 				colisio2 = false;
 				primercop = true;
+				superat = false;
 			}	//Update screen
 			SDL_RenderPresent(gRenderer);
+
 		}
 	
 		

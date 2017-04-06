@@ -1,6 +1,6 @@
 #include "IA.h"
 
-bool joc();
+bool joc(bool &quit);
 
 
 //Loads media

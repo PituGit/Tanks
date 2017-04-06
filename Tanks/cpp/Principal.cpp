@@ -111,7 +111,7 @@ bool HandleEvent(SDL_Event* e)
 int main(int argc, char* args[])
 {
 	//vides amb les que es comença
-	int vides = 3;
+	int vides = 10;
 
 	//Si se supera el nivell
 	bool superat;
@@ -151,9 +151,9 @@ int main(int argc, char* args[])
 
 				if (jugar)
 				{
-					while (vides > 0 && e.type!=SDL_QUIT)
+					while (vides > 0 && !quit)
 					{
-						superat = joc();
+						superat = joc(quit);
 						if (!superat)
 							vides--;
 						while (SDL_PollEvent(&e) != 0)
