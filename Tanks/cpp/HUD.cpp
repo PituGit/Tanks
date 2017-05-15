@@ -14,8 +14,11 @@ bool hudInit(bool success){
 
 void hudRender(int vides, int punts)
 {
-	gVidaTexture.render(X_VIDES, Y_VIDES);
- 
+	for (int i = 0; i < vides; i++)
+	{
+		gVidaTexture.render(X_VIDES + gVidaTexture.getWidth()*i, Y_VIDES);
+	}
+
 	SDL_Color textColor = { 50, 0, 0 };
 	string puntString = "PUNTS: " + to_string(punts);
 	gTextTexture.loadFromRenderedText(puntString, textColor);
