@@ -151,6 +151,7 @@
     <Image Include="res\Base_tank_Jugador.png" />
     <Image Include="res\CapsulaCano_tank_Dolent.png" />
     <Image Include="res\CapsulaCano_tank_Jugador.png" />
+    <Image Include="res\hud_vida.png" />
     <Image Include="res\tiles.png" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="cpp\Bala.cpp" />
     <ClCompile Include="cpp\Global.cpp" />
+    <ClCompile Include="cpp\HUD.cpp" />
     <ClCompile Include="cpp\IA.cpp" />
     <ClCompile Include="cpp\LTexture.cpp" />
     <ClCompile Include="cpp\Main.cpp" />
@@ -171,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="h\Bala.h" />
     <ClInclude Include="h\Global.h" />
+    <ClInclude Include="h\HUD.h" />
     <ClInclude Include="h\IA.h" />
     <ClInclude Include="h\LTexture.h" />
     <ClInclude Include="h\Main.h" />
@@ -181,6 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

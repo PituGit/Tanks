@@ -47,6 +47,13 @@ bool init()
 					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
+
+				//Initialize SDL_ttf
+				if (TTF_Init() == -1)
+				{
+					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+					success = false;
+				}
 			}
 		}
 	}
@@ -70,6 +77,13 @@ bool LoadMedia()
 
 void close()
 {
+	//Free loaded images
+	gTextTexture.free();
+
+	//Free global font
+	TTF_CloseFont(gFont);
+	gFont = NULL;
+
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
@@ -111,7 +125,10 @@ bool HandleEvent(SDL_Event* e)
 int main(int argc, char* args[])
 {
 	//vides amb les que es comença
-	int vides = 10;
+	int vides = 3;
+
+	//Punts inicials
+	int punts = 0;
 
 	//Si se supera el nivell
 	bool superat;
@@ -153,7 +170,7 @@ int main(int argc, char* args[])
 				{
 					while (vides > 0 && !quit)
 					{
-						superat = joc(quit);
+						superat = joc(quit, vides, punts);
 						if (!superat)
 							vides--;
 						while (SDL_PollEvent(&e) != 0)

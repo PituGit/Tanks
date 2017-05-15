@@ -22,10 +22,10 @@ void CalcularGraus(double &degrees, Tank tank)
 }
 
 void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
-	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio, 
-	int &frame, bool &colisio, bool &colisio2)
+	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio,
+	int &frame, bool &colisio, bool &colisio2, int &punts)
 {
-	
+
 	SDL_Point Explosio = Lloc_Explosio;
 
 	//El primer cop que s'executa necessitem eliminar tank i bala
@@ -34,7 +34,7 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 		bool trobat = false;
 		int comptadore = 0;
 
-		
+
 		//Busquem quin tank hem tocat i posteriorment l'eliminarem
 		while (!trobat)
 		{
@@ -54,6 +54,7 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 			balesenemigues.erase(balesenemigues.begin() + (cBalesE - 1));
 			cBalesE--;
 
+			punts += tankdolent[comptadore].punts;
 			tankdolent.erase(tankdolent.begin() + comptadore);
 			cTanks--;
 		}
@@ -63,12 +64,13 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 			balajugador.erase(balajugador.begin() + (cBalesJ - 1));
 			cBalesJ--;
 
+			punts += tankdolent[comptadore].punts;
 			tankdolent.erase(tankdolent.begin() + comptadore);
 			cTanks--;
 		}
 
 	}
-	
+
 
 	primercop = false;
 
@@ -91,10 +93,17 @@ bool loadMedia(Tile* tiles[])
 	//Loading success flag
 	bool success = true;
 
+	gFont = TTF_OpenFont("res/font.ttf", 40);
+	if (gFont == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
+	}
+
 	//Load dot texture
 	if (!gBaseTankJugadorTexture.loadFromFile("res/Base_tank_Jugador.png"))
 	{
-		printf( "Failed to load tank_jugador texture!\n" );
+		printf("Failed to load tank_jugador texture!\n");
 
 		success = false;
 	}
@@ -137,6 +146,9 @@ bool loadMedia(Tile* tiles[])
 		success = false;
 	}
 
+	//Load HUD texture
+	hudInit(success);
+
 	//Load tile map
 	if (!setTiles(tiles))
 	{
@@ -146,6 +158,7 @@ bool loadMedia(Tile* tiles[])
 
 	return success;
 }
+
 
 void close(Tile* tiles[])
 {
@@ -167,6 +180,10 @@ void close(Tile* tiles[])
 	gCapsulaDolentTexture.free();
 	gBalaTexture.free();
 	gExplosioTexture.free();
+	gPlay_game_buttonTexture.free();
+	gVidaTexture.free();
+	gTextTexture.free();
+
 }
 
 void renderExplosio(int x, int y, int imatge)
@@ -375,7 +392,7 @@ bool setTiles(Tile* tiles[])
 }
 
 
-bool joc(bool &quit)
+bool joc(bool &quit, int vides, int &punts)
 {
 	//si sha superat el nivell
 	bool superat = true;
@@ -386,7 +403,7 @@ bool joc(bool &quit)
 	bool primercop = true;
 
 	//Temps per controlar la renderitzacio de l'explosio
-	UINT32 temps=0, tempsinicial=0;
+	UINT32 temps = 0, tempsinicial = 0;
 
 	//Lloc on explota la bala
 	SDL_Point Lloc_Explosio, Explosio;
@@ -409,7 +426,7 @@ bool joc(bool &quit)
 		int Bala_que_explota = 0;
 		int numerotank = 0;
 
-		int frame=0;
+		int frame = 0;
 
 		//Angle de rotació
 		double degrees = 0, angle = 0;
@@ -434,7 +451,7 @@ bool joc(bool &quit)
 		std::vector<int> ID(1);
 		std::vector<int> x(1);
 		std::vector<int> y(1);
-		
+
 		//Obtenim el numero de tanks enemics
 		int cTanks = setTanks(ID, x, y) - 1;
 
@@ -444,7 +461,7 @@ bool joc(bool &quit)
 		for (int i = 0; i < cTanks; i++)
 		{
 			tankdolent.push_back(TankDolent());
-			tankdolent[i].InicialitzaDades(ID[i+1], x[i+1], y[i+1]);
+			tankdolent[i].InicialitzaDades(ID[i + 1], x[i + 1], y[i + 1]);
 		}
 
 
@@ -556,7 +573,7 @@ bool joc(bool &quit)
 			{
 				tankdolent[i].render(0, flipType, tank);
 			}
-			
+
 
 			//si es dispara augmentem el vector i el numero de bales (cBales)
 			if (shoot)
@@ -590,9 +607,11 @@ bool joc(bool &quit)
 			if ((colisio || colisio2) && !mort)
 			{
 				GestionaColisio(tankdolent, tank, cBalesE, cBalesJ, cTanks, balesenemigues,
-								balajugador, primercop, Lloc_Explosio, frame, colisio, colisio2);
+					balajugador, primercop, Lloc_Explosio, frame, colisio, colisio2, punts);
 			}
 
+			//Renderitza l'HUD
+			hudRender(vides, punts);
 
 			//Update screen
 			SDL_RenderPresent(gRenderer);
@@ -615,8 +634,8 @@ bool joc(bool &quit)
 			SDL_RenderPresent(gRenderer);
 
 		}
-	
-		
+
+
 		Sleep(1500);
 	}
 
