@@ -165,8 +165,11 @@
     <ClCompile Include="cpp\Global.cpp" />
     <ClCompile Include="cpp\HUD.cpp" />
     <ClCompile Include="cpp\IA.cpp" />
+    <ClCompile Include="cpp\IteradorNodeTank.cpp" />
+    <ClCompile Include="cpp\LlistaTank.cpp" />
     <ClCompile Include="cpp\LTexture.cpp" />
     <ClCompile Include="cpp\Main.cpp" />
+    <ClCompile Include="cpp\NodeTank.cpp" />
     <ClCompile Include="cpp\Principal.cpp" />
     <ClCompile Include="cpp\Tank.cpp" />
     <ClCompile Include="cpp\Tile.cpp" />
@@ -176,8 +179,11 @@
     <ClInclude Include="h\Global.h" />
     <ClInclude Include="h\HUD.h" />
     <ClInclude Include="h\IA.h" />
+    <ClInclude Include="h\IteradorNodeTank.h" />
+    <ClInclude Include="h\LlistaTank.h" />
     <ClInclude Include="h\LTexture.h" />
     <ClInclude Include="h\Main.h" />
+    <ClInclude Include="h\NodeTank.h" />
     <ClInclude Include="h\Principal.h" />
     <ClInclude Include="h\Tank.h" />
     <ClInclude Include="h\Tile.h" />

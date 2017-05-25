@@ -21,7 +21,7 @@ void CalcularGraus(double &degrees, Tank tank)
 	}
 }
 
-void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
+void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
 	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio,
 	int &frame, bool &colisio, bool &colisio2, int &punts)
 {
@@ -34,19 +34,22 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 		bool trobat = false;
 		int comptadore = 0;
 
-
+		IteradorNodeTank actual = tankdolent.getInici();
 		//Busquem quin tank hem tocat i posteriorment l'eliminarem
 		while (!trobat)
 		{
-			if ((tankdolent[comptadore].getTankBox().x + tankdolent[comptadore].getTankBox().w + 5) >= Explosio.x
-				&& (tankdolent[comptadore].getTankBox().y + tankdolent[comptadore].getTankBox().h + 5) >= Explosio.y
-				&& (tankdolent[comptadore].getTankBox().x - 5)< Explosio.x
-				&& (tankdolent[comptadore].getTankBox().y - 5) <= Explosio.y)
+			if ((actual.getElement().getTankBox().x + actual.getElement().getTankBox().w + 5) >= Explosio.x
+				&& (actual.getElement().getTankBox().y + actual.getElement().getTankBox().h + 5) >= Explosio.y
+				&& (actual.getElement().getTankBox().x - 5)< Explosio.x
+				&& (actual.getElement().getTankBox().y - 5) <= Explosio.y)
 			{
 				trobat = true;
-				comptadore--;
+				//comptadore--;
 			}
-			comptadore++;
+			if (!trobat) {
+				actual.seguent();
+			}
+			//comptadore++;
 		}
 
 		if (colisio)
@@ -54,8 +57,8 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 			balesenemigues.erase(balesenemigues.begin() + (cBalesE - 1));
 			cBalesE--;
 
-			punts += tankdolent[comptadore].punts;
-			tankdolent.erase(tankdolent.begin() + comptadore);
+			punts += actual.getElement().punts;
+			tankdolent.eliminaNext(actual);
 			cTanks--;
 		}
 
@@ -64,8 +67,8 @@ void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int
 			balajugador.erase(balajugador.begin() + (cBalesJ - 1));
 			cBalesJ--;
 
-			punts += tankdolent[comptadore].punts;
-			tankdolent.erase(tankdolent.begin() + comptadore);
+			punts += actual.getElement().punts;
+			tankdolent.eliminaNext(actual);
 			cTanks--;
 		}
 
@@ -445,7 +448,7 @@ bool joc(bool &quit, int vides, int &punts)
 
 		//The tank that will be moving around on the screen
 		TankJugador tank;
-		std::vector <TankDolent> tankdolent(0);
+		LlistaTank tankdolent;
 
 		//Vectors de les dades a llegir del fitxer 
 		std::vector<int> ID(1);
@@ -457,11 +460,17 @@ bool joc(bool &quit, int vides, int &punts)
 
 		tank.InicialitzaDades(ID[0], x[0], y[0]);
 
-
+		IteradorNodeTank anterior(NULL);
+		IteradorNodeTank actual = tankdolent.getInici();
 		for (int i = 0; i < cTanks; i++)
 		{
-			tankdolent.push_back(TankDolent());
-			tankdolent[i].InicialitzaDades(ID[i + 1], x[i + 1], y[i + 1]);
+			TankDolent t;
+			t.InicialitzaDades(ID[i + 1], x[i + 1], y[i + 1]);
+
+			anterior = actual;
+
+			actual = tankdolent.insereixNext(t, anterior); // actual seguent es el problema
+	
 		}
 
 
@@ -524,15 +533,18 @@ bool joc(bool &quit, int vides, int &punts)
 			//Mou el tank
 			//tank.AjustarVelocitat();
 			tank.move(tileSet);
+
+			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				moveTankRandom(tankdolent[i], tileSet, tempsmoviment[i]);
+				moveTankRandom(actual.getElement(), tileSet, tempsmoviment[i]); //potser canvi
+				actual.seguent();
 			}
 
 			//Movem els dos vectors de bales
 			for (int i = 0; i < cBalesE; i++)
 			{
-				if (balesenemigues[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
+				if (balesenemigues[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank)) //Potser s'ha de canviar
 				{
 					colisio = true;
 					Lloc_Explosio.x = balesenemigues[i].getBalaBox().x;
@@ -542,7 +554,7 @@ bool joc(bool &quit, int vides, int &punts)
 			}
 			for (int i = 0; i < cBalesJ; i++)
 			{
-				if (balajugador[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank))
+				if (balajugador[i].moveBala(tileSet, tank, tankdolent, mort, cTanks, numerotank)) //Potser s'ha de canviar
 				{
 					colisio2 = true;
 					Lloc_Explosio.x = balajugador[i].getBalaBox().x;
@@ -562,16 +574,21 @@ bool joc(bool &quit, int vides, int &punts)
 				tileSet[i]->render(camera);
 			}
 
+			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				disparar(tankdolent[i], tank, &balesenemigues, &cBalesE, tileSet);
+				disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
+				actual.seguent();
 			}
 
 			//Render el tank
 			tank.render(degrees, flipType, angle);
+
+			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				tankdolent[i].render(0, flipType, tank);
+				actual.getElement().render(0, flipType, tank);
+				actual.seguent();
 			}
 
 
