@@ -33,6 +33,9 @@
     <Image Include="res\CapsulaCano_tank_Jugador.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\hud_vida.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\lazy.map">
@@ -68,6 +71,9 @@
     <ClCompile Include="cpp\IA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\Tile.h">
@@ -97,8 +103,16 @@
     <ClInclude Include="h\IA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="h\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>
