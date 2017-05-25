@@ -72,6 +72,13 @@ bool LoadMedia()
 		success = false;
 	}
 
+	if (!gGame_OverTexture.loadFromFile("res/Game_Over.png"))
+	{
+		printf("Failed to load Game Over texture!\n");
+
+		success = false;
+	}
+
 	return success;
 }
 
@@ -155,7 +162,7 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			while (!quit)
+			while (!quit && vides>0)
 			{
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -180,6 +187,7 @@ int main(int argc, char* args[])
 							
 						}
 					}
+					
 				}
 
 				//Clear screen
@@ -189,6 +197,19 @@ int main(int argc, char* args[])
 				gPlay_game_buttonTexture.render(PosicioXBoto, PosicioYBoto);
 
 				SDL_RenderPresent(gRenderer);
+			}
+
+			if (vides == 0)
+			{
+				//Clear screen
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderer);
+
+				gGame_OverTexture.render(LEVEL_WIDTH / 4, LEVEL_HEIGHT / 4);
+
+				SDL_RenderPresent(gRenderer);
+
+				Sleep(2000);
 			}
 		}
 		

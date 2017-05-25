@@ -7,6 +7,7 @@ LTexture gBaseTankDolentTexture;
 LTexture gCapsulaDolentTexture;
 LTexture gBalaTexture;
 LTexture gPlay_game_buttonTexture;
+LTexture gGame_OverTexture;
 LTexture gExplosioTexture;
 LTexture gVidaTexture;
 LTexture gTextTexture;

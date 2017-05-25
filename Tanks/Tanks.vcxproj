@@ -151,6 +151,7 @@
     <Image Include="res\Base_tank_Jugador.png" />
     <Image Include="res\CapsulaCano_tank_Dolent.png" />
     <Image Include="res\CapsulaCano_tank_Jugador.png" />
+    <Image Include="res\Game_Over.jpg" />
     <Image Include="res\hud_vida.png" />
     <Image Include="res\tiles.png" />
   </ItemGroup>
