@@ -34,19 +34,23 @@ void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int 
 		bool trobat = false;
 		int comptadore = 0;
 
+		IteradorNodeTank anterior(NULL);
 		IteradorNodeTank actual = tankdolent.getInici();
 		//Busquem quin tank hem tocat i posteriorment l'eliminarem
 		while (!trobat)
 		{
-			if ((actual.getElement().getTankBox().x + actual.getElement().getTankBox().w + 5) >= Explosio.x
-				&& (actual.getElement().getTankBox().y + actual.getElement().getTankBox().h + 5) >= Explosio.y
-				&& (actual.getElement().getTankBox().x - 5)< Explosio.x
-				&& (actual.getElement().getTankBox().y - 5) <= Explosio.y)
-			{
-				trobat = true;
-				//comptadore--;
+			if (!actual.esNul()) {
+				if ((actual.getElement().getTankBox().x + actual.getElement().getTankBox().w + 5) >= Explosio.x
+					&& (actual.getElement().getTankBox().y + actual.getElement().getTankBox().h + 5) >= Explosio.y
+					&& (actual.getElement().getTankBox().x - 5) < Explosio.x
+					&& (actual.getElement().getTankBox().y - 5) <= Explosio.y) {
+
+					trobat = true;
+					//comptadore--;
+				}
 			}
 			if (!trobat) {
+				anterior = actual;
 				actual.seguent();
 			}
 			//comptadore++;
@@ -58,7 +62,7 @@ void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int 
 			cBalesE--;
 
 			punts += actual.getElement().punts;
-			tankdolent.eliminaNext(actual);
+			actual = tankdolent.eliminaNext(anterior);
 			cTanks--;
 		}
 
@@ -68,7 +72,7 @@ void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int 
 			cBalesJ--;
 
 			punts += actual.getElement().punts;
-			tankdolent.eliminaNext(actual);
+			actual = tankdolent.eliminaNext(anterior);
 			cTanks--;
 		}
 
@@ -577,7 +581,10 @@ bool joc(bool &quit, int vides, int &punts)
 			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
+				if (!actual.esNul()) {
+					disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
+				}
+
 				actual.seguent();
 			}
 
@@ -587,7 +594,10 @@ bool joc(bool &quit, int vides, int &punts)
 			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				actual.getElement().render(0, flipType, tank);
+				if (!actual.esNul()) {
+					actual.getElement().render(0, flipType, tank);
+				}
+				
 				actual.seguent();
 			}
 
@@ -614,11 +624,13 @@ bool joc(bool &quit, int vides, int &punts)
 			}
 
 			//Renderitza totes les bales
-			for (int i = 0; i<cBalesE; i++)
+			for (int i = 0; i < cBalesE; i++) {
 				balesenemigues[i].renderBala(degrees, flipType, angle, tank);
-			for (int i = 0; i<cBalesJ; i++)
+			}
+				
+			for (int i = 0; i < cBalesJ; i++) {
 				balajugador[i].renderBala(degrees, flipType, angle, tank);
-
+			}
 
 			//Renderitza i elimina bales/tanks
 			if ((colisio || colisio2) && !mort)

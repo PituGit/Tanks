@@ -424,7 +424,7 @@ void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int 
 
 		}
 
-  else
+	else
 
 		{
 			bala.push_back(Bala(ID_DOLENT));

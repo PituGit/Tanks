@@ -128,11 +128,15 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent,
 
 	while(!colisio && i<comptador)
 	{
-		if (checkCollision(BalaBox, actual.getElement().getTankBox()))
-		{
-			colisio = true;
-			numerotank = i-1;
+		if (!actual.esNul()){
+			SDL_Rect tankBox = actual.getElement().getTankBox();
+			if (checkCollision(BalaBox, tankBox))
+			{
+				colisio = true;
+				numerotank = i - 1;
+			}
 		}
+	
 		i++;
 		actual.seguent();
 	}
