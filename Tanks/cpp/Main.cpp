@@ -595,7 +595,6 @@ bool joc()
 								balajugador, primercop, Lloc_Explosio, frame, colisio, colisio2);
 			}
 
-
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
