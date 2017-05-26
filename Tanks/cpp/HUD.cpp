@@ -22,5 +22,5 @@ void hudRender(int vides, int punts)
 	SDL_Color textColor = { 50, 0, 0 };
 	string puntString = "PUNTS: " + to_string(punts);
 	gTextTexture.loadFromRenderedText(puntString, textColor);
-	gTextTexture.render((SCREEN_WIDTH - gTextTexture.getWidth()) / 2, Y_VIDES);
+	gTextTexture.render((SCREEN_WIDTH - gTextTexture.getWidth()) / 2, Y_VIDES - 15);
 }
