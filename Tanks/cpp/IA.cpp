@@ -405,6 +405,7 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 
 void disparar(TankDolent &tankdolent, TankJugador tank, vector<Bala> &pBala, int * pCBales, Tile * tiles[])
 {
+
 	double angle = calculAngle(tankdolent, tank, false);
 
 	vector<Bala> bala = pBala;
