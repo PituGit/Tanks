@@ -81,6 +81,8 @@ void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int 
 
 	primercop = false;
 
+	Mix_PlayChannel(-1, gExplosion, 0);
+
 	renderExplosio(Explosio.x, Explosio.y, frame);
 
 	frame++;
@@ -221,7 +223,6 @@ void close(Tile* tiles[])
 
 void renderExplosio(int x, int y, int imatge)
 {
-	Mix_PlayChannel(-1, gExplosion, 0);
 	//Ajusta l'imatge a on esta la bala
 	x -= 32;
 	y -= 32;
@@ -672,6 +673,7 @@ bool joc(bool &quit, int vides, int &punts)
 
 		while (colisio || colisio2)
 		{
+			Mix_PlayChannel(-1, gExplosion, 0);
 			renderExplosio(tank.getTankBox().x + MEITAT_CAPSULA_X, tank.getTankBox().y + MEITAT_CAPSULA_Y, frame);
 
 			frame++;
