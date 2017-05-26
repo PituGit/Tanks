@@ -33,6 +33,12 @@
     <Image Include="res\CapsulaCano_tank_Jugador.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\hud_vida.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Game_Over.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\lazy.map">
@@ -40,6 +46,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="res\DadesNivell.map">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Scoreboard.scb">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -66,6 +75,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\IA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\IteradorNodeTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\NodeTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\LlistaTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Scoreboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,8 +121,28 @@
     <ClInclude Include="h\IA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="h\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\IteradorNodeTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\NodeTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\LlistaTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Scoreboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

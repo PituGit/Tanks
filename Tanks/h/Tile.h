@@ -1,5 +1,3 @@
-#pragma once
-
 #include "LTexture.h"
 
 class Tile
