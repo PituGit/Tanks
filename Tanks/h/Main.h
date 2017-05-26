@@ -1,4 +1,4 @@
-#include "HUD.h"
+#include "Scoreboard.h"
 
 bool joc(bool &quit, int vides, int &punts);
 
@@ -17,6 +17,6 @@ void renderExplosio(int x, int y, int imatge);
 
 int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y);
 
-void GestionaColisio(std::vector <TankDolent> &tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
+void GestionaColisio(LlistaTank tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
 	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio,
 	int &frame, bool &colisio, bool &colisio2, int &punts);

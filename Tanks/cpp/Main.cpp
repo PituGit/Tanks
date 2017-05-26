@@ -413,7 +413,7 @@ bool joc(bool &quit, int vides, int &punts)
 	UINT32 temps = 0, tempsinicial = 0;
 
 	//Lloc on explota la bala
-	SDL_Point Lloc_Explosio, Explosio;
+	SDL_Point Lloc_Explosio;
 
 	//The level tiles
 	Tile* tileSet[TOTAL_TILES];
@@ -580,10 +580,8 @@ bool joc(bool &quit, int vides, int &punts)
 
 			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
-			{
-				if (!actual.esNul()) {
-					disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
-				}
+			{		
+				disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
 
 				actual.seguent();
 			}
@@ -659,11 +657,12 @@ bool joc(bool &quit, int vides, int &punts)
 				colisio2 = false;
 				primercop = true;
 				superat = false;
-			}	//Update screen
+			}	
+			
+			//Update screen
 			SDL_RenderPresent(gRenderer);
 
 		}
-
 
 		Sleep(1500);
 	}

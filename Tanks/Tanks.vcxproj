@@ -159,6 +159,7 @@
     <None Include="packages.config" />
     <None Include="res\DadesNivell.map" />
     <None Include="res\lazy.map" />
+    <None Include="res\Scoreboard.scb" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Bala.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="cpp\Main.cpp" />
     <ClCompile Include="cpp\NodeTank.cpp" />
     <ClCompile Include="cpp\Principal.cpp" />
+    <ClCompile Include="cpp\Scoreboard.cpp" />
     <ClCompile Include="cpp\Tank.cpp" />
     <ClCompile Include="cpp\Tile.cpp" />
   </ItemGroup>
@@ -185,6 +187,7 @@
     <ClInclude Include="h\Main.h" />
     <ClInclude Include="h\NodeTank.h" />
     <ClInclude Include="h\Principal.h" />
+    <ClInclude Include="h\Scoreboard.h" />
     <ClInclude Include="h\Tank.h" />
     <ClInclude Include="h\Tile.h" />
     <ClInclude Include="SDL_mixer.h" />

@@ -57,7 +57,6 @@ bool init()
 			}
 		}
 	}
-
 	return success;
 }
 
@@ -149,6 +148,9 @@ int main(int argc, char* args[])
 	//Event handler
 	SDL_Event e;
 
+	Scoreboard scoreboard;
+	scoreboard.retriveScoreFromFile();
+
 	//Start up SDL and create window
 	if (!init())
 	{
@@ -178,6 +180,7 @@ int main(int argc, char* args[])
 					while (vides > 0 && !quit)
 					{
 						superat = joc(quit, vides, punts);
+						scoreboard.newScore(punts);
 						if (!superat)
 							vides--;
 						while (SDL_PollEvent(&e) != 0)
