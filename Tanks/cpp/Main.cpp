@@ -107,6 +107,27 @@ bool loadMedia(Tile* tiles[])
 		success = false;
 	}
 
+	gInGameSong = Mix_LoadMUS("res/InGameSong.wav");
+	if (gInGameSong == NULL)
+	{
+		printf("Failed to load InGame music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gClick = Mix_LoadWAV("res/Click.wav");
+	if (gClick == NULL)
+	{
+		printf("Failed to load Click sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gExplosion = Mix_LoadWAV("res/Explosion.wav");
+	if (gExplosion == NULL)
+	{
+		printf("Failed to load Explosion sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	//Load dot texture
 	if (!gBaseTankJugadorTexture.loadFromFile("res/Base_tank_Jugador.png"))
 	{
@@ -191,10 +212,16 @@ void close(Tile* tiles[])
 	gVidaTexture.free();
 	gTextTexture.free();
 
+	Mix_FreeChunk(gClick);
+	gClick = NULL;
+	Mix_FreeChunk(gExplosion);
+	gExplosion = NULL;
+
 }
 
 void renderExplosio(int x, int y, int imatge)
 {
+	Mix_PlayChannel(-1, gExplosion, 0);
 	//Ajusta l'imatge a on esta la bala
 	x -= 32;
 	y -= 32;
@@ -425,6 +452,7 @@ bool joc(bool &quit, int vides, int &punts)
 	}
 	else
 	{
+		Mix_PlayMusic(gInGameSong, -1);
 
 		//Event handler
 		SDL_Event e;
@@ -652,6 +680,8 @@ bool joc(bool &quit, int vides, int &punts)
 
 			if (frame / 4 >= 24)
 			{
+				Mix_HaltMusic();
+
 				frame = 0;
 				colisio = false;
 				colisio2 = false;

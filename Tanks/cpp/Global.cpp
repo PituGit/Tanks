@@ -8,8 +8,7 @@
  SDL_Rect gExplosioClips[TOTAL_SPRITES_EXPLOSIONS] = {};
 
 Mix_Music *gMenuSong = NULL;
+Mix_Music *gInGameSong = NULL;
 
 Mix_Chunk *gClick = NULL;
-Mix_Chunk *gHigh = NULL;
-Mix_Chunk *gMedium = NULL;
-Mix_Chunk *gLow = NULL;
+Mix_Chunk *gExplosion = NULL;

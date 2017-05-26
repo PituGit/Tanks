@@ -101,7 +101,14 @@ bool LoadMedia()
 	gMenuSong = Mix_LoadMUS("res/MenuSong.wav");
 	if (gMenuSong == NULL)
 	{
-		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
+		printf("Failed to load Menu music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gClick = Mix_LoadWAV("res/Click.wav");
+	if (gClick == NULL)
+	{
+		printf("Failed to load Click sound effect! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
 	}
 
@@ -119,14 +126,8 @@ void close()
 
 	//Free the sound effects
 	Mix_FreeChunk(gClick);
-	Mix_FreeChunk(gHigh);
-	Mix_FreeChunk(gMedium);
-	Mix_FreeChunk(gLow);
 	gClick = NULL;
-	gHigh = NULL;
-	gMedium = NULL;
-	gLow = NULL;
-
+	
 	//Free the music
 	Mix_FreeMusic(gMenuSong);
 	gMenuSong = NULL;
@@ -160,6 +161,7 @@ bool HandleEvent(SDL_Event* e)
 		{
 			if (e->type == SDL_MOUSEBUTTONDOWN) {
 				Mix_HaltMusic();
+				Mix_PlayChannel(-1, gClick, 0);
 				jugar = true;
 			}
 		}
@@ -203,7 +205,6 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 			Mix_PlayMusic(gMenuSong, -1);
 
 			while (!quit && vides>0)
@@ -219,6 +220,7 @@ int main(int argc, char* args[])
 
 				if (jugar)
 				{
+					Sleep(500);
 					while (vides > 0 && !quit)
 					{
 						superat = joc(quit, vides, punts);

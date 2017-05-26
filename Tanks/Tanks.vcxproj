@@ -201,6 +201,9 @@
     <Font Include="res\font.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="res\Click.wav" />
+    <Media Include="res\Explosion.wav" />
+    <Media Include="res\InGameSong.wav" />
     <Media Include="res\MenuSong.wav" />
   </ItemGroup>
   <ItemGroup>

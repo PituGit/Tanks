@@ -161,6 +161,15 @@
     <Media Include="res\MenuSong.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="res\Click.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\Explosion.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\InGameSong.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
