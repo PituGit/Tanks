@@ -403,12 +403,12 @@ void moveTankRandom(TankDolent &tankdolent, Tile * tiles[], Uint32 &tempsmovimen
 }
 	
 
-void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int * pCBales, Tile * tiles[])
+void disparar(TankDolent &tankdolent, TankJugador tank, vector<Bala> &pBala, int * pCBales, Tile * tiles[])
 {
+
 	double angle = calculAngle(tankdolent, tank, false);
 
-
-	vector<Bala> bala = *pBala;
+	vector<Bala> bala = pBala;
 	int cBales = *pCBales;
 
 	if (esVeuen(tankdolent, tank, tiles))
@@ -432,17 +432,17 @@ void disparar(TankDolent tankdolent, TankJugador tank, vector<Bala>* pBala, int 
 			bala[cBales - 1].ObtenirDades(angle, tankdolent);
 		}
 
-		*pBala = bala;
+		pBala = bala;
 		*pCBales = cBales;
 	}
 }
 
-bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
+bool esVeuen(TankDolent &tankdolent, TankJugador tank, Tile * tiles[])
 {
 	SDL_Rect capsulaDolent = tankdolent.getTankBox();
 	SDL_Rect capsulaJugador = tank.getTankBox();
 
-	bool esVeuen = false;
+	bool seVen = false;
 
 	//Capsula que encercla la posicio del jugador
 	SDL_Rect Caixa;
@@ -453,17 +453,17 @@ bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[])
 
 	double angle = calculAngle(tankdolent, tank, false);
 
-	while (move(capsulaDolent, angle, tiles)&& !esVeuen)
+	while (move(capsulaDolent, angle, tiles)&& !seVen)
 	{
 		if (checkCollision(Caixa,capsulaDolent))
 
 		{
-			esVeuen = true;
+			seVen = true;
 			capsulaDolent = tankdolent.getTankBox();
 		}
 	}
 
-	return esVeuen;
+	return seVen;
 }
 
 

@@ -609,7 +609,7 @@ bool joc(bool &quit, int vides, int &punts)
 			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{		
-				disparar(actual.getElement(), tank, &balesenemigues, &cBalesE, tileSet);
+				disparar(actual.getElement(), tank, balesenemigues, &cBalesE, tileSet);
 
 				actual.seguent();
 			}
@@ -617,13 +617,11 @@ bool joc(bool &quit, int vides, int &punts)
 			//Render el tank
 			tank.render(degrees, flipType, angle);
 
+			//Renderitza el tank enemic
 			actual = tankdolent.getInici();
 			for (int i = 0; i < cTanks; i++)
 			{
-				if (!actual.esNul()) {
-					actual.getElement().render(0, flipType, tank);
-				}
-				
+				actual.getElement().render(0, flipType, tank);
 				actual.seguent();
 			}
 

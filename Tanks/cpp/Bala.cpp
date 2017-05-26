@@ -86,8 +86,8 @@ SDL_Rect Bala::getBalaBox()
 	return BalaBox;
 }
 
-bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent, 
-	bool& mort, int comptador, int &numerotank)
+bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank &tankdolent, 
+	bool& mort, int cTanks, int &numerotank)
 {
 	//La variable que indica si colisiona
 	bool colisio = false;
@@ -126,16 +126,16 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent,
 	int i = 0;
 	IteradorNodeTank actual = tankdolent.getInici();
 
-	while(!colisio && i<comptador)
+	while(!colisio && i<cTanks)
 	{
-		if (!actual.esNul()){
-			SDL_Rect tankBox = actual.getElement().getTankBox();
-			if (checkCollision(BalaBox, tankBox))
-			{
-				colisio = true;
-				numerotank = i - 1;
-			}
+
+		SDL_Rect tankBox = actual.getElement().getTankBox();
+		if (checkCollision(BalaBox, tankBox))
+		{
+			colisio = true;
+			numerotank = i - 1;
 		}
+
 	
 		i++;
 		actual.seguent();

@@ -1,13 +1,13 @@
 #include "Bala.h"
 
 
-bool esVeuen(TankDolent tankdolent, TankJugador tank, Tile * tiles[]);
+bool esVeuen(TankDolent &tankdolent, TankJugador tank, Tile * tiles[]);
 
 bool move(SDL_Rect &CapsulaDolent, double angle, Tile * tiles[]);
 
 double CalculaDistancia(SDL_Point actual, SDL_Point objectiu);
 
-void disparar(TankDolent tankdolent, TankJugador tank, vector <Bala>* pBala, int* cBales, Tile * tiles[]);
+void disparar(TankDolent &tankdolent, TankJugador tank, vector <Bala> &pBala, int* cBales, Tile * tiles[]);
 
 const int MAX_X = 1280;
 const int MAX_Y = 960;
