@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "../SDL_mixer.h"
 #include <string>
 #include <stdio.h>
 #include <fstream>
@@ -65,3 +66,10 @@ extern SDL_Renderer* gRenderer;
 
 extern SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 extern SDL_Rect gExplosioClips[TOTAL_SPRITES_EXPLOSIONS];
+
+extern Mix_Music *gMenuSong;
+
+extern Mix_Chunk *gClick;
+extern Mix_Chunk *gHigh;
+extern Mix_Chunk *gMedium;
+extern Mix_Chunk *gLow;

@@ -39,6 +39,18 @@
     <Image Include="res\Game_Over.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\Icon16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Icon32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Icon16.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Icon32.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\lazy.map">
@@ -103,9 +115,6 @@
     <ClInclude Include="h\Tank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SDL_mixer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="h\LTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -136,13 +145,29 @@
     <ClInclude Include="h\Scoreboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="SDL2_mixer.lib" />
+    <ClInclude Include="SDL_mixer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\font.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\MenuSong.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL2_mixer.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tanks.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

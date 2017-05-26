@@ -20,7 +20,7 @@ bool init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("The TANKS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (gWindow == NULL)
 		{
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
@@ -54,9 +54,29 @@ bool init()
 					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 					success = false;
 				}
+
+				//Initialize SDL_mixer
+				if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+					success = false;
+				}
 			}
 		}
 	}
+
+	
+	//Icona de la finestra
+	SDL_Surface *icon; 
+	icon = IMG_Load("res/Icon32.png");
+	SDL_SetWindowIcon(gWindow, icon);
+	SDL_FreeSurface(icon);
+
+	//Cursor personalitzat
+	SDL_Cursor* cursor;
+	cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	SDL_SetCursor(cursor);
+
 	return success;
 }
 
@@ -78,6 +98,13 @@ bool LoadMedia()
 		success = false;
 	}
 
+	gMenuSong = Mix_LoadMUS("res/MenuSong.wav");
+	if (gMenuSong == NULL)
+	{
+		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	return success;
 }
 
@@ -90,15 +117,25 @@ void close()
 	TTF_CloseFont(gFont);
 	gFont = NULL;
 
-	//Destroy window	
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	gRenderer = NULL;
+	//Free the sound effects
+	Mix_FreeChunk(gClick);
+	Mix_FreeChunk(gHigh);
+	Mix_FreeChunk(gMedium);
+	Mix_FreeChunk(gLow);
+	gClick = NULL;
+	gHigh = NULL;
+	gMedium = NULL;
+	gLow = NULL;
+
+	//Free the music
+	Mix_FreeMusic(gMenuSong);
+	gMenuSong = NULL;
 
 	//Quit SDL subsystems
+	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
+	
 }
 
 bool HandleEvent(SDL_Event* e)
@@ -121,8 +158,10 @@ bool HandleEvent(SDL_Event* e)
 		}
 		if (inside)
 		{
-			if (e->type == SDL_MOUSEBUTTONDOWN)
+			if (e->type == SDL_MOUSEBUTTONDOWN) {
+				Mix_HaltMusic();
 				jugar = true;
+			}
 		}
 	}
 	return jugar;
@@ -164,6 +203,9 @@ int main(int argc, char* args[])
 		}
 		else
 		{
+			Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+			Mix_PlayMusic(gMenuSong, -1);
+
 			while (!quit && vides>0)
 			{
 				while (SDL_PollEvent(&e) != 0)

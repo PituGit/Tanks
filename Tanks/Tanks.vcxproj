@@ -153,6 +153,10 @@
     <Image Include="res\CapsulaCano_tank_Jugador.png" />
     <Image Include="res\Game_Over.jpg" />
     <Image Include="res\hud_vida.png" />
+    <Image Include="res\Icon16.ico" />
+    <Image Include="res\Icon16.png" />
+    <Image Include="res\Icon32.ico" />
+    <Image Include="res\Icon32.png" />
     <Image Include="res\tiles.png" />
   </ItemGroup>
   <ItemGroup>
@@ -190,13 +194,20 @@
     <ClInclude Include="h\Scoreboard.h" />
     <ClInclude Include="h\Tank.h" />
     <ClInclude Include="h\Tile.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SDL_mixer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\MenuSong.wav" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="res\font.ttf" />
+    <ResourceCompile Include="Tanks.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
