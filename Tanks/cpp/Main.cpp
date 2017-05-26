@@ -31,6 +31,8 @@ void GestionaColisio(LlistaTank &tankdolent, TankJugador tank, int &cBalesE, int
 	//El primer cop que s'executa necessitem eliminar tank i bala
 	if (primercop)
 	{
+		Mix_PlayChannel(-1, gExplosion, 0);
+
 		bool trobat = false;
 		int comptadore = 0;
 
@@ -80,8 +82,6 @@ void GestionaColisio(LlistaTank &tankdolent, TankJugador tank, int &cBalesE, int
 
 
 	primercop = false;
-
-	Mix_PlayChannel(-1, gExplosion, 0);
 
 	renderExplosio(Explosio.x, Explosio.y, frame);
 
@@ -671,29 +671,34 @@ bool joc(bool &quit, int vides, int &punts)
 			SDL_RenderPresent(gRenderer);
 		}
 
-		while (colisio || colisio2)
+		if (colisio || colisio2)
 		{
 			Mix_PlayChannel(-1, gExplosion, 0);
-			renderExplosio(tank.getTankBox().x + MEITAT_CAPSULA_X, tank.getTankBox().y + MEITAT_CAPSULA_Y, frame);
 
-			frame++;
-
-			if (frame / 4 >= 24)
+			while (colisio || colisio2)
 			{
-				Mix_HaltMusic();
+				renderExplosio(tank.getTankBox().x + MEITAT_CAPSULA_X, tank.getTankBox().y + MEITAT_CAPSULA_Y, frame);
 
-				frame = 0;
-				colisio = false;
-				colisio2 = false;
-				primercop = true;
-				superat = false;
-			}	
-			
-			//Update screen
-			SDL_RenderPresent(gRenderer);
+				frame++;
 
+				if (frame / 4 >= 24)
+				{
+
+					Mix_HaltMusic();
+
+					frame = 0;
+					colisio = false;
+					colisio2 = false;
+					primercop = true;
+					superat = false;
+				}
+
+				//Update screen
+				SDL_RenderPresent(gRenderer);
+
+			}
 		}
-
+			
 		Sleep(1500);
 	}
 
