@@ -54,8 +54,4 @@ extern LTexture gBaseTankDolentTexture;
 extern LTexture gCapsulaDolentTexture;
 extern LTexture gBalaTexture;
 extern LTexture gPlay_game_buttonTexture;
-extern LTexture gGame_OverTexture;
 extern LTexture gExplosioTexture;
-extern LTexture gVidaTexture;
-extern LTexture gTextTexture;
-extern TTF_Font *gFont;

@@ -47,16 +47,10 @@ bool init()
 					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
-
-				//Initialize SDL_ttf
-				if (TTF_Init() == -1)
-				{
-					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-					success = false;
-				}
 			}
 		}
 	}
+
 	return success;
 }
 
@@ -71,25 +65,11 @@ bool LoadMedia()
 		success = false;
 	}
 
-	if (!gGame_OverTexture.loadFromFile("res/Game_Over.png"))
-	{
-		printf("Failed to load Game Over texture!\n");
-
-		success = false;
-	}
-
 	return success;
 }
 
 void close()
 {
-	//Free loaded images
-	gTextTexture.free();
-
-	//Free global font
-	TTF_CloseFont(gFont);
-	gFont = NULL;
-
 	//Destroy window	
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
@@ -133,9 +113,6 @@ int main(int argc, char* args[])
 	//vides amb les que es comença
 	int vides = 3;
 
-	//Punts inicials
-	int punts = 0;
-
 	//Si se supera el nivell
 	bool superat;
 
@@ -147,9 +124,6 @@ int main(int argc, char* args[])
 
 	//Event handler
 	SDL_Event e;
-
-	Scoreboard scoreboard;
-	scoreboard.retriveScoreFromFile();
 
 	//Start up SDL and create window
 	if (!init())
@@ -164,7 +138,7 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			while (!quit && vides>0)
+			while (!quit)
 			{
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -177,10 +151,9 @@ int main(int argc, char* args[])
 
 				if (jugar)
 				{
-					while (vides > 0 && !quit)
+					while (vides > 0 && e.type!=SDL_QUIT)
 					{
-						superat = joc(quit, vides, punts);
-						scoreboard.newScore(punts);
+						superat = joc();
 						if (!superat)
 							vides--;
 						while (SDL_PollEvent(&e) != 0)
@@ -190,7 +163,6 @@ int main(int argc, char* args[])
 							
 						}
 					}
-					
 				}
 
 				//Clear screen
@@ -201,20 +173,6 @@ int main(int argc, char* args[])
 
 				SDL_RenderPresent(gRenderer);
 			}
-
-			if (vides == 0)
-			{
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
-
-				gGame_OverTexture.render(LEVEL_WIDTH / 4, LEVEL_HEIGHT / 4);
-
-				SDL_RenderPresent(gRenderer);
-
-				Sleep(2000);
-			}
-
 		}
 		
 	}

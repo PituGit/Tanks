@@ -16,10 +16,10 @@ Bala::Bala()
 
 	//Temps
 	Temps = SDL_GetTicks();
-
 }
 
-Bala::Bala(int id)
+
+Bala::Bala()
 {
 	//Initialize the collision box
 	BalaBox.w = BALA_WIDTH;
@@ -35,8 +35,6 @@ Bala::Bala(int id)
 
 	//Temps
 	Temps = SDL_GetTicks();
-
-	shooterId = id;
 }
 
 void Bala::ObtenirDades( double angle, Tank tank)
@@ -86,7 +84,7 @@ SDL_Rect Bala::getBalaBox()
 	return BalaBox;
 }
 
-bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent, 
+bool Bala::moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> tankdolent, 
 	bool& mort, int comptador, int &numerotank)
 {
 	//La variable que indica si colisiona
@@ -124,21 +122,15 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent,
 	}
 
 	int i = 0;
-	IteradorNodeTank actual = tankdolent.getInici();
 
-	while(!colisio && i<comptador)
+	while(!colisio && i<(comptador))
 	{
-		if (!actual.esNul()){
-			SDL_Rect tankBox = actual.getElement().getTankBox();
-			if (checkCollision(BalaBox, tankBox))
-			{
-				colisio = true;
-				numerotank = i - 1;
-			}
+		if (checkCollision(BalaBox, tankdolent[i].getTankBox()))
+		{
+			colisio = true;
+			numerotank = i-1;
 		}
-	
 		i++;
-		actual.seguent();
 	}
 	
 	return colisio;

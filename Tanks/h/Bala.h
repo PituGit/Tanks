@@ -1,4 +1,4 @@
-#include "LlistaTank.h"
+#include "Tank.h"
 
 class Bala
 
@@ -11,7 +11,7 @@ public:
 	Bala();
 	Bala(int id);
 
-	bool moveBala(Tile *tiles[], TankJugador tank, LlistaTank tankdolent,
+	bool moveBala(Tile *tiles[], TankJugador tank, std::vector <TankDolent> tankdolent,
 		bool& mort, int comptador, int &numerotank);
 
 	void ObtenirDades( double angle, Tank tank);
