@@ -151,12 +151,17 @@
     <Image Include="res\Base_tank_Jugador.png" />
     <Image Include="res\CapsulaCano_tank_Dolent.png" />
     <Image Include="res\CapsulaCano_tank_Jugador.png" />
+    <Image Include="res\GameOverRender.png" />
     <Image Include="res\Game_Over.jpg" />
     <Image Include="res\hud_vida.png" />
     <Image Include="res\Icon16.ico" />
     <Image Include="res\Icon16.png" />
     <Image Include="res\Icon32.ico" />
     <Image Include="res\Icon32.png" />
+    <Image Include="res\MenuRender.png" />
+    <Image Include="res\OK_button.png" />
+    <Image Include="res\ScoreboardRender.png" />
+    <Image Include="res\Scoreboard_button.png" />
     <Image Include="res\tiles.png" />
   </ItemGroup>
   <ItemGroup>

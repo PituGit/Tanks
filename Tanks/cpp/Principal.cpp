@@ -84,6 +84,13 @@ bool LoadMedia()
 {
 	bool success = true;
 
+	gFont = TTF_OpenFont("res/font.ttf", 40);
+	if (gFont == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
+	}
+
 	if (!gPlay_game_buttonTexture.loadFromFile("res/Play_game_button.png"))
 	{
 		printf("Failed to load Play_game_button texture!\n");
@@ -91,9 +98,37 @@ bool LoadMedia()
 		success = false;
 	}
 
-	if (!gGame_OverTexture.loadFromFile("res/Game_Over.png"))
+	if (!gMenuRenderTexture.loadFromFile("res/MenuRender.png"))
 	{
-		printf("Failed to load Game Over texture!\n");
+		printf("Failed to load MenuRender texture!\n");
+
+		success = false;
+	}
+
+	if (!gScoreboard_buttonTexture.loadFromFile("res/Scoreboard_button.png"))
+	{
+		printf("Failed to load Scoreboard_button texture!\n");
+
+		success = false;
+	}
+
+	if (!gOK_buttonTexture.loadFromFile("res/OK_button.png"))
+	{
+		printf("Failed to load OK_button texture!\n");
+
+		success = false;
+	}
+
+	if (!gGameOverRenderTexture.loadFromFile("res/GameOverRender.png"))
+	{
+		printf("Failed to load GameOverRender texture!\n");
+
+		success = false;
+	}
+
+	if (!gScoreboardRenderTexture.loadFromFile("res/ScoreboardRender.png"))
+	{
+		printf("Failed to load ScoreboardRender texture!\n");
 
 		success = false;
 	}
@@ -120,6 +155,13 @@ void close()
 	//Free loaded images
 	gTextTexture.free();
 
+	gMenuRenderTexture.free();
+	gPlay_game_buttonTexture.free();
+	gScoreboard_buttonTexture.free();
+	gOK_buttonTexture.free();
+	gGameOverRenderTexture.free();
+	gScoreboardRenderTexture.free();
+
 	//Free global font
 	TTF_CloseFont(gFont);
 	gFont = NULL;
@@ -139,10 +181,10 @@ void close()
 	
 }
 
-bool HandleEvent(SDL_Event* e)
+int HandleEvent(SDL_Event* e)
 {
-	bool jugar = false;
-	bool inside = false;
+	int boto = CAP;
+	int inside = CAP;
 
 	if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
 	{
@@ -150,23 +192,45 @@ bool HandleEvent(SDL_Event* e)
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 
-		if (x<(PosicioXBoto + MargeX) && x>(PosicioXBoto))
+		if (x < (X_PLAY + MargeX) && x > (X_PLAY))
 		{
-			if (y<(PosicioYBoto + MargeY) && y>(PosicioYBoto))
+			if (y < (Y_PLAY + MargeY) && y > (Y_PLAY))
 			{
-				inside = true;
+				inside = PLAY;
 			}
 		}
-		if (inside)
+
+		if (x < (X_SCB + MargeX) && x > (X_SCB))
 		{
+			if (y < (Y_SCB + MargeY) && y > (Y_SCB))
+			{
+				inside = SCORE;
+			}
+		}
+
+		switch (inside)
+		{
+		case PLAY:
 			if (e->type == SDL_MOUSEBUTTONDOWN) {
 				Mix_HaltMusic();
 				Mix_PlayChannel(-1, gClick, 0);
-				jugar = true;
+				boto = PLAY;
 			}
+
+			break;
+
+		case SCORE:
+			if (e->type == SDL_MOUSEBUTTONDOWN) {
+				Mix_PlayChannel(-1, gClick, 0);
+				boto = SCORE;
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
-	return jugar;
+	return boto;
 }
 
 int main(int argc, char* args[])
@@ -181,7 +245,7 @@ int main(int argc, char* args[])
 	bool superat;
 
 	//Si es vol començar a jugar
-	bool jugar = false;
+	int boto = CAP;
 
 	//Tancar l'aplicacio
 	bool quit = false;
@@ -211,15 +275,16 @@ int main(int argc, char* args[])
 			{
 				while (SDL_PollEvent(&e) != 0)
 				{
-					if (e.type == SDL_QUIT)
+					boto = HandleEvent(&e);
+
+					if (e.type == SDL_QUIT) {
 						quit = true;
-
-					jugar=HandleEvent(&e);
-
+					}
 				}
 
-				if (jugar)
+				switch (boto)
 				{
+				case PLAY:
 					Sleep(500);
 					while (vides > 0 && !quit)
 					{
@@ -230,17 +295,30 @@ int main(int argc, char* args[])
 						{
 							if (e.type == SDL_QUIT)
 								quit = true;
-							
+
 						}
 					}
-					
+
+					break;
+
+				case SCORE:
+					quit = scoreboard.ShowScoreboard();
+					Sleep(100);
+
+					break;
+
+				default:
+					break;
 				}
+
 
 				//Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
-				gPlay_game_buttonTexture.render(PosicioXBoto, PosicioYBoto);
+				gMenuRenderTexture.render(0, 0);
+				gPlay_game_buttonTexture.render(X_PLAY, Y_PLAY);
+				gScoreboard_buttonTexture.render(X_SCB, Y_SCB);
 
 				SDL_RenderPresent(gRenderer);
 			}
@@ -251,7 +329,7 @@ int main(int argc, char* args[])
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
-				gGame_OverTexture.render(LEVEL_WIDTH / 4, LEVEL_HEIGHT / 4);
+				gGameOverRenderTexture.render(0,0);
 
 				SDL_RenderPresent(gRenderer);
 

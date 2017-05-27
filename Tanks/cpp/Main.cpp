@@ -206,7 +206,6 @@ void close(Tile* tiles[])
 	gCapsulaDolentTexture.free();
 	gBalaTexture.free();
 	gExplosioTexture.free();
-	gPlay_game_buttonTexture.free();
 	gVidaTexture.free();
 	gTextTexture.free();
 
