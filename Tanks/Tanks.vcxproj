@@ -151,6 +151,7 @@
     <Image Include="res\Base_tank_Jugador.png" />
     <Image Include="res\CapsulaCano_tank_Dolent.png" />
     <Image Include="res\CapsulaCano_tank_Jugador.png" />
+    <Image Include="res\Explosio.png" />
     <Image Include="res\GameOverRender.png" />
     <Image Include="res\Game_Over.jpg" />
     <Image Include="res\hud_vida.png" />
@@ -161,6 +162,7 @@
     <Image Include="res\MenuRender.png" />
     <Image Include="res\NewHighScoreRender.png" />
     <Image Include="res\OK_button.png" />
+    <Image Include="res\Play_game_button.png" />
     <Image Include="res\ScoreboardRender.png" />
     <Image Include="res\Scoreboard_button.png" />
     <Image Include="res\tiles.png" />
@@ -207,10 +209,14 @@
     <Font Include="res\font.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="res\Backspace.wav" />
     <Media Include="res\Click.wav" />
     <Media Include="res\Explosion.wav" />
+    <Media Include="res\GameOver.wav" />
     <Media Include="res\InGameSong.wav" />
     <Media Include="res\MenuSong.wav" />
+    <Media Include="res\Return.wav" />
+    <Media Include="res\Type.wav" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2_mixer.lib" />

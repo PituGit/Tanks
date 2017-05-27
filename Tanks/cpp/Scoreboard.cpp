@@ -34,7 +34,7 @@ bool Scoreboard::returnEvent(SDL_Event * ev)
 void Scoreboard::initScoreArray() {
 	for (int i = 0; i < MAX_SCORE_LINES; i++)
 	{
-		scoreArray[i].Name = "EmptyName";
+		scoreArray[i].Name = "Empty";
 		scoreArray[i].Value = 0;
 	}
 }
@@ -112,10 +112,13 @@ void Scoreboard::fillArray(score &player, int punts) {
 	bool intro = false;
 
 	//Set text color as black
-	SDL_Color textColor = { 0, 0, 0, 0xFF };
+	SDL_Color textColor = { 50, 0, 0 };
 
 	//The current input text.
-	std::string inputText = "Some Text";
+	std::string puntsText = to_string(punts);
+	gTextPuntsTexture.loadFromRenderedText(puntsText.c_str(), textColor);
+
+	std::string inputText = "";
 	gTextTexture.loadFromRenderedText(inputText.c_str(), textColor);
 
 	//Enable text input
@@ -135,30 +138,32 @@ void Scoreboard::fillArray(score &player, int punts) {
 				//Handle backspace
 				if (e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0)
 				{
+					Mix_PlayChannel(-1, gBackspace, 0);
 					//lop off character
 					inputText.pop_back();
 					renderText = true;
+
 				}
-				//Handle copy
-				else if (e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL)
+
+			}
+			else if (e.type == SDL_KEYUP)
+			{
+				if (e.key.keysym.sym == SDLK_RETURN)
 				{
-					SDL_SetClipboardText(inputText.c_str());
-				}
-				//Handle paste
-				else if (e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
-				{
-					inputText = SDL_GetClipboardText();
-					renderText = true;
+					Mix_PlayChannel(-1, gReturn, 0);
+					Sleep(1000);
+					intro = true;
 				}
 			}
 			//Special text input event
-			else if (e.type == SDL_TEXTINPUT)
+			else if (e.type == SDL_TEXTINPUT && inputText.length() < MAX_NAME_CHAR)
 			{
 				//Not copy or pasting
 				if (!((e.text.text[0] == 'c' || e.text.text[0] == 'C') && (e.text.text[0] == 'v' || e.text.text[0] == 'V') && SDL_GetModState() & KMOD_CTRL))
 				{
 					if (e.text.text[0] != ' ')
 					{
+						Mix_PlayChannel(-1, gType, 0);
 						inputText += e.text.text;
 						renderText = true;
 					}
@@ -189,8 +194,9 @@ void Scoreboard::fillArray(score &player, int punts) {
 
 		gNewHighScoreRenderTexture.render(0, 0);
 
-		//Render text textures
-		gTextTexture.render((SCREEN_WIDTH - gTextTexture.getWidth()) / 2, Y_TXT);
+		gTextPuntsTexture.render((SCREEN_WIDTH - gTextPuntsTexture.getWidth()) / 2, Y_POINTS);
+
+		gTextTexture.render((SCREEN_WIDTH - gTextTexture.getWidth()) / 2, Y_INPUT);
 
 		//Update screen
 		SDL_RenderPresent(gRenderer);
@@ -198,6 +204,11 @@ void Scoreboard::fillArray(score &player, int punts) {
 
 	//Disable text input
 	SDL_StopTextInput();
+
+	if (inputText != "") {
+		player.Name = inputText;
+		player.Value = punts;
+	}
 }
 
 bool Scoreboard::ShowScoreboard() {

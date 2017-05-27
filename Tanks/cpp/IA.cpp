@@ -417,6 +417,8 @@ void disparar(TankDolent &tankdolent, TankJugador tank, vector<Bala> &pBala, int
 		{
 			if (bala[cBales - 1].getTemps() > TIEMPO_DE_VIDA)
 			{
+				Mix_PlayChannel(-1, gClick, 0);
+
 				bala.push_back(Bala(ID_DOLENT));
 				cBales++;
 				bala[cBales - 1].ObtenirDades(angle, tankdolent);
@@ -427,6 +429,8 @@ void disparar(TankDolent &tankdolent, TankJugador tank, vector<Bala> &pBala, int
 	else
 
 		{
+			Mix_PlayChannel(-1, gClick, 0);
+
 			bala.push_back(Bala(ID_DOLENT));
 			cBales++;
 			bala[cBales - 1].ObtenirDades(angle, tankdolent);

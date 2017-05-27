@@ -7,6 +7,7 @@ struct score
 };
 
 const int MAX_SCORE_LINES = 10;
+const int MAX_NAME_CHAR = 15;
 const char SCB_FILE[] = "res/Scoreboard.scb";
 
 class Scoreboard
@@ -37,3 +38,5 @@ const int MargeX = 100;
 const int MargeY = 100;
 
 const int Y_TXT = 100;
+const int Y_INPUT = 530;
+const int Y_POINTS = 265;

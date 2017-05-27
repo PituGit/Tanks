@@ -629,6 +629,8 @@ bool joc(bool &quit, int vides, int &punts)
 				{
 					if (balajugador[cBalesJ - 1].getTemps() > TIEMPO_DE_VIDA)
 					{
+						Mix_PlayChannel(-1, gClick, 0);
+
 						balajugador.push_back(Bala());
 						cBalesJ++;
 						balajugador[cBalesJ - 1].ObtenirDades(angle, tank);
@@ -636,6 +638,8 @@ bool joc(bool &quit, int vides, int &punts)
 				}
 				else
 				{
+					Mix_PlayChannel(-1, gClick, 0);
+
 					balajugador.push_back(Bala());
 					cBalesJ++;
 					balajugador[cBalesJ - 1].ObtenirDades(angle, tank);

@@ -63,4 +63,5 @@ extern LTexture gNewHighScoreRenderTexture;
 extern LTexture gExplosioTexture;
 extern LTexture gVidaTexture;
 extern LTexture gTextTexture;
+extern LTexture gTextPuntsTexture;
 extern TTF_Font *gFont;

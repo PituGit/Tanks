@@ -11,4 +11,8 @@ Mix_Music *gMenuSong = NULL;
 Mix_Music *gInGameSong = NULL;
 
 Mix_Chunk *gClick = NULL;
+Mix_Chunk *gType = NULL;
+Mix_Chunk *gBackspace = NULL;
+Mix_Chunk *gReturn = NULL;
+Mix_Chunk *gGameOverSound = NULL;
 Mix_Chunk *gExplosion = NULL;

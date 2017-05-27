@@ -113,8 +113,9 @@ void TankJugador::handleEvent(SDL_Event & e, SDL_Event * a, double & angle, SDL_
 	if ((x - TankBox.x - MEITAT_CAPSULA_X) < 0)
 		angle += 180;
 
-	if (a->type == SDL_MOUSEBUTTONDOWN)
+	if (a->type == SDL_MOUSEBUTTONDOWN) {
 		shoot = true;
+	}
 
 	//If a key was pressed
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)

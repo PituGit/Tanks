@@ -72,4 +72,8 @@ extern Mix_Music *gMenuSong;
 extern Mix_Music *gInGameSong;
 
 extern Mix_Chunk *gClick;
+extern Mix_Chunk *gType;
+extern Mix_Chunk *gBackspace;
+extern Mix_Chunk *gReturn;
+extern Mix_Chunk *gGameOverSound;
 extern Mix_Chunk *gExplosion;

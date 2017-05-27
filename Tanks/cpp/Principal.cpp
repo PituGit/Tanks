@@ -155,6 +155,34 @@ bool LoadMedia()
 		success = false;
 	}
 
+	gType = Mix_LoadWAV("res/Type.wav");
+	if (gType == NULL)
+	{
+		printf("Failed to load Click sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gBackspace = Mix_LoadWAV("res/Backspace.wav");
+	if (gBackspace == NULL)
+	{
+		printf("Failed to load Click sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gReturn = Mix_LoadWAV("res/Return.wav");
+	if (gReturn == NULL)
+	{
+		printf("Failed to load Click sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
+	gGameOverSound = Mix_LoadWAV("res/GameOver.wav");
+	if (gGameOverSound == NULL)
+	{
+		printf("Failed to load Game Over sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
+
 	return success;
 }
 
@@ -162,6 +190,7 @@ void close()
 {
 	//Free loaded images
 	gTextTexture.free();
+	gTextPuntsTexture.free();
 
 	gMenuRenderTexture.free();
 	gPlay_game_buttonTexture.free();
@@ -178,10 +207,25 @@ void close()
 	//Free the sound effects
 	Mix_FreeChunk(gClick);
 	gClick = NULL;
+
+	//Free the sound effects
+	Mix_FreeChunk(gType);
+	gType = NULL;
+
+	//Free the sound effects
+	Mix_FreeChunk(gBackspace);
+	gBackspace = NULL;
+
+	//Free the sound effects
+	Mix_FreeChunk(gReturn);
+	gReturn = NULL;
 	
 	//Free the music
 	Mix_FreeMusic(gMenuSong);
 	gMenuSong = NULL;
+
+	Mix_FreeChunk(gGameOverSound);
+	gGameOverSound = NULL;
 
 	//Quit SDL subsystems
 	Mix_Quit();
@@ -342,9 +386,11 @@ int main(int argc, char* args[])
 
 				SDL_RenderPresent(gRenderer);
 
+				Mix_PlayChannel(-1, gGameOverSound, 0);
+				Sleep(2000);
+
 				scoreboard.newScore(punts);
 
-				//Sleep(2000);
 			}
 
 		}

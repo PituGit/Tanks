@@ -16,6 +16,7 @@ LTexture gNewHighScoreRenderTexture;
 LTexture gExplosioTexture;
 LTexture gVidaTexture;
 LTexture gTextTexture;
+LTexture gTextPuntsTexture;
 
 TTF_Font *gFont = NULL;
 
