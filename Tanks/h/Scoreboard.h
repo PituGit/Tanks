@@ -27,7 +27,7 @@ private:
 	int isBestScore(int punts);
 	void moveArray(int posicio);
 	void fillArray(score &player, int punts);
-	bool returnEvent(SDL_Event*e);
+	bool returnEvent(SDL_Event*ev);
 };
 
 const int X_RET = 585;

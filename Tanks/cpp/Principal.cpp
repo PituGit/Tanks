@@ -111,7 +111,7 @@ bool LoadMedia()
 
 		success = false;
 	}
-
+	
 	if (!gOK_buttonTexture.loadFromFile("res/OK_button.png"))
 	{
 		printf("Failed to load OK_button texture!\n");
@@ -132,6 +132,14 @@ bool LoadMedia()
 
 		success = false;
 	}
+
+	if (!gNewHighScoreRenderTexture.loadFromFile("res/NewHighScoreRender.png"))
+	{
+		printf("Failed to load NewHighScoreRender texture!\n");
+
+		success = false;
+	}
+
 
 	gMenuSong = Mix_LoadMUS("res/MenuSong.wav");
 	if (gMenuSong == NULL)
@@ -161,6 +169,7 @@ void close()
 	gOK_buttonTexture.free();
 	gGameOverRenderTexture.free();
 	gScoreboardRenderTexture.free();
+	gNewHighScoreRenderTexture.free();
 
 	//Free global font
 	TTF_CloseFont(gFont);

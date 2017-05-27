@@ -106,14 +106,98 @@ void Scoreboard::moveArray(int posicio) {
 
 //Demana el nom a l'usuari per omplir el ranking amb la nova puntuació
 void Scoreboard::fillArray(score &player, int punts) {
-	system("CLS");
-	printf("Entra el teu nom (fins a 14 caracters):\n");
+	//Event handler
+	SDL_Event e;
 
-	cin >> player.Name;
-	player.Value = punts;
+	bool intro = false;
 
-	printf("\nResultat entrat al ranking.\n");
-	Sleep(1000);
+	//Set text color as black
+	SDL_Color textColor = { 0, 0, 0, 0xFF };
+
+	//The current input text.
+	std::string inputText = "Some Text";
+	gTextTexture.loadFromRenderedText(inputText.c_str(), textColor);
+
+	//Enable text input
+	SDL_StartTextInput();
+
+	while (!intro)
+	{
+		//The rerender text flag
+		bool renderText = false;
+
+		//Handle events on queue
+		while (SDL_PollEvent(&e) != 0)
+		{
+			//Special key input
+			if (e.type == SDL_KEYDOWN)
+			{
+				//Handle backspace
+				if (e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0)
+				{
+					//lop off character
+					inputText.pop_back();
+					renderText = true;
+				}
+				//Handle copy
+				else if (e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL)
+				{
+					SDL_SetClipboardText(inputText.c_str());
+				}
+				//Handle paste
+				else if (e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
+				{
+					inputText = SDL_GetClipboardText();
+					renderText = true;
+				}
+			}
+			//Special text input event
+			else if (e.type == SDL_TEXTINPUT)
+			{
+				//Not copy or pasting
+				if (!((e.text.text[0] == 'c' || e.text.text[0] == 'C') && (e.text.text[0] == 'v' || e.text.text[0] == 'V') && SDL_GetModState() & KMOD_CTRL))
+				{
+					if (e.text.text[0] != ' ')
+					{
+						inputText += e.text.text;
+						renderText = true;
+					}
+				}
+			}
+		}
+
+		//Rerender text if needed
+		if (renderText)
+		{
+			//Text is not empty
+			if (inputText != "")
+			{
+				//Render new text
+				gTextTexture.loadFromRenderedText(inputText.c_str(), textColor);
+			}
+			//Text is empty
+			else
+			{
+				//Render space texture
+				gTextTexture.loadFromRenderedText(" ", textColor);
+			}
+		}
+
+		//Clear screen
+		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+		SDL_RenderClear(gRenderer);
+
+		gNewHighScoreRenderTexture.render(0, 0);
+
+		//Render text textures
+		gTextTexture.render((SCREEN_WIDTH - gTextTexture.getWidth()) / 2, Y_TXT);
+
+		//Update screen
+		SDL_RenderPresent(gRenderer);
+	}
+
+	//Disable text input
+	SDL_StopTextInput();
 }
 
 bool Scoreboard::ShowScoreboard() {

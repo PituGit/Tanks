@@ -12,6 +12,7 @@ LTexture gScoreboard_buttonTexture;
 LTexture gOK_buttonTexture;
 LTexture gGameOverRenderTexture;
 LTexture gScoreboardRenderTexture;
+LTexture gNewHighScoreRenderTexture;
 LTexture gExplosioTexture;
 LTexture gVidaTexture;
 LTexture gTextTexture;

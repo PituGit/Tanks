@@ -159,6 +159,7 @@
     <Image Include="res\Icon32.ico" />
     <Image Include="res\Icon32.png" />
     <Image Include="res\MenuRender.png" />
+    <Image Include="res\NewHighScoreRender.png" />
     <Image Include="res\OK_button.png" />
     <Image Include="res\ScoreboardRender.png" />
     <Image Include="res\Scoreboard_button.png" />

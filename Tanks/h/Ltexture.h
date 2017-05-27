@@ -59,6 +59,7 @@ extern LTexture gScoreboard_buttonTexture;
 extern LTexture gOK_buttonTexture;
 extern LTexture gGameOverRenderTexture;
 extern LTexture gScoreboardRenderTexture;
+extern LTexture gNewHighScoreRenderTexture;
 extern LTexture gExplosioTexture;
 extern LTexture gVidaTexture;
 extern LTexture gTextTexture;
