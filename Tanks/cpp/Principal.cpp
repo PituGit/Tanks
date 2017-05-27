@@ -224,7 +224,6 @@ int main(int argc, char* args[])
 					while (vides > 0 && !quit)
 					{
 						superat = joc(quit, vides, punts);
-						scoreboard.newScore(punts);
 						if (!superat)
 							vides--;
 						while (SDL_PollEvent(&e) != 0)
@@ -256,7 +255,9 @@ int main(int argc, char* args[])
 
 				SDL_RenderPresent(gRenderer);
 
-				Sleep(2000);
+				scoreboard.newScore(punts);
+
+				//Sleep(2000);
 			}
 
 		}

@@ -78,7 +78,7 @@ void Scoreboard::fillArray(score &player, int punts) {
 	system("CLS");
 	printf("Entra el teu nom (fins a 14 caracters):\n");
 
-	scanf_s("%s", player.Name, 15);
+	cin >> player.Name;
 	player.Value = punts;
 
 	printf("\nResultat entrat al ranking.\n");

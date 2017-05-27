@@ -6,6 +6,7 @@
 #include "../SDL_mixer.h"
 #include <string>
 #include <stdio.h>
+#include <iostream> //Temporal
 #include <fstream>
 #include <vector>
 #include <math.h>

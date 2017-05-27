@@ -34,28 +34,24 @@ void GestionaColisio(LlistaTank &tankdolent, TankJugador tank, int &cBalesE, int
 		Mix_PlayChannel(-1, gExplosion, 0);
 
 		bool trobat = false;
-		int comptadore = 0;
 
 		IteradorNodeTank anterior(NULL);
 		IteradorNodeTank actual = tankdolent.getInici();
 		//Busquem quin tank hem tocat i posteriorment l'eliminarem
 		while (!trobat)
 		{
-			if (!actual.esNul()) {
-				if ((actual.getElement().getTankBox().x + actual.getElement().getTankBox().w + 5) >= Explosio.x
-					&& (actual.getElement().getTankBox().y + actual.getElement().getTankBox().h + 5) >= Explosio.y
-					&& (actual.getElement().getTankBox().x - 5) < Explosio.x
-					&& (actual.getElement().getTankBox().y - 5) <= Explosio.y) {
+			if ((actual.getElement().getTankBox().x + actual.getElement().getTankBox().w + 10) >= Explosio.x
+				&& (actual.getElement().getTankBox().y + actual.getElement().getTankBox().h + 10) >= Explosio.y
+				&& (actual.getElement().getTankBox().x - 10) < Explosio.x
+				&& (actual.getElement().getTankBox().y - 10) <= Explosio.y) {
 
-					trobat = true;
-					//comptadore--;
-				}
+				trobat = true;
 			}
+
 			if (!trobat) {
 				anterior = actual;
 				actual.seguent();
 			}
-			//comptadore++;
 		}
 
 		if (colisio)
