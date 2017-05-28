@@ -255,11 +255,12 @@ void renderExplosio(int x, int y, int imatge)
 }
 
 
-int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y)
+int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y, int nTanks)
 {
 
 	//Comptador per el while
 	int comptador = 0;
+	int i = -1;
 
 	//Obrir l'arxiu de les dades del nivell
 	std::ifstream DadesNivell("res/DadesNivell.map");
@@ -269,7 +270,7 @@ int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y)
 		printf("Error al carregar DadesNivell: Unexpected end of file!\n");
 	}
 
-	while (!DadesNivell.eof())
+	while (i<nTanks)
 	{
 		//Obte l'id del tank
 		DadesNivell >> ID[comptador];
@@ -278,18 +279,21 @@ int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y)
 		DadesNivell >> x[comptador];
 		DadesNivell >> y[comptador];
 
-		if (!DadesNivell.eof())
+		comptador++;
+		i++;
+
+		if (i<nTanks)
 		{
 			ID.push_back(int());
 			x.push_back(int());
 			y.push_back(int());
 		}
-		comptador++;
+
 	}
 
 	DadesNivell.close();
 
-	return comptador;
+	return nTanks;
 }
 
 
@@ -422,7 +426,7 @@ bool setTiles(Tile* tiles[])
 }
 
 
-bool joc(bool &quit, int vides, int &punts)
+bool joc(bool &quit, int vides, int &punts, int nTanks)
 {
 	//si sha superat el nivell
 	bool superat = true;
@@ -462,11 +466,6 @@ bool joc(bool &quit, int vides, int &punts)
 		//Angle de rotació
 		double degrees = 0, angle = 0;
 
-		//Variable que controla cada quan canvia la direccio dels tanks enemics
-		std::vector <Uint32> tempsmoviment(2);
-		tempsmoviment[0] = SDL_GetTicks() - 500;
-		tempsmoviment[0] = SDL_GetTicks() - 500;
-
 		//tipus de rotacio
 		SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -484,7 +483,15 @@ bool joc(bool &quit, int vides, int &punts)
 		std::vector<int> y(1);
 
 		//Obtenim el numero de tanks enemics
-		int cTanks = setTanks(ID, x, y) - 1;
+		int cTanks = setTanks(ID, x, y, nTanks);
+
+		//Variable que controla cada quan canvia la direccio dels tanks enemics
+		std::vector <Uint32> tempsmoviment(cTanks);
+		for (int i = 0; i < cTanks; i++)
+		{
+			tempsmoviment[i] = SDL_GetTicks() - 500;
+		}
+		
 
 		tank.InicialitzaDades(ID[0], x[0], y[0]);
 
@@ -517,7 +524,7 @@ bool joc(bool &quit, int vides, int &punts)
 		SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 		//While application is running
-		while (!mort && !quit)
+		while (!mort && !quit && cTanks>0)
 		{
 			//Handle events on queue
 			while (SDL_PollEvent(&e) != 0)
@@ -669,6 +676,21 @@ bool joc(bool &quit, int vides, int &punts)
 			//Update screen
 			SDL_RenderPresent(gRenderer);
 		}
+		if ((colisio || colisio2) && !mort)
+		{
+			while (colisio || colisio2)
+			{
+				GestionaColisio(tankdolent, tank, cBalesE, cBalesJ, cTanks, balesenemigues,
+					balajugador, primercop, Lloc_Explosio, frame, colisio, colisio2, punts);
+				//Update screen
+				SDL_RenderPresent(gRenderer);
+
+			}
+			return superat;
+		}
+		
+		
+		
 
 		if (colisio || colisio2)
 		{

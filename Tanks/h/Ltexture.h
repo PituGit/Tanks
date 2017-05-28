@@ -65,3 +65,5 @@ extern LTexture gVidaTexture;
 extern LTexture gTextTexture;
 extern LTexture gTextPuntsTexture;
 extern TTF_Font *gFont;
+extern LTexture gRetryTexture;
+extern LTexture gNivellTexture;

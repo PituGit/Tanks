@@ -133,6 +133,13 @@ bool LoadMedia()
 		success = false;
 	}
 
+	if (!gRetryTexture.loadFromFile("res/Retry_button.png"))
+	{
+		printf("Failed to load Retry boto texture!\n");
+
+		success = false;
+	}
+
 	if (!gNewHighScoreRenderTexture.loadFromFile("res/NewHighScoreRender.png"))
 	{
 		printf("Failed to load NewHighScoreRender texture!\n");
@@ -234,6 +241,8 @@ void close()
 	
 }
 
+
+
 int HandleEvent(SDL_Event* e)
 {
 	int boto = CAP;
@@ -260,6 +269,13 @@ int HandleEvent(SDL_Event* e)
 				inside = SCORE;
 			}
 		}
+		if (x<(X_RETRY + 90) && x>(X_RETRY))
+		{
+			if (y<(Y_RETRY + 114) && y>(Y_RETRY))
+			{
+				inside = RETRY;
+			}
+		}
 
 		switch (inside)
 		{
@@ -279,6 +295,13 @@ int HandleEvent(SDL_Event* e)
 			}
 			break;
 
+		case RETRY:
+			if (e->type == SDL_MOUSEBUTTONDOWN)
+			{
+				boto = RETRY;
+			}
+			break;
+
 		default:
 			break;
 		}
@@ -294,6 +317,10 @@ int main(int argc, char* args[])
 	//Punts inicials
 	int punts = 0;
 
+	//nivell en el que estem i color de les lletres
+	string nivell;
+	SDL_Color textColor;
+
 	//Si se supera el nivell
 	bool superat;
 
@@ -302,6 +329,8 @@ int main(int argc, char* args[])
 
 	//Tancar l'aplicacio
 	bool quit = false;
+
+	int nTanks = 1;
 
 	//Event handler
 	SDL_Event e;
@@ -338,12 +367,29 @@ int main(int argc, char* args[])
 				switch (boto)
 				{
 				case PLAY:
-					Sleep(500);
+
 					while (vides > 0 && !quit)
 					{
-						superat = joc(quit, vides, punts);
+						//Clear screen
+						SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+						textColor = { 50, 0, 0 };
+						nivell = "Nivell: " + to_string(nTanks);
+
+						gNivellTexture.loadFromRenderedText(nivell, textColor);
+						gNivellTexture.render(SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2);
+
+						SDL_RenderPresent(gRenderer);
+						Sleep(1000);
+
+						superat = joc(quit, vides, punts, nTanks);
 						if (!superat)
 							vides--;
+						else
+						{
+							nTanks++;
+							Sleep(100);
+						}
 						while (SDL_PollEvent(&e) != 0)
 						{
 							if (e.type == SDL_QUIT)
@@ -364,32 +410,61 @@ int main(int argc, char* args[])
 					break;
 				}
 
+				if (vides > 0)
+				{
+					//Clear screen
+					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+					SDL_RenderClear(gRenderer);
 
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
+					gMenuRenderTexture.render(0, 0);
+					gPlay_game_buttonTexture.render(X_PLAY, Y_PLAY);
+					gScoreboard_buttonTexture.render(X_SCB, Y_SCB);
 
-				gMenuRenderTexture.render(0, 0);
-				gPlay_game_buttonTexture.render(X_PLAY, Y_PLAY);
-				gScoreboard_buttonTexture.render(X_SCB, Y_SCB);
-
-				SDL_RenderPresent(gRenderer);
+					SDL_RenderPresent(gRenderer);
+				}
+				
 			}
+			
+			scoreboard.newScore(punts);
 
 			if (vides == 0)
 			{
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
-
-				gGameOverRenderTexture.render(0,0);
-
-				SDL_RenderPresent(gRenderer);
 
 				Mix_PlayChannel(-1, gGameOverSound, 0);
-				Sleep(2000);
+				
+				bool retry = false;
+				quit = false;
+				boto = CAP;
 
-				scoreboard.newScore(punts);
+				while (!quit && !retry)
+				{
+				
+
+					while (SDL_PollEvent(&e) != 0)
+					{
+						boto = HandleEvent(&e);
+						if (e.type == SDL_QUIT)
+							quit = true;
+
+					}
+					if (boto==RETRY)
+						retry = true;
+
+					//Clear screen
+					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+					SDL_RenderClear(gRenderer);
+
+					gGameOverRenderTexture.render(0, 0);
+					gRetryTexture.render(X_RETRY, Y_RETRY);
+
+					SDL_RenderPresent(gRenderer);
+				}
+
+				if (retry)
+					main(argc, args);
+					
+
+				
 
 			}
 
