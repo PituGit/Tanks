@@ -313,7 +313,7 @@ int HandleEvent(SDL_Event* e)
 int main(int argc, char* args[])
 {
 	//vides amb les que es comença
-	int vides = 3;
+	int vides = MAX_VIDES;
 
 	//Punts inicials
 	int punts = 0;
@@ -354,7 +354,7 @@ int main(int argc, char* args[])
 		{
 			Mix_PlayMusic(gMenuSong, -1);
 
-			while (!quit && vides>0)
+			while (!quit)
 			{
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -427,56 +427,47 @@ int main(int argc, char* args[])
 					gScoreboard_buttonTexture.render(X_SCB, Y_SCB);
 
 					SDL_RenderPresent(gRenderer);
-				}
-				
-			}
-			
-			scoreboard.newScore(punts);
-
-			if (vides == 0)
-			{
-
-				Mix_PlayChannel(-1, gGameOverSound, 0);
-				
-				bool retry = false;
-				quit = false;
-				boto = CAP;
-
-				while (!quit && !retry)
+				} 
+				else
 				{
-				
+					scoreboard.newScore(punts);
+					Mix_PlayChannel(-1, gGameOverSound, 0);
 
-					while (SDL_PollEvent(&e) != 0)
+					bool retry = false;
+					quit = false;
+					boto = CAP;
+
+					while (!quit && !retry)
 					{
-						boto = HandleEvent(&e);
-						if (e.type == SDL_QUIT)
-							quit = true;
+						while (SDL_PollEvent(&e) != 0)
+						{
+							boto = HandleEvent(&e);
+							if (e.type == SDL_QUIT)
+								quit = true;
+						}
 
+						if (boto == RETRY) {
+							vides = MAX_VIDES;
+							retry = true;
+						}
+
+
+						//Clear screen
+						SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+						SDL_RenderClear(gRenderer);
+
+						gGameOverRenderTexture.render(0, 0);
+						gRetryTexture.render(X_RETRY, Y_RETRY);
+
+						SDL_RenderPresent(gRenderer);
 					}
-					if (boto==RETRY)
-						retry = true;
 
-					//Clear screen
-					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-					SDL_RenderClear(gRenderer);
-
-					gGameOverRenderTexture.render(0, 0);
-					gRetryTexture.render(X_RETRY, Y_RETRY);
-
-					SDL_RenderPresent(gRenderer);
+					Mix_PlayMusic(gMenuSong, -1);
 				}
-
-				if (retry)
-					main(argc, args);
-					
-
-				
-
 			}
-
 		}
-		
 	}
+
 	close();
 	return 0;
 }
