@@ -339,7 +339,7 @@ int main(int argc, char* args[])
 	Scoreboard scoreboard;
 	scoreboard.retriveScoreFromFile();
 
-	//Start up SDL and create window
+	//Start up SDL and create window.
 	if (!init())
 	{
 		printf("Failed to initialize!\n");
