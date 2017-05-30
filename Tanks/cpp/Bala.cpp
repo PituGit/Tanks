@@ -76,11 +76,13 @@ bool Bala::ControlaBales()
 	return trobat;
 }
 
+//Retorna el temps que ha estat viva la bala
 Uint32 Bala::getTemps()
 {
 	return (SDL_GetTicks() - Temps);
 }
 
+//Retorna la capsula de colisio de la bala
 SDL_Rect Bala::getBalaBox()
 {
 	return BalaBox;
@@ -92,10 +94,10 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank &tankdolent,
 	//La variable que indica si colisiona
 	bool colisio = false;
 
-	//Move the bala left or right
+	//Mout la bala esquerra o dreta
 	BalaBox.x += VelX;
 
-	//If the bala went too far to the left or right or touched a wall
+	//Si la bala ha anat massa cap a la dreta o esquerra o ha tocat una paret
 	if ((BalaBox.x < 0) || (BalaBox.x + BALA_WIDTH > LEVEL_WIDTH) || touchesWall(BalaBox, tiles))
 	{
 		//move back
@@ -104,10 +106,10 @@ bool Bala::moveBala(Tile *tiles[], TankJugador tank, LlistaTank &tankdolent,
 		VelX *= signeX;
 	}
 
-	//Move the bala up or down
+	//Mou la bala amunt o aball
 	BalaBox.y += VelY;
 
-	//If the bala went too far up or down or touched a wall
+	//Si ha hanat massa amunt o avall o ha tocat una paret
 	if ((BalaBox.y < 0) || (BalaBox.y + BALA_HEIGHT > LEVEL_HEIGHT) || touchesWall(BalaBox, tiles))
 	{
 		//move back

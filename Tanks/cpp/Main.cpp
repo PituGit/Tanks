@@ -21,6 +21,7 @@ void CalcularGraus(double &degrees, Tank tank)
 	}
 }
 
+//Ens ajuda a renderitzar la explosió quan n'hi ha hagut una 
 void GestionaColisio(LlistaTank &tankdolent, TankJugador tank, int &cBalesE, int &cBalesJ, int &cTanks,
 	std::vector <Bala> &balesenemigues, std::vector <Bala> &balajugador, bool &primercop, SDL_Point Lloc_Explosio,
 	int &frame, bool &colisio, bool &colisio2, int &punts)
@@ -93,6 +94,7 @@ void GestionaColisio(LlistaTank &tankdolent, TankJugador tank, int &cBalesE, int
 
 }
 
+//Carrega els arxius, png's...
 bool loadMedia(Tile* tiles[])
 {
 	//Loading success flag
@@ -185,7 +187,7 @@ bool loadMedia(Tile* tiles[])
 	return success;
 }
 
-
+//Tanca els arxius
 void close(Tile* tiles[])
 {
 	//Deallocate tiles
@@ -216,6 +218,7 @@ void close(Tile* tiles[])
 
 }
 
+//Renderitza l'explosió
 void renderExplosio(int x, int y, int imatge)
 {
 	//Ajusta l'imatge a on esta la bala
@@ -254,7 +257,7 @@ void renderExplosio(int x, int y, int imatge)
 	gExplosioTexture.render(x , y, &Caixa_Explosions);
 }
 
-
+//Inicialitza els tanks
 int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y, int nTanks)
 {
 
@@ -296,7 +299,7 @@ int setTanks(std::vector <int> &ID, std::vector <int> &x, std::vector <int> &y, 
 	return nTanks;
 }
 
-
+//Inicialitza el mapa
 bool setTiles(Tile* tiles[])
 {
 	//Success flag
@@ -425,7 +428,7 @@ bool setTiles(Tile* tiles[])
 	return tilesLoaded;
 }
 
-
+//Funció principal, on hi ha el bucle principal en el qual s'executa el joc
 bool joc(bool &quit, int vides, int &punts, int nTanks)
 {
 	//si sha superat el nivell

@@ -309,6 +309,7 @@ int HandleEvent(SDL_Event* e)
 	return boto;
 }
 
+
 int main(int argc, char* args[])
 {
 	//vides amb les que es comença
@@ -382,11 +383,15 @@ int main(int argc, char* args[])
 						SDL_RenderPresent(gRenderer);
 						Sleep(1000);
 
+						//El joc, pròpiament, que ens retornarà si hem superat el nivell o no
 						superat = joc(quit, vides, punts, nTanks);
+
+						//Si no el superem, restem vides
 						if (!superat)
 							vides--;
 						else
 						{
+							//En cas que si haguem superat el nivell, augmentem el número de tanks enemics
 							nTanks++;
 							Sleep(100);
 						}
@@ -401,6 +406,7 @@ int main(int argc, char* args[])
 					break;
 
 				case SCORE:
+					//Mostra els rècords
 					quit = scoreboard.ShowScoreboard();
 					Sleep(100);
 
